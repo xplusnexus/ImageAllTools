@@ -1,0 +1,40 @@
+---
+const navLinks = [
+  { label: "Compress", href: "/#compress" },
+  { label: "Resize", href: "/#resize" },
+  { label: "Convert", href: "/#convert" },
+  { label: "Crop", href: "/#crop" },
+  { label: "Remove BG", href: "/#bg-remove" },
+  { label: "Watermark", href: "/#watermark" },
+  { label: "To PDF", href: "/#to-pdf" },
+  { label: "All 47 Tools", href: "/#catalog" },
+];
+---
+<header class="border-b border-border sticky top-0 z-40 bg-[#0a0b0f]/85 backdrop-blur-md">
+  <div class="wrap py-3.5 flex items-center justify-between gap-4">
+    <a href="/" class="brand flex items-center gap-2.5 font-display font-bold text-lg text-ink hover:opacity-90 transition">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>ImageAll <span class="text-xs font-normal text-ink-muted hidden sm:inline">by XPlus Nexus</span></span>
+    </a>
+    
+    <nav class="hidden lg:flex items-center gap-1 text-sm" aria-label="Quick Tools Navigation">
+      {navLinks.map((item) => (
+        <a
+          href={item.href}
+          class="px-2.5 py-1.5 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-2 transition-colors text-[13px] font-medium"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    
+    <div class="flex items-center gap-3">
+      <a
+        href="/#catalog"
+        class="text-xs sm:text-sm px-3.5 py-1.5 rounded-lg border border-border bg-surface-2 text-ink hover:border-cyan hover:text-cyan transition-colors font-medium"
+      >
+        Browse Tools (47)
+      </a>
+    </div>
+  </div>
+</header>

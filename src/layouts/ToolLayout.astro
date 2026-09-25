@@ -1,0 +1,55 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PrivacyBadges from "../components/PrivacyBadges.astro";
+import PrivacyNotice from "../components/PrivacyNotice.astro";
+import ToolWidget from "../components/ToolWidget.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import CoreValueProps from "../components/CoreValueProps.astro";
+import FAQSchema from "../components/FAQSchema.astro";
+import RelatedTools from "../components/RelatedTools.astro";
+import WebAppSchema from "../components/WebAppSchema.astro";
+
+export interface Props {
+  slug?: string;
+  title: string;
+  description: string;
+  h1: string;
+  category: string;
+  engine: "client" | "server";
+  engineModule?: string;
+  badges: string[];
+  faqs: { q: string; a: string }[];
+  relatedTools: string[];
+  canonicalPath: string;
+}
+const {
+  slug, title, description, h1, category, engine, engineModule,
+  badges, faqs, relatedTools, canonicalPath,
+} = Astro.props;
+---
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <WebAppSchema name={h1} description={description} url={`https://www.imagealltools.com${canonicalPath}`} />
+  <div class="wrap py-10 max-w-4xl">
+    <Breadcrumbs category={category} toolTitle={h1} />
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-ink mt-2">{h1}</h1>
+    <p class="text-sm text-ink-muted mt-2 mb-4 max-w-2xl">{description}</p>
+    <PrivacyBadges badges={badges} />
+
+    <!-- How It Works Section (Starting of every page) -->
+    <HowItWorks className="mb-8" />
+
+    <ToolWidget slug={slug} engine={engine} engineModule={engineModule} toolName={h1} />
+    <PrivacyNotice engine={engine} />
+
+    <!-- 100% Private, Lightning Fast, Batch Processing (Every page) -->
+    <CoreValueProps className="my-8" />
+
+    <article class="article-content mt-12 pt-8 border-t border-border">
+      <slot />
+    </article>
+
+    <FAQSchema faqs={faqs} />
+    <RelatedTools slugs={relatedTools} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+export interface Props {
+  slug: string;
+  h1: string;
+  description: string;
+  category?: string;
+  isNew?: boolean;
+}
+const { slug, h1, description, category, isNew = false } = Astro.props;
+---
+<a
+  href={`/${slug}`}
+  class="group relative block p-5 rounded-xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan hover:shadow-[0_4px_24px_rgba(38,224,255,0.12)] transition duration-200"
+>
+  <div class="flex items-center justify-between mb-2">
+    <span class="text-[11px] uppercase font-semibold tracking-wider text-cyan">{category || "Tool"}</span>
+    {isNew && (
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan to-purple text-[#04141a]">
+        New
+      </span>
+    )}
+  </div>
+  <div class="font-display font-semibold text-ink group-hover:text-cyan transition-colors text-sm sm:text-base mb-1.5 leading-snug">
+    {h1}
+  </div>
+  <p class="text-xs text-ink-muted line-clamp-2 leading-relaxed">
+    {description}
+  </p>
+</a>

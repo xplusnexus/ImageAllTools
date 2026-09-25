@@ -1,0 +1,1403 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ToolCard from "../components/ToolCard.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import CoreValueProps from "../components/CoreValueProps.astro";
+
+const allTools = await getCollection("tools");
+
+const CATEGORY_ORDER = ["optimize", "create", "edit", "convert", "security"] as const;
+const CATEGORY_LABEL: Record<string, string> = {
+  optimize: "Optimize & Compress",
+  create: "Create & Enhance",
+  edit: "Edit, Crop & Transform",
+  convert: "Format Converters",
+  security: "Security & Privacy",
+};
+---
+<BaseLayout
+  title="ImageAll — Free Online Image Tools: Compress, Resize, Convert, Crop & More | XPlus Nexus"
+  description="ImageAll by XPlus Nexus is a free all-in-one image toolkit: compress, resize, convert, crop, rotate, remove backgrounds, watermark, extract colors, and turn images into PDFs — right in your browser."
+  canonicalPath="/"
+>
+  <!-- SEO WebApplication Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "ImageAll",
+    url: "https://www.imagealltools.com/",
+    applicationCategory: "MultimediaApplication",
+    operatingSystem: "Any (browser-based)",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: { "@type": "Organization", name: "XPlus Nexus", url: "https://www.xplusnexus.com" },
+    description: "A free, browser-based suite of image tools: compress, resize, convert, crop, rotate, remove backgrounds, watermark, extract colors, and convert images to PDF. 100% on-device processing."
+  })} />
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden py-14 md:py-20 border-b border-border">
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-10 -right-20 w-96 h-96 bg-purple/15 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="wrap relative z-10 max-w-3xl">
+      <p class="text-sm font-medium text-ink-muted mb-3.5">
+        An <strong class="text-cyan font-semibold">XPlus Nexus</strong> product
+      </p>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-ink leading-tight">
+        Every image tool you need, <span class="accent">in one place.</span>
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-ink-muted leading-relaxed">
+        Upload an image and every tool below actually processes it — compress, resize, convert, crop, remove backgrounds, watermark, extract colors, or export to PDF, all on your own device.
+      </p>
+      
+      <div class="mt-6 rounded-xl border border-border bg-surface p-4 text-xs sm:text-sm text-ink-muted flex items-start gap-3 shadow-inner">
+        <span class="text-cyan font-bold text-base leading-none mt-0.5">⚡</span>
+        <div>
+          <strong class="text-ink">100% Client-Side Private Engine:</strong> No images are uploaded to any server. Everything runs on your computer or phone using HTML5 Canvas & WebAssembly APIs.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted by Creators Worldwide (Home page only) -->
+  <section class="py-10 border-b border-border bg-[#0d0f17]">
+    <div class="wrap">
+      <div class="text-center max-w-xl mx-auto mb-6">
+        <span class="text-xs font-semibold uppercase tracking-wider text-purple">Proven Performance</span>
+        <h2 class="text-xl sm:text-2xl font-display font-bold text-ink mt-1">Trusted by Creators Worldwide</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto text-center">
+        <div class="p-5 rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="text-2xl sm:text-3xl font-display font-bold text-cyan">100K+</div>
+          <div class="text-xs text-ink-muted mt-1 uppercase tracking-wider font-medium">Images Processed</div>
+        </div>
+        <div class="p-5 rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="text-2xl sm:text-3xl font-display font-bold text-purple">10K+</div>
+          <div class="text-xs text-ink-muted mt-1 uppercase tracking-wider font-medium">Active Users</div>
+        </div>
+        <div class="p-5 rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="text-2xl sm:text-3xl font-display font-bold text-cyan">100%</div>
+          <div class="text-xs text-ink-muted mt-1 uppercase tracking-wider font-medium">Free & In-Browser</div>
+        </div>
+        <div class="p-5 rounded-2xl border border-border bg-surface shadow-sm">
+          <div class="text-2xl sm:text-3xl font-display font-bold text-purple">0 ms</div>
+          <div class="text-xs text-ink-muted mt-1 uppercase tracking-wider font-medium">Server Upload Delay</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works (Three simple steps - on every page) -->
+  <HowItWorks className="py-12 border-b border-border bg-[#08090c]" />
+
+  <!-- Sticky Interactive Quick Tools Navigation -->
+  <nav class="sticky top-[58px] z-30 border-b border-border bg-[#0a0b0f]/95 backdrop-blur-xl py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]" aria-label="Jump to a tool" id="quick-jump-nav">
+    <div class="wrap relative">
+      <div class="flex items-center gap-3 overflow-x-auto py-1.5 no-scrollbar scroll-smooth" id="jump-scroll-container">
+        <a
+          href="#compress"
+          data-jump="compress"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">🗜️</span>
+          <span>Compress</span>
+        </a>
+        <a
+          href="#resize"
+          data-jump="resize"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">⤢</span>
+          <span>Resize</span>
+        </a>
+        <a
+          href="#convert"
+          data-jump="convert"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">⇄</span>
+          <span>Convert</span>
+        </a>
+        <a
+          href="#crop"
+          data-jump="crop"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">⛶</span>
+          <span>Crop</span>
+        </a>
+        <a
+          href="#bg-remove"
+          data-jump="bg-remove"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">✂️</span>
+          <span>Remove BG</span>
+        </a>
+        <a
+          href="#rotate"
+          data-jump="rotate"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">⟳</span>
+          <span>Rotate & Flip</span>
+        </a>
+        <a
+          href="#watermark"
+          data-jump="watermark"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">◈</span>
+          <span>Watermark</span>
+        </a>
+        <a
+          href="#to-pdf"
+          data-jump="to-pdf"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">📄</span>
+          <span>Image to PDF</span>
+        </a>
+        <a
+          href="#palette"
+          data-jump="palette"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-cyan group-hover:scale-110 transition-transform">◐</span>
+          <span>Color Palette</span>
+        </a>
+        <a
+          href="#catalog"
+          data-jump="catalog"
+          class="jump-pill group flex items-center gap-2.5 px-5 py-2.5 rounded-xl border border-cyan/50 bg-gradient-to-r from-cyan/15 via-purple/20 to-cyan/10 text-cyan text-sm sm:text-base font-bold hover:border-cyan hover:brightness-125 transition-all duration-200 whitespace-nowrap shadow-[0_0_20px_rgba(38,224,255,0.18)]"
+        >
+          <span class="text-base group-hover:scale-110 transition-transform">📁</span>
+          <span>All 47 Tools Catalog →</span>
+        </a>
+        <a
+          href="#faq"
+          data-jump="faq"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+        >
+          <span class="text-base text-purple group-hover:scale-110 transition-transform">💬</span>
+          <span>FAQ</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= LIVE TOOLKIT WORKSPACES ================= -->
+  <section class="tools py-12">
+    <div class="wrap">
+      <div class="section-head max-w-2xl mb-10">
+        <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink">The ImageAll Interactive Toolkit</h2>
+        <p class="text-sm text-ink-muted mt-2">Every operation runs locally in your browser with zero latency. No sign-up, no queues, no watermarks.</p>
+      </div>
+
+      <!-- 1. COMPRESS -->
+      <article class="tool-card-box" id="compress">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">↓</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Image Compressor</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Live size · Target size search · Instant download</div>
+            </div>
+          </div>
+          <a href="/image-compressor" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Reduce image file size while keeping the best practical visual quality. Move the quality slider or choose a target size (20KB, 50KB, 100KB, etc.) for instant calculation.
+        </p>
+        
+        <div class="workspace">
+          <div class="dropzone" id="compress-drop" tabindex="0" role="button" aria-label="Upload an image to compress">
+            <strong>Click to upload</strong> or drag an image here. Supports JPG, PNG, WEBP, GIF, BMP, TIFF, SVG, AVIF.
+          </div>
+          <input type="file" id="compress-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" hidden />
+          
+          <div class="preview-row" id="compress-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="compress-canvas"></canvas></div>
+            <div class="controls">
+              <div class="field">
+                <label for="compress-format">Output format</label>
+                <select id="compress-format">
+                  <option value="image/jpeg">JPG</option>
+                  <option value="image/webp">WEBP</option>
+                  <option value="image/png">PNG (lossless)</option>
+                </select>
+              </div>
+              <div class="field">
+                <span class="field-label">Compression method</span>
+                <div class="mode-switch" role="group" aria-label="Compression method">
+                  <button class="mode-option active" id="compress-quality-mode" type="button" aria-pressed="true">Quality</button>
+                  <button class="mode-option" id="compress-target-mode" type="button" aria-pressed="false">Target file size</button>
+                </div>
+              </div>
+              <div class="field" id="quality-field">
+                <label for="compress-quality">Quality (<span id="compress-quality-val">80</span>%)</label>
+                <input type="range" id="compress-quality" min="10" max="100" value="80" />
+              </div>
+              <div class="field" id="target-field" style="opacity: 0.55;">
+                <label for="compress-target">Target file size</label>
+                <div class="target-inline">
+                  <input type="number" id="compress-target" min="1" value="100" disabled />
+                  <span class="helper">KB goal</span>
+                </div>
+                <div class="target-presets">
+                  <button class="preset" type="button" data-target="20">20 KB</button>
+                  <button class="preset" type="button" data-target="50">50 KB</button>
+                  <button class="preset" type="button" data-target="80">80 KB</button>
+                  <button class="preset" type="button" data-target="100">100 KB</button>
+                  <button class="preset" type="button" data-target="150">150 KB</button>
+                  <button class="preset" type="button" data-target="200">200 KB</button>
+                </div>
+              </div>
+            </div>
+            <div class="metrics" aria-live="polite">
+              <div class="metric"><div class="metric-label">Original</div><div class="metric-value" id="compress-original-size">—</div></div>
+              <div class="metric"><div class="metric-label">Quality</div><div class="metric-value" id="compress-metric-quality">80%</div></div>
+              <div class="metric"><div class="metric-label">New size</div><div class="metric-value" id="compress-new-size">—</div></div>
+              <div class="metric"><div class="metric-label">Reduction</div><div class="metric-value" id="compress-reduction">—</div></div>
+            </div>
+            <p class="helper text-xs text-ink-muted mt-2" id="compress-target-note">Calculated in real-time inside your browser Canvas.</p>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-primary" id="compress-download" type="button">Download compressed image</button>
+              <button class="btn btn-ghost" id="compress-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="compress-status" aria-live="polite"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. RESIZE -->
+      <article class="tool-card-box" id="resize">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⤢</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Image Resizer</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Custom pixels · Aspect lock · Social presets</div>
+            </div>
+          </div>
+          <a href="/image-resizer" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Type exact width or height, drag the percentage slider, or choose presets for YouTube, Instagram, or Facebook without distorting aspect ratios.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="resize-drop" tabindex="0" role="button" aria-label="Upload an image to resize">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="resize-input" accept="image/*" hidden />
+          <div class="preview-row" id="resize-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="resize-canvas"></canvas></div>
+            <div class="controls">
+              <div class="field"><label for="resize-w">Width (px)</label><input type="number" id="resize-w" min="1" /></div>
+              <div class="field"><label for="resize-h">Height (px)</label><input type="number" id="resize-h" min="1" /></div>
+              <div class="field"><label for="resize-lock" class="flex items-center gap-2 cursor-pointer pt-3"><input type="checkbox" id="resize-lock" checked /> <span class="text-xs text-ink">Lock aspect ratio</span></label></div>
+              <div class="field"><label for="resize-pct">Scale (<span id="resize-pct-val">100</span>%)</label><input type="range" id="resize-pct" min="5" max="200" value="100" /></div>
+            </div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-ghost" id="resize-apply" type="button">Apply resize</button>
+              <button class="btn btn-primary" id="resize-download" type="button">Download resized image</button>
+              <button class="btn btn-ghost" id="resize-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="resize-status"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. CONVERT -->
+      <article class="tool-card-box" id="convert">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⇄</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Image Converter</h2>
+              <div class="text-xs text-ink-muted mt-0.5">JPG · PNG · WEBP</div>
+            </div>
+          </div>
+          <a href="/jpg-to-png" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Converters →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Switch files between JPG, PNG, and WEBP formats instantly with preserved transparency and lossless quality.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="convert-drop" tabindex="0" role="button" aria-label="Upload an image to convert">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="convert-input" accept="image/*" hidden />
+          <div class="preview-row" id="convert-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="convert-canvas"></canvas></div>
+            <div class="controls">
+              <div class="field">
+                <label for="convert-format">Convert to</label>
+                <select id="convert-format">
+                  <option value="image/png">PNG</option>
+                  <option value="image/jpeg">JPG</option>
+                  <option value="image/webp">WEBP</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-primary" id="convert-download" type="button">Download converted image</button>
+              <button class="btn btn-ghost" id="convert-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="convert-status"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. CROP -->
+      <article class="tool-card-box" id="crop">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⛶</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Image Cropper</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Drag to crop · 1:1 · 9:16 Story · 16:9</div>
+            </div>
+          </div>
+          <a href="/image-cropper" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Draw a selection box directly on the image, or tap a ratio preset for a centered crop, then apply.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="crop-drop" tabindex="0" role="button" aria-label="Upload an image to crop">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="crop-input" accept="image/*" hidden />
+          <div class="preview-row" id="crop-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="crop-canvas"></canvas></div>
+            <div class="controls">
+              <div class="field col-span-full">
+                <label>Preset ratio</label>
+                <div class="flex gap-2 flex-wrap mt-1">
+                  <button class="preset" type="button" data-ratio="1">1:1 Square</button>
+                  <button class="preset" type="button" data-ratio="1.9098">Story 9:16</button>
+                  <button class="preset" type="button" data-ratio="1.7778">16:9 Landscape</button>
+                  <button class="preset" type="button" data-ratio="free">Freeform</button>
+                </div>
+              </div>
+            </div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-ghost" id="crop-reset" type="button">Reset selection</button>
+              <button class="btn btn-primary" id="crop-download" type="button">Apply & download crop</button>
+            </div>
+            <p class="status" id="crop-status">Drag on the image to draw a crop box.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. BACKGROUND REMOVER -->
+      <article class="tool-card-box" id="bg-remove">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">✂</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Background Remover</h2>
+              <div class="text-xs text-ink-muted mt-0.5">On-device AI model · Zero server upload</div>
+            </div>
+          </div>
+          <a href="/background-remover" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Uses an on-device AI model to cut subjects out automatically. Your images stay 100% on your device.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="bg-drop" tabindex="0" role="button" aria-label="Upload an image to remove background">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="bg-input" accept="image/*" hidden />
+          <div class="preview-row" id="bg-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="bg-canvas"></canvas></div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-primary" id="bg-run" type="button">Remove background</button>
+              <button class="btn btn-ghost" id="bg-download" type="button" disabled>Download PNG</button>
+              <button class="btn btn-ghost" id="bg-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="bg-status">First run caches the on-device AI model locally — later runs execute fast.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6. ROTATE / FLIP -->
+      <article class="tool-card-box" id="rotate">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⟳</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Rotate & Flip</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Lossless · 90° steps · Horizontal & vertical mirroring</div>
+            </div>
+          </div>
+          <a href="/rotate-image" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Fix a sideways photo or mirror it — each action redraws instantly with no re-compression loss.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="rotate-drop" tabindex="0" role="button" aria-label="Upload an image to rotate or flip">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="rotate-input" accept="image/*" hidden />
+          <div class="preview-row" id="rotate-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="rotate-canvas"></canvas></div>
+            <div class="row-actions mt-4 flex gap-2.5 flex-wrap">
+              <button class="btn btn-ghost" id="rotate-left" type="button">⟲ Rotate left</button>
+              <button class="btn btn-ghost" id="rotate-right" type="button">⟳ Rotate right</button>
+              <button class="btn btn-ghost" id="flip-h" type="button">⇋ Flip horizontal</button>
+              <button class="btn btn-ghost" id="flip-v" type="button">⇵ Flip vertical</button>
+              <button class="btn btn-primary" id="rotate-download" type="button">Download</button>
+              <button class="btn btn-ghost" id="rotate-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="rotate-status"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7. WATERMARK -->
+      <article class="tool-card-box" id="watermark">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">◈</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Watermark Adder</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Text watermark · Opacity · Tiled or corner positions</div>
+            </div>
+          </div>
+          <a href="/add-watermark" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Stamp text across a photo before sharing — control the wording, color, size, opacity, and positioning.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="wm-drop" tabindex="0" role="button" aria-label="Upload an image to watermark">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="wm-input" accept="image/*" hidden />
+          <div class="preview-row" id="wm-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="wm-canvas"></canvas></div>
+            <div class="controls">
+              <div class="field"><label for="wm-text">Watermark text</label><input type="text" id="wm-text" value="© XPlus Nexus" /></div>
+              <div class="field"><label for="wm-color">Color</label><input type="color" id="wm-color" value="#ffffff" /></div>
+              <div class="field"><label for="wm-size">Size (<span id="wm-size-val">36</span>px)</label><input type="range" id="wm-size" min="10" max="120" value="36" /></div>
+              <div class="field"><label for="wm-opacity">Opacity (<span id="wm-opacity-val">60</span>%)</label><input type="range" id="wm-opacity" min="10" max="100" value="60" /></div>
+              <div class="field"><label for="wm-position">Position</label>
+                <select id="wm-position">
+                  <option value="bottom-right">Bottom right</option>
+                  <option value="bottom-left">Bottom left</option>
+                  <option value="top-right">Top right</option>
+                  <option value="top-left">Top left</option>
+                  <option value="center">Center</option>
+                  <option value="tile">Repeating tile</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-primary" id="wm-download" type="button">Download watermarked image</button>
+              <button class="btn btn-ghost" id="wm-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="wm-status"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8. IMAGE TO PDF -->
+      <article class="tool-card-box" id="to-pdf">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">▤</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Image to PDF</h2>
+              <div class="text-xs text-ink-muted mt-0.5">Multi-page · Reorder · DPI · Target size</div>
+            </div>
+          </div>
+          <a href="/image-to-pdf" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Combine multiple images into a PDF with full control over page size, orientation, DPI, and output quality.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="pdf-drop" tabindex="0" role="button" aria-label="Upload images for PDF">
+            <strong>Click to upload</strong> or drag one or more images here
+          </div>
+          <input type="file" id="pdf-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple hidden />
+          <div id="pdf-list" class="pdf-list"></div>
+          <div class="preview-row" id="pdf-preview" style="display:none;">
+            <div class="controls">
+              <div class="field"><label for="pdf-size">Page size</label><select id="pdf-size"><option value="a4">A4</option><option value="letter">Letter</option><option value="fit">Fit to image</option></select></div>
+              <div class="field"><label for="pdf-orientation">Orientation</label><select id="pdf-orientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+              <div class="field"><label for="pdf-quality">PDF quality</label><select id="pdf-quality"><option value="small">Smallest</option><option value="balanced" selected>Balanced</option><option value="high">High quality</option></select></div>
+              <div class="field"><label for="pdf-dpi">DPI</label><select id="pdf-dpi"><option value="72">72 DPI</option><option value="96" selected>96 DPI</option><option value="150">150 DPI</option><option value="300">300 DPI</option></select></div>
+            </div>
+            <div class="metrics" aria-live="polite">
+              <div class="metric"><div class="metric-label">Pages</div><div class="metric-value" id="pdf-page-count">0</div></div>
+              <div class="metric"><div class="metric-label">DPI</div><div class="metric-value" id="pdf-dpi-readout">96</div></div>
+              <div class="metric"><div class="metric-label">Estimated size</div><div class="metric-value" id="pdf-est-size">—</div></div>
+              <div class="metric"><div class="metric-label">Quality</div><div class="metric-value" id="pdf-quality-readout">Balanced</div></div>
+            </div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-primary" id="pdf-download" type="button">Generate & download PDF</button>
+              <button class="btn btn-ghost" id="pdf-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="pdf-status" aria-live="polite"></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 9. COLOR PALETTE -->
+      <article class="tool-card-box" id="palette">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">◐</span>
+            <div>
+              <h2 class="text-xl font-display font-bold text-ink">Color Palette Extractor</h2>
+              <div class="text-xs text-ink-muted mt-0.5">HEX codes · WCAG AA contrast testing</div>
+            </div>
+          </div>
+          <a href="/color-palette" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+        </div>
+        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+          Extract dominant colors from an image as ready-to-use hex codes, and test the contrast ratio between any two colors.
+        </p>
+        <div class="workspace">
+          <div class="dropzone" id="palette-drop" tabindex="0" role="button" aria-label="Upload an image to extract colors">
+            <strong>Click to upload</strong> or drag an image here
+          </div>
+          <input type="file" id="palette-input" accept="image/*" hidden />
+          <div class="preview-row" id="palette-preview" style="display:none;">
+            <div class="canvas-holder"><canvas id="palette-canvas"></canvas></div>
+            <div class="swatches" id="palette-swatches"></div>
+            <div class="contrast-box" id="palette-contrast">Select two swatches to check contrast.</div>
+            <div class="row-actions mt-4 flex gap-3 flex-wrap">
+              <button class="btn btn-ghost" id="palette-reset" type="button">Reset</button>
+            </div>
+            <p class="status" id="palette-status"></p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 100% Private, Lightning Fast, Batch Processing (Every page) -->
+  <CoreValueProps className="py-14 border-t border-border bg-[#08090c]" />
+
+  <!-- ================= UNIQUE EDITORIAL SECTION ================= -->
+  <section class="py-16 border-t border-border bg-gradient-to-b from-surface to-[#0a0b0f]">
+    <div class="wrap max-w-5xl">
+      <div class="max-w-3xl mb-12">
+        <span class="text-xs font-semibold uppercase tracking-wider text-cyan">Next-Generation Image Suite</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-ink mt-1.5 leading-tight">
+          Why Choose ImageAll for Your Image Editing &amp; Optimization Needs?
+        </h2>
+        <p class="text-sm sm:text-base text-ink-muted mt-3 leading-relaxed">
+          ImageAll is engineered from the ground up to redefine browser-based creative tooling. Unlike legacy online editors that upload your files to remote servers, our platform executes 100% of pixel operations right inside your device memory using modern HTML5 Canvas, WebAssembly, and local vector routines.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Feature 1: Built for Professionals -->
+        <div class="p-7 rounded-2xl border border-border bg-surface-2/60 hover:border-cyan/50 transition-all duration-200">
+          <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 text-cyan flex items-center justify-center text-xl mb-4 font-bold">
+            ⚡
+          </div>
+          <h3 class="text-lg font-display font-bold text-ink">Built for High-Velocity Professionals</h3>
+          <p class="text-sm text-ink-muted mt-2.5 leading-relaxed">
+            Content creators, photographers, frontend developers, and digital marketers depend on ImageAll to streamline daily creative operations. Resize assets to pixel-perfect social specifications (YouTube covers, Instagram 1:1, Open Graph banners), compress images to exact target KB ceilings for Core Web Vitals optimization, and convert formats with uncompromising visual fidelity.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-ink/80">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Lossless and near-lossless compression math</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Instant social media dimension presets</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Real-time side-by-side metric readouts</li>
+          </ul>
+        </div>
+
+        <!-- Feature 2: Effortless Simplicity -->
+        <div class="p-7 rounded-2xl border border-border bg-surface-2/60 hover:border-purple/50 transition-all duration-200">
+          <div class="w-12 h-12 rounded-xl bg-purple/10 border border-purple/30 text-purple flex items-center justify-center text-xl mb-4 font-bold">
+            ✨
+          </div>
+          <h3 class="text-lg font-display font-bold text-ink">Zero Learning Curve for Everyone</h3>
+          <p class="text-sm text-ink-muted mt-2.5 leading-relaxed">
+            No bulky desktop software, expensive monthly subscriptions, or complex toolbars. Our clean, distraction-free interface gives anyone immediate creative control. Simply drag and drop your media, fine-tune intuitive sliders or quick presets with live canvas feedback, and save your finished artwork in seconds.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-ink/80">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Zero registration or email verification required</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Works flawlessly across mobile, tablet &amp; desktop</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Clean exports with zero watermarks or ads</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature 3: Complete Suite Banner -->
+      <div class="mt-8 p-7 rounded-2xl border border-cyan/30 bg-gradient-to-r from-surface to-surface-2 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div>
+          <h3 class="text-lg font-display font-bold text-ink">Explore Our Complete Suite of 47 Dedicated Tools</h3>
+          <p class="text-sm text-ink-muted mt-1 leading-relaxed max-w-2xl">
+            From exact dimension crop utilities to smart background removers, OCR extractors, and privacy metadata strippers — explore our organized directory below to find the exact tool built for your goal.
+          </p>
+        </div>
+        <a
+          href="#catalog"
+          class="btn btn-primary whitespace-nowrap text-sm px-6 py-3 rounded-xl shadow-[0_0_20px_rgba(38,224,255,0.2)]"
+        >
+          Browse Tool Catalog ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 47 TOOLS CATALOG (SEO & DIRECTORY) ================= -->
+  <section id="catalog" class="py-16 border-t border-border bg-[#08090c]">
+    <div class="wrap">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-cyan">Complete Directory</span>
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink mt-1">All 47 Image Tools</h2>
+          <p class="text-sm text-ink-muted mt-1">Dedicated, SEO-optimized tools with comprehensive tutorials and instant on-device processing.</p>
+        </div>
+        <div class="flex gap-2 flex-wrap" id="category-tabs">
+          <button class="preset active" data-filter="all">All (47)</button>
+          {CATEGORY_ORDER.map((cat) => (
+            <button class="preset" data-filter={cat}>{CATEGORY_LABEL[cat]}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="tools-grid">
+        {allTools.map((t: CollectionEntry<"tools">) => (
+          <div data-category={t.data.category} class="tool-card-item">
+            <ToolCard
+              slug={t.slug}
+              h1={t.data.h1}
+              description={t.data.description}
+              category={CATEGORY_LABEL[t.data.category]}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GENERAL FAQ & GUIDE ================= -->
+  <section class="py-16 border-t border-border" id="faq">
+    <div class="wrap max-w-4xl">
+      <div class="section-head mb-8">
+        <span class="text-xs font-semibold uppercase tracking-wider text-purple">Help & Documentation</span>
+        <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink mt-1">Frequently Asked Questions</h2>
+        <p class="text-sm text-ink-muted mt-1">Everything you need to know about processing images safely and privately with ImageAll.</p>
+      </div>
+
+      <div class="space-y-3">
+        <details class="faq">
+          <summary>Is ImageAll really free to use?</summary>
+          <p>Yes. Every tool in ImageAll is 100% free with no subscription, no sign-up, and no watermarks on your downloaded images.</p>
+        </details>
+        <details class="faq">
+          <summary>Do you store, see, or upload my images?</summary>
+          <p>No. Every tool processes your image entirely on your own device using client-side HTML5 Canvas and WebAssembly. Your files never touch our servers.</p>
+        </details>
+        <details class="faq">
+          <summary>Which file types does ImageAll support?</summary>
+          <p>ImageAll supports common image formats including JPG, PNG, WEBP, GIF, SVG, BMP, TIFF, and AVIF. Export options vary according to the selected tool.</p>
+        </details>
+        <details class="faq">
+          <summary>Can I compress an image to an exact size like 50KB or 100KB?</summary>
+          <p>Yes! Switch to "Target file size" in the Image Compressor, pick 20KB, 50KB, 100KB, or enter a custom target. Our search engine will optimize the image to stay below your requested file size limit.</p>
+        </details>
+        <details class="faq">
+          <summary>How does ImageAll run without server costs?</summary>
+          <p>Because image computation happens on your computer's browser rather than expensive cloud servers, our hosting only serves static HTML, CSS, and JS files. This allows us to keep the site completely free forever!</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Load jsPDF for Image to PDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <!-- Homepage Interactive Scripts -->
+  <script>
+    (function () {
+      // Category filter tabs
+      const filterBtns = document.querySelectorAll("[data-filter]");
+      const items = document.querySelectorAll(".tool-card-item");
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          filterBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const targetCat = btn.getAttribute("data-filter");
+          items.forEach((item) => {
+            const el = item as HTMLElement;
+            if (targetCat === "all" || el.getAttribute("data-category") === targetCat) {
+              el.style.display = "block";
+            } else {
+              el.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // Sticky Navigation Scroll-Spy & Smooth Navigation
+      const jumpPills = document.querySelectorAll(".jump-pill");
+      const jumpContainer = document.getElementById("jump-scroll-container");
+      const sectionIds = [
+        "compress", "resize", "convert", "crop", "bg-remove",
+        "rotate", "watermark", "to-pdf", "palette", "catalog", "faq"
+      ];
+
+      function setActivePill(id: string) {
+        jumpPills.forEach((p) => {
+          if (p.getAttribute("data-jump") === id) {
+            p.classList.add("active-pill");
+            if (jumpContainer) {
+              const pillRect = p.getBoundingClientRect();
+              const containerRect = jumpContainer.getBoundingClientRect();
+              if (pillRect.left < containerRect.left || pillRect.right > containerRect.right) {
+                p.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+              }
+            }
+          } else {
+            p.classList.remove("active-pill");
+          }
+        });
+      }
+
+      jumpPills.forEach((pill) => {
+        pill.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = pill.getAttribute("data-jump");
+          if (!targetId) return;
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            const headerOffset = 130;
+            const elementPosition = targetEl.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+            setActivePill(targetId);
+          }
+        });
+      });
+
+      let scrollTimer: any = null;
+      window.addEventListener("scroll", () => {
+        if (scrollTimer) return;
+        scrollTimer = setTimeout(() => {
+          scrollTimer = null;
+          const scrollPos = window.pageYOffset + 220;
+          for (let i = sectionIds.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sectionIds[i]);
+            if (el && el.offsetTop <= scrollPos) {
+              setActivePill(sectionIds[i]);
+              break;
+            }
+          }
+        }, 100);
+      }, { passive: true });
+
+      // Global helpers
+      function $(id: string) { return document.getElementById(id); }
+      function setStatus(el: HTMLElement | null, msg: string, cls?: string) {
+        if (!el) return;
+        el.textContent = msg || "";
+        el.className = "status" + (cls ? " " + cls : "");
+      }
+      function fmtBytes(n: number) {
+        if (n < 1024) return n + " B";
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+        return (n / (1024 * 1024)).toFixed(2) + " MB";
+      }
+      function loadImage(file: File): Promise<{ img: HTMLImageElement; url: string }> {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          const url = URL.createObjectURL(file);
+          img.onload = () => resolve({ img, url });
+          img.onerror = reject;
+          img.src = url;
+        });
+      }
+      function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob | null> {
+        return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+      }
+      function downloadBlob(blob: Blob, filename: string) {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      function initDropzone(zoneId: string, inputId: string, onFiles: (files: FileList) => void) {
+        const zone = $(zoneId), input = $(inputId) as HTMLInputElement;
+        if (!zone || !input) return;
+        zone.addEventListener("click", () => input.click());
+        zone.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+        });
+        zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("drag"); });
+        zone.addEventListener("dragleave", () => zone.classList.remove("drag"));
+        zone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          zone.classList.remove("drag");
+          if (e.dataTransfer && e.dataTransfer.files.length) onFiles(e.dataTransfer.files);
+        });
+        input.addEventListener("change", () => {
+          if (input.files && input.files.length) { onFiles(input.files); input.value = ""; }
+        });
+      }
+
+      // 1. COMPRESSOR
+      (function () {
+        const canvas = $("compress-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null, lastBlob: Blob | null = null;
+        const qEl = $("compress-quality") as HTMLInputElement;
+        const qVal = $("compress-quality-val");
+        const targetEl = $("compress-target") as HTMLInputElement;
+        const formatEl = $("compress-format") as HTMLSelectElement;
+        let compressionMode = "quality";
+        const qualityModeBtn = $("compress-quality-mode");
+        const targetModeBtn = $("compress-target-mode");
+
+        async function encode(q: number) {
+          const type = formatEl ? formatEl.value : "image/jpeg";
+          return canvasToBlob(canvas, type, type === "image/png" ? undefined : q);
+        }
+
+        async function findTargetBlob(targetBytes: number) {
+          if (formatEl.value === "image/png") return { blob: await encode(1), quality: 1 };
+          let low = 0.05, high = 1, best: Blob | null = null, bestQ = 0.8;
+          for (let i = 0; i < 9; i++) {
+            const q = (low + high) / 2;
+            const blob = await encode(q);
+            if (!blob) break;
+            if (blob.size <= targetBytes) { best = blob; bestQ = q; low = q; } else high = q;
+          }
+          if (!best) { best = await encode(low); bestQ = low; }
+          return { blob: best, quality: bestQ };
+        }
+
+        async function refresh() {
+          if (!srcImg || !currentFile) return;
+          try {
+            let result;
+            if (compressionMode === "target") result = await findTargetBlob(Number(targetEl.value) * 1024);
+            else result = { blob: await encode(Number(qEl.value) / 100), quality: Number(qEl.value) / 100 };
+            lastBlob = result.blob;
+            if (result.blob) {
+              const orig = $("compress-original-size");
+              const nw = $("compress-new-size");
+              const qm = $("compress-metric-quality");
+              const red = $("compress-reduction");
+              if (orig) orig.textContent = fmtBytes(currentFile.size);
+              if (nw) nw.textContent = fmtBytes(result.blob.size);
+              if (qm) qm.textContent = Math.round(result.quality * 100) + "%";
+              if (red) red.textContent = Math.max(0, (1 - result.blob.size / currentFile.size) * 100).toFixed(1) + "%";
+              setStatus($("compress-status"), `Output: ${fmtBytes(result.blob.size)}. Ready to download.`, "ok");
+            }
+          } catch (e) {
+            setStatus($("compress-status"), "Could not calculate compressed image.", "err");
+          }
+        }
+
+        initDropzone("compress-drop", "compress-input", (files) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
+            srcImg = r.img;
+            canvas.width = r.img.naturalWidth;
+            canvas.height = r.img.naturalHeight;
+            ctx?.drawImage(r.img, 0, 0);
+            const prev = $("compress-preview");
+            if (prev) prev.style.display = "grid";
+            refresh();
+          });
+        });
+
+        qEl?.addEventListener("input", () => {
+          if (qVal) qVal.textContent = qEl.value;
+          if (compressionMode === "quality") refresh();
+        });
+        qualityModeBtn?.addEventListener("click", () => {
+          compressionMode = "quality";
+          qualityModeBtn.classList.add("active");
+          targetModeBtn?.classList.remove("active");
+          if (qEl) qEl.disabled = false;
+          if (targetEl) targetEl.disabled = true;
+          const qF = $("quality-field"), tF = $("target-field");
+          if (qF) qF.style.opacity = "1";
+          if (tF) tF.style.opacity = "0.55";
+          refresh();
+        });
+        targetModeBtn?.addEventListener("click", () => {
+          compressionMode = "target";
+          targetModeBtn.classList.add("active");
+          qualityModeBtn?.classList.remove("active");
+          if (qEl) qEl.disabled = true;
+          if (targetEl) targetEl.disabled = false;
+          const qF = $("quality-field"), tF = $("target-field");
+          if (qF) qF.style.opacity = "0.55";
+          if (tF) tF.style.opacity = "1";
+          refresh();
+        });
+        document.querySelectorAll("[data-target]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const t = btn.getAttribute("data-target") || "100";
+            if (targetEl) targetEl.value = t;
+            targetModeBtn?.click();
+          });
+        });
+        targetEl?.addEventListener("input", refresh);
+        formatEl?.addEventListener("change", refresh);
+        $("compress-download")?.addEventListener("click", async () => {
+          if (!srcImg) { setStatus($("compress-status"), "Upload an image first.", "err"); return; }
+          if (!lastBlob) await refresh();
+          if (lastBlob) downloadBlob(lastBlob, "compressed.jpg");
+        });
+        $("compress-reset")?.addEventListener("click", () => {
+          currentFile = null; srcImg = null; lastBlob = null;
+          const prev = $("compress-preview");
+          if (prev) prev.style.display = "none";
+          setStatus($("compress-status"), "Reset. Upload an image to begin.");
+        });
+      })();
+
+      // 2. RESIZE
+      (function () {
+        const canvas = $("resize-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let srcImg: HTMLImageElement | null = null, origW = 0, origH = 0;
+        const wEl = $("resize-w") as HTMLInputElement;
+        const hEl = $("resize-h") as HTMLInputElement;
+        const lockEl = $("resize-lock") as HTMLInputElement;
+        const pctEl = $("resize-pct") as HTMLInputElement;
+        const pctVal = $("resize-pct-val");
+
+        initDropzone("resize-drop", "resize-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            srcImg = r.img; origW = r.img.naturalWidth; origH = r.img.naturalHeight;
+            canvas.width = origW; canvas.height = origH;
+            ctx?.drawImage(srcImg, 0, 0);
+            if (wEl) wEl.value = String(origW);
+            if (hEl) hEl.value = String(origH);
+            const prev = $("resize-preview");
+            if (prev) prev.style.display = "grid";
+            setStatus($("resize-status"), `Loaded at ${origW}×${origH}px.`, "ok");
+          });
+        });
+        wEl?.addEventListener("input", () => {
+          if (lockEl?.checked && origW && hEl) hEl.value = String(Math.round(origH * (Number(wEl.value) / origW)));
+        });
+        hEl?.addEventListener("input", () => {
+          if (lockEl?.checked && origH && wEl) wEl.value = String(Math.round(origW * (Number(hEl.value) / origH)));
+        });
+        pctEl?.addEventListener("input", () => {
+          if (pctVal) pctVal.textContent = pctEl.value;
+          if (origW && wEl && hEl) {
+            wEl.value = String(Math.round(origW * Number(pctEl.value) / 100));
+            hEl.value = String(Math.round(origH * Number(pctEl.value) / 100));
+          }
+        });
+        $("resize-apply")?.addEventListener("click", () => {
+          if (!srcImg || !ctx) return;
+          const w = Math.max(1, Number(wEl?.value) || origW);
+          const h = Math.max(1, Number(hEl?.value) || origH);
+          canvas.width = w; canvas.height = h;
+          ctx.clearRect(0, 0, w, h);
+          ctx.drawImage(srcImg, 0, 0, w, h);
+          setStatus($("resize-status"), `Resized to ${w}×${h}px.`, "ok");
+        });
+        $("resize-download")?.addEventListener("click", () => {
+          if (!srcImg) return;
+          canvasToBlob(canvas, "image/png").then((blob) => {
+            if (blob) downloadBlob(blob, "resized.png");
+          });
+        });
+        $("resize-reset")?.addEventListener("click", () => {
+          srcImg = null;
+          const prev = $("resize-preview");
+          if (prev) prev.style.display = "none";
+          setStatus($("resize-status"), "");
+        });
+      })();
+
+      // 3. CONVERT
+      (function () {
+        const canvas = $("convert-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let srcImg: HTMLImageElement | null = null;
+        initDropzone("convert-drop", "convert-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            srcImg = r.img;
+            canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
+            ctx?.drawImage(srcImg, 0, 0);
+            const prev = $("convert-preview");
+            if (prev) prev.style.display = "grid";
+            setStatus($("convert-status"), "Ready to convert.", "ok");
+          });
+        });
+        $("convert-download")?.addEventListener("click", () => {
+          if (!srcImg) return;
+          const fmt = ($("convert-format") as HTMLSelectElement)?.value || "image/png";
+          canvasToBlob(canvas, fmt, 0.92).then((blob) => {
+            if (blob) {
+              const ext = fmt === "image/png" ? "png" : fmt === "image/webp" ? "webp" : "jpg";
+              downloadBlob(blob, "converted." + ext);
+              setStatus($("convert-status"), "Downloaded.", "ok");
+            }
+          });
+        });
+        $("convert-reset")?.addEventListener("click", () => {
+          srcImg = null;
+          const prev = $("convert-preview");
+          if (prev) prev.style.display = "none";
+          setStatus($("convert-status"), "");
+        });
+      })();
+
+      // 4. CROP
+      (function () {
+        const canvas = $("crop-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let srcImg: HTMLImageElement | null = null;
+        let cropBox: { x: number; y: number; w: number; h: number } | null = null;
+        let dragging = false, startX = 0, startY = 0, ratio = "free";
+
+        function draw() {
+          if (!srcImg || !ctx) return;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(srcImg, 0, 0);
+          if (cropBox) {
+            ctx.fillStyle = "rgba(0,0,0,0.5)";
+            ctx.fillRect(0, 0, canvas.width, cropBox.y);
+            ctx.fillRect(0, cropBox.y + cropBox.h, canvas.width, canvas.height - (cropBox.y + cropBox.h));
+            ctx.fillRect(0, cropBox.y, cropBox.x, cropBox.h);
+            ctx.fillRect(cropBox.x + cropBox.w, cropBox.y, canvas.width - (cropBox.x + cropBox.w), cropBox.h);
+            ctx.strokeStyle = "#26e0ff";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
+          }
+        }
+
+        initDropzone("crop-drop", "crop-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            srcImg = r.img;
+            canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
+            cropBox = null;
+            draw();
+            const prev = $("crop-preview");
+            if (prev) prev.style.display = "grid";
+            setStatus($("crop-status"), "Drag on the image to draw a crop box.");
+          });
+        });
+
+        canvas?.addEventListener("mousedown", (e) => {
+          if (!srcImg || ratio !== "free") return;
+          const rect = canvas.getBoundingClientRect();
+          const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+          startX = (e.clientX - rect.left) * sx;
+          startY = (e.clientY - rect.top) * sy;
+          dragging = true;
+          cropBox = { x: startX, y: startY, w: 0, h: 0 };
+        });
+        window.addEventListener("mousemove", (e) => {
+          if (!dragging || !canvas) return;
+          const rect = canvas.getBoundingClientRect();
+          const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+          const curX = (e.clientX - rect.left) * sx;
+          const curY = (e.clientY - rect.top) * sy;
+          cropBox = {
+            x: Math.min(startX, curX),
+            y: Math.min(startY, curY),
+            w: Math.abs(curX - startX),
+            h: Math.abs(curY - startY),
+          };
+          draw();
+        });
+        window.addEventListener("mouseup", () => { dragging = false; });
+
+        document.querySelectorAll("[data-ratio]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (!srcImg) return;
+            ratio = btn.getAttribute("data-ratio") || "free";
+            if (ratio === "free") {
+              cropBox = null; draw();
+              setStatus($("crop-status"), "Drag to draw crop box.");
+            } else {
+              const r = Number(ratio);
+              let w = canvas.width * 0.8, h = w / r;
+              if (h > canvas.height * 0.8) { h = canvas.height * 0.8; w = h * r; }
+              cropBox = { x: (canvas.width - w) / 2, y: (canvas.height - h) / 2, w, h };
+              draw();
+              setStatus($("crop-status"), `Centered crop set.`, "ok");
+            }
+          });
+        });
+
+        $("crop-download")?.addEventListener("click", () => {
+          if (!srcImg || !cropBox || cropBox.w < 2 || cropBox.h < 2) return;
+          const out = document.createElement("canvas");
+          out.width = Math.round(cropBox.w); out.height = Math.round(cropBox.h);
+          out.getContext("2d")?.drawImage(srcImg, cropBox.x, cropBox.y, cropBox.w, cropBox.h, 0, 0, out.width, out.height);
+          canvasToBlob(out, "image/png").then((blob) => {
+            if (blob) downloadBlob(blob, "cropped.png");
+          });
+        });
+      })();
+
+      // 5. BACKGROUND REMOVER
+      (function () {
+        const canvas = $("bg-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let currentFile: File | null = null, resultBlob: Blob | null = null;
+        initDropzone("bg-drop", "bg-input", (files) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
+            canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
+            ctx?.drawImage(r.img, 0, 0);
+            const prev = $("bg-preview");
+            if (prev) prev.style.display = "grid";
+            setStatus($("bg-status"), "Ready — click 'Remove background' to run.", "ok");
+          });
+        });
+        $("bg-run")?.addEventListener("click", async () => {
+          if (!currentFile) return;
+          setStatus($("bg-status"), "Processing locally on your device...");
+          try {
+            const mod: any = await import("https://esm.sh/@imgly/background-removal");
+            const removeBg = mod.default || mod.removeBackground;
+            const blob: Blob = await removeBg(currentFile);
+            resultBlob = blob;
+            const img = new Image();
+            img.onload = () => {
+              canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+              ctx?.clearRect(0, 0, canvas.width, canvas.height);
+              ctx?.drawImage(img, 0, 0);
+              const dl = $("bg-download") as HTMLButtonElement;
+              if (dl) dl.disabled = false;
+              setStatus($("bg-status"), "Background removed!", "ok");
+            };
+            img.src = URL.createObjectURL(blob);
+          } catch (e: any) {
+            setStatus($("bg-status"), "Error running on-device AI: " + e?.message, "err");
+          }
+        });
+        $("bg-download")?.addEventListener("click", () => {
+          if (resultBlob) downloadBlob(resultBlob, "no-background.png");
+        });
+      })();
+
+      // 6. ROTATE / FLIP
+      (function () {
+        const canvas = $("rotate-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let srcImg: HTMLImageElement | null = null, rotation = 0, flipH = false, flipV = false;
+        function render() {
+          if (!srcImg || !ctx) return;
+          const w = srcImg.naturalWidth, h = srcImg.naturalHeight;
+          const swapped = rotation % 180 !== 0;
+          canvas.width = swapped ? h : w; canvas.height = swapped ? w : h;
+          ctx.save();
+          ctx.translate(canvas.width / 2, canvas.height / 2);
+          ctx.rotate((rotation * Math.PI) / 180);
+          ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+          ctx.drawImage(srcImg, -w / 2, -h / 2);
+          ctx.restore();
+        }
+        initDropzone("rotate-drop", "rotate-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            srcImg = r.img; rotation = 0; flipH = false; flipV = false;
+            render();
+            const prev = $("rotate-preview");
+            if (prev) prev.style.display = "grid";
+          });
+        });
+        $("rotate-left")?.addEventListener("click", () => { if (!srcImg) return; rotation = (rotation - 90 + 360) % 360; render(); });
+        $("rotate-right")?.addEventListener("click", () => { if (!srcImg) return; rotation = (rotation + 90) % 360; render(); });
+        $("flip-h")?.addEventListener("click", () => { if (!srcImg) return; flipH = !flipH; render(); });
+        $("flip-v")?.addEventListener("click", () => { if (!srcImg) return; flipV = !flipV; render(); });
+        $("rotate-download")?.addEventListener("click", () => {
+          if (!srcImg) return;
+          canvasToBlob(canvas, "image/png").then((blob) => {
+            if (blob) downloadBlob(blob, "rotated.png");
+          });
+        });
+      })();
+
+      // 7. WATERMARK
+      (function () {
+        const canvas = $("wm-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        let srcImg: HTMLImageElement | null = null;
+        function render() {
+          if (!srcImg || !ctx) return;
+          canvas.width = srcImg.naturalWidth; canvas.height = srcImg.naturalHeight;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(srcImg, 0, 0);
+          const text = ($("wm-text") as HTMLInputElement)?.value || "";
+          const color = ($("wm-color") as HTMLInputElement)?.value || "#ffffff";
+          const size = Number(($("wm-size") as HTMLInputElement)?.value) || 36;
+          const opacity = (Number(($("wm-opacity") as HTMLInputElement)?.value) || 60) / 100;
+          const pos = ($("wm-position") as HTMLSelectElement)?.value || "bottom-right";
+          ctx.font = `${size}px 'Space Grotesk', sans-serif`;
+          ctx.fillStyle = color; ctx.globalAlpha = opacity;
+          const m = ctx.measureText(text);
+          const pad = size * 0.6;
+          if (pos === "tile") {
+            ctx.save(); ctx.rotate((-25 * Math.PI) / 180);
+            const stepX = m.width + size * 3, stepY = size * 4;
+            for (let y = -canvas.height; y < canvas.height * 2; y += stepY) {
+              for (let x = -canvas.width; x < canvas.width * 2; x += stepX) ctx.fillText(text, x, y);
+            }
+            ctx.restore();
+          } else {
+            let x = canvas.width - m.width - pad, y = canvas.height - pad;
+            if (pos === "bottom-left") { x = pad; y = canvas.height - pad; }
+            else if (pos === "top-right") { x = canvas.width - m.width - pad; y = pad + size; }
+            else if (pos === "top-left") { x = pad; y = pad + size; }
+            else if (pos === "center") { x = (canvas.width - m.width) / 2; y = canvas.height / 2; }
+            ctx.fillText(text, x, y);
+          }
+          ctx.globalAlpha = 1;
+        }
+        initDropzone("wm-drop", "wm-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            srcImg = r.img; render();
+            const prev = $("wm-preview");
+            if (prev) prev.style.display = "grid";
+          });
+        });
+        ["wm-text", "wm-color", "wm-size", "wm-opacity", "wm-position"].forEach((id) => {
+          $(id)?.addEventListener("input", () => {
+            if (id === "wm-size") { const s = $("wm-size-val"); if (s) s.textContent = (document.getElementById(id) as HTMLInputElement).value; }
+            if (id === "wm-opacity") { const o = $("wm-opacity-val"); if (o) o.textContent = (document.getElementById(id) as HTMLInputElement).value; }
+            render();
+          });
+        });
+        $("wm-download")?.addEventListener("click", () => {
+          if (!srcImg) return;
+          canvasToBlob(canvas, "image/png").then((blob) => {
+            if (blob) downloadBlob(blob, "watermarked.png");
+          });
+        });
+      })();
+
+      // 8. IMAGE TO PDF
+      (function () {
+        const items: Array<{ file: File; url: string; img: HTMLImageElement }> = [];
+        const listEl = $("pdf-list");
+        function renderList() {
+          if (!listEl) return;
+          listEl.innerHTML = "";
+          items.forEach((it, i) => {
+            const row = document.createElement("div"); row.className = "pdf-item";
+            row.innerHTML = `<img src="${it.url}" alt="${it.file.name}" /><span>${i + 1}. ${it.file.name}</span><button type="button" data-del="${i}">Remove</button>`;
+            row.querySelector("[data-del]")?.addEventListener("click", () => {
+              items.splice(i, 1); renderList();
+            });
+            listEl.appendChild(row);
+          });
+          const pageCnt = $("pdf-page-count");
+          if (pageCnt) pageCnt.textContent = String(items.length);
+          const prev = $("pdf-preview");
+          if (prev) prev.style.display = items.length ? "grid" : "none";
+        }
+        initDropzone("pdf-drop", "pdf-input", (files) => {
+          Array.from(files).forEach((f) => {
+            loadImage(f).then((r) => {
+              items.push({ file: f, url: r.url, img: r.img });
+              renderList();
+            });
+          });
+        });
+        $("pdf-download")?.addEventListener("click", () => {
+          if (!items.length) return;
+          const jspdf = (window as any).jspdf;
+          if (!jspdf) return;
+          let doc: any = null;
+          items.forEach((it, i) => {
+            const w = it.img.naturalWidth, h = it.img.naturalHeight;
+            if (i === 0) doc = new jspdf.jsPDF({ orientation: w >= h ? "landscape" : "portrait", unit: "px", format: [w, h] });
+            else doc.addPage([w, h], w >= h ? "landscape" : "portrait");
+            const c = document.createElement("canvas");
+            c.width = w; c.height = h;
+            c.getContext("2d")?.drawImage(it.img, 0, 0);
+            doc.addImage(c.toDataURL("image/jpeg", 0.85), "JPEG", 0, 0, w, h);
+          });
+          const blob = doc.output("blob");
+          downloadBlob(blob, "converted.pdf");
+        });
+      })();
+
+      // 9. COLOR PALETTE
+      (function () {
+        const canvas = $("palette-canvas") as HTMLCanvasElement;
+        const ctx = canvas ? canvas.getContext("2d") : null;
+        initDropzone("palette-drop", "palette-input", (files) => {
+          loadImage(files[0]).then((r) => {
+            canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
+            ctx?.drawImage(r.img, 0, 0);
+            const w = canvas.width, h = canvas.height;
+            const data = ctx?.getImageData(0, 0, w, h).data;
+            if (!data) return;
+            const buckets: Record<string, number> = {};
+            const step = Math.max(1, Math.floor((w * h) / 40000));
+            for (let i = 0; i < w * h; i += step) {
+              const idx = i * 4;
+              if (data[idx + 3] < 128) continue;
+              const rCol = Math.round(data[idx] / 24) * 24;
+              const gCol = Math.round(data[idx + 1] / 24) * 24;
+              const bCol = Math.round(data[idx + 2] / 24) * 24;
+              const key = `${rCol},${gCol},${bCol}`;
+              buckets[key] = (buckets[key] || 0) + 1;
+            }
+            const sorted = Object.keys(buckets).sort((a, b) => buckets[b] - buckets[a]);
+            const wrap = $("palette-swatches");
+            if (wrap) wrap.innerHTML = "";
+            let selected: Array<{ hex: string; rgb: number[] }> = [];
+            sorted.slice(0, 6).forEach((k) => {
+              const [rC, gC, bC] = k.split(",").map(Number);
+              const hex = "#" + rC.toString(16).padStart(2, "0") + gC.toString(16).padStart(2, "0") + bC.toString(16).padStart(2, "0");
+              const el = document.createElement("div"); el.className = "swatch";
+              el.innerHTML = `<div class="swatch-color" style="background:${hex}"></div>${hex}`;
+              el.addEventListener("click", () => {
+                navigator.clipboard?.writeText(hex).catch(() => {});
+                if (selected.length === 2) selected = [];
+                selected.push({ hex, rgb: [rC, gC, bC] });
+                document.querySelectorAll(".swatch").forEach((s) => s.classList.remove("selected"));
+                el.classList.add("selected");
+                const box = $("palette-contrast");
+                if (box) {
+                  if (selected.length === 2) {
+                    const l = (rgb: number[]) => {
+                      const a = rgb.map((v) => {
+                        const s = v / 255;
+                        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+                      });
+                      return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+                    };
+                    const l1 = l(selected[0].rgb) + 0.05, l2 = l(selected[1].rgb) + 0.05;
+                    const ratio = l1 > l2 ? l1 / l2 : l2 / l1;
+                    box.innerHTML = `${selected[0].hex} on ${selected[1].hex} — contrast <strong>${ratio.toFixed(2)}:1</strong> (${ratio >= 4.5 ? "Passes WCAG AA" : "Fails WCAG AA"}).`;
+                  } else {
+                    box.textContent = `${hex} copied! Select another swatch to test contrast.`;
+                  }
+                }
+              });
+              wrap?.appendChild(el);
+            });
+            const prev = $("palette-preview");
+            if (prev) prev.style.display = "grid";
+            setStatus($("palette-status"), "Palette extracted.", "ok");
+          });
+        });
+      })();
+    })();
+  </script>
+</BaseLayout>

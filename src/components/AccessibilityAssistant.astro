@@ -1,0 +1,108 @@
+---
+// Accessibility Assistant Component
+---
+<button
+  class="btn access-fab"
+  id="access-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="access-panel"
+>
+  Accessibility
+</button>
+
+<div
+  class="access-panel"
+  id="access-panel"
+  role="dialog"
+  aria-labelledby="access-title"
+  aria-modal="false"
+>
+  <h2 id="access-title" style="font-size:1.1rem; font-family:'Space Grotesk',sans-serif; font-weight:600; margin:0 0 4px 0;">
+    Accessibility Assistant
+  </h2>
+  <p class="text-xs text-ink/60 m-0">Adjust the interface for readability, focus, motion and spoken feedback.</p>
+  
+  <div class="access-grid">
+    <button class="btn btn-ghost" id="access-read" type="button">Read results aloud</button>
+    <button class="btn btn-ghost" id="access-large" type="button">Large text</button>
+    <button class="btn btn-ghost" id="access-contrast" type="button">High contrast</button>
+    <button class="btn btn-ghost" id="access-focus" type="button">Focus mode</button>
+    <button class="btn btn-ghost" id="access-motion" type="button">Reduce animations</button>
+    <button class="btn btn-ghost" id="access-help" type="button">Keyboard help</button>
+  </div>
+  
+  <p id="access-help-text" class="text-xs text-ink/60 mt-3" style="display:none;">
+    <span class="kbd">Tab</span> move between controls · <span class="kbd">Enter</span>/<span class="kbd">Space</span> activate · <span class="kbd">Esc</span> close this panel
+  </p>
+</div>
+
+<script>
+  (function () {
+    const panel = document.getElementById("access-panel");
+    const toggle = document.getElementById("access-toggle");
+    if (!panel || !toggle) return;
+
+    toggle.addEventListener("click", function () {
+      const open = panel.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) {
+        const firstBtn = panel.querySelector("button");
+        if (firstBtn) firstBtn.focus();
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        panel.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.focus();
+      }
+    });
+
+    function flip(id: string, cls: string, label: string) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        document.body.classList.toggle(cls);
+        const active = document.body.classList.contains(cls);
+        this.setAttribute("aria-pressed", active ? "true" : "false");
+        this.textContent = (active ? "Disable " : "Enable ") + label;
+      });
+    }
+
+    flip("access-large", "large-text", "large text");
+    flip("access-contrast", "high-contrast", "high contrast");
+    flip("access-focus", "focus-mode", "focus mode");
+    flip("access-motion", "reduce-motion", "reduced motion");
+
+    const helpBtn = document.getElementById("access-help");
+    const helpText = document.getElementById("access-help-text");
+    if (helpBtn && helpText) {
+      helpBtn.addEventListener("click", function () {
+        helpText.style.display = helpText.style.display === "none" ? "block" : "none";
+      });
+    }
+
+    const readBtn = document.getElementById("access-read");
+    if (readBtn) {
+      readBtn.addEventListener("click", function () {
+        if (!("speechSynthesis" in window)) {
+          alert("Speech synthesis is not supported in this browser.");
+          return;
+        }
+        const parts: string[] = [];
+        document.querySelectorAll(".status").forEach(function (el) {
+          if (el.textContent && el.textContent.trim()) {
+            parts.push(el.textContent.trim());
+          }
+        });
+        if (!parts.length) {
+          parts.push("ImageAll is ready. Upload an image and choose a tool.");
+        }
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(parts.join(". ")));
+      });
+    }
+  })();
+</script>

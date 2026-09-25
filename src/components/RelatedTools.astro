@@ -1,0 +1,29 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+
+export interface Props {
+  slugs: string[];
+}
+const { slugs } = Astro.props;
+
+const allTools = await getCollection("tools");
+const related = slugs
+  .map((s) => allTools.find((t: CollectionEntry<"tools">) => t.slug === s))
+  .filter((t): t is CollectionEntry<"tools"> => Boolean(t));
+---
+{related.length > 0 && (
+  <section class="mt-12 pt-8 border-t border-border">
+    <h2 class="text-lg font-semibold font-display text-ink mb-4">Related tools</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {related.map((t) => (
+        <a
+          href={`/${t.slug}`}
+          class="group block p-4 rounded-xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan hover:shadow-[0_4px_20px_rgba(38,224,255,0.08)] transition duration-150"
+        >
+          <div class="font-medium text-sm text-ink group-hover:text-cyan transition-colors">{t.data.h1}</div>
+          <div class="text-xs text-ink-muted mt-1 line-clamp-2 leading-relaxed">{t.data.description}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

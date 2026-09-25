@@ -1,0 +1,963 @@
+---
+export interface Props {
+  slug?: string;
+  toolName?: string;
+  engine?: "client" | "server";
+  engineModule?: string;
+}
+const { slug = "image-compressor", toolName = "Image Tool", engine = "client" } = Astro.props;
+
+// Determine tool type from slug
+let mode = "compress";
+if (slug.includes("resize")) mode = "resize";
+else if (slug.includes("crop") || slug.includes("dp-maker") || slug.includes("passport")) mode = "crop";
+else if (slug.includes("rotate") || slug.includes("flip")) mode = "rotate";
+else if (slug.includes("watermark") || slug.includes("add-text") || slug.includes("meme")) mode = "watermark";
+else if (slug.includes("pdf")) mode = "pdf";
+else if (slug.includes("palette")) mode = "palette";
+else if (slug.includes("background") || slug.includes("bg-remove")) mode = "bg-remove";
+else if (slug.includes("to-") || slug.includes("convert")) mode = "convert";
+else if (slug.includes("blur") || slug.includes("censor") || slug.includes("pixelat")) mode = "blur";
+
+// Default presets
+let defaultTargetKB = "100";
+if (slug.includes("20kb")) defaultTargetKB = "20";
+else if (slug.includes("50kb")) defaultTargetKB = "50";
+else if (slug.includes("100kb")) defaultTargetKB = "100";
+else if (slug.includes("200kb")) defaultTargetKB = "200";
+
+let defaultWidth = "";
+let defaultHeight = "";
+if (slug.includes("1920x1080")) { defaultWidth = "1920"; defaultHeight = "1080"; }
+else if (slug.includes("1080x1080")) { defaultWidth = "1080"; defaultHeight = "1080"; }
+else if (slug.includes("512x512")) { defaultWidth = "512"; defaultHeight = "512"; }
+else if (slug.includes("youtube-thumbnail")) { defaultWidth = "1280"; defaultHeight = "720"; }
+else if (slug.includes("instagram")) { defaultWidth = "1080"; defaultHeight = "1080"; }
+else if (slug.includes("facebook")) { defaultWidth = "1200"; defaultHeight = "630"; }
+else if (slug.includes("linkedin")) { defaultWidth = "1200"; defaultHeight = "627"; }
+
+let defaultFormat = "image/jpeg";
+if (slug.includes("to-png")) defaultFormat = "image/png";
+else if (slug.includes("to-webp")) defaultFormat = "image/webp";
+else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
+---
+<div
+  class="workspace"
+  id="active-tool-workspace"
+  data-tool-slug={slug}
+  data-tool-mode={mode}
+  data-target-kb={defaultTargetKB}
+  data-default-w={defaultWidth}
+  data-default-h={defaultHeight}
+  data-default-fmt={defaultFormat}
+>
+  <!-- Universal Dropzone -->
+  <div class="dropzone" id="tw-drop" tabindex="0" role="button" aria-label={`Upload image for ${toolName}`}>
+    <strong>Click to upload</strong> or drag an image here. Supports JPG, PNG, WEBP, GIF, SVG, AVIF.
+  </div>
+  <input type="file" id="tw-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple={mode === "pdf"} hidden />
+
+  <!-- Multi-file PDF list container (only for PDF) -->
+  {mode === "pdf" && <div id="tw-pdf-list" class="pdf-list"></div>}
+
+  <!-- Preview Row (hidden until image loaded) -->
+  <div class="preview-row" id="tw-preview" style="display:none;">
+    {mode !== "pdf" && (
+      <div class="canvas-holder">
+        <canvas id="tw-canvas"></canvas>
+      </div>
+    )}
+
+    <!-- ================= MODE CONTROLS ================= -->
+    {mode === "compress" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-cmp-fmt">Output format</label>
+          <select id="tw-cmp-fmt">
+            <option value="image/jpeg" selected={defaultFormat === "image/jpeg"}>JPG</option>
+            <option value="image/webp" selected={defaultFormat === "image/webp"}>WEBP</option>
+            <option value="image/png" selected={defaultFormat === "image/png"}>PNG (lossless)</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="field-label">Compression method</span>
+          <div class="mode-switch" role="group" aria-label="Compression method">
+            <button class={`mode-option ${slug.includes("kb") ? "" : "active"}`} id="tw-cmp-q-mode" type="button">Quality</button>
+            <button class={`mode-option ${slug.includes("kb") ? "active" : ""}`} id="tw-cmp-t-mode" type="button">Target file size</button>
+          </div>
+        </div>
+        <div class="field" id="tw-cmp-q-field" style={slug.includes("kb") ? "opacity:0.55" : ""}>
+          <label for="tw-cmp-q">Quality (<span id="tw-cmp-q-val">80</span>%)</label>
+          <input type="range" id="tw-cmp-q" min="10" max="100" value="80" disabled={slug.includes("kb")} />
+        </div>
+        <div class="field" id="tw-cmp-t-field" style={slug.includes("kb") ? "" : "opacity:0.55"}>
+          <label for="tw-cmp-t">Target size (KB)</label>
+          <div class="target-inline">
+            <input type="number" id="tw-cmp-t" min="1" value={defaultTargetKB} disabled={!slug.includes("kb")} />
+            <span class="helper">KB maximum goal</span>
+          </div>
+          <div class="target-presets">
+            {["20", "50", "80", "100", "150", "200"].map((kb) => (
+              <button class={`preset ${defaultTargetKB === kb ? "active" : ""}`} type="button" data-kb={kb}>{kb} KB</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="metrics" aria-live="polite">
+        <div class="metric"><div class="metric-label">Original</div><div class="metric-value" id="tw-cmp-orig">—</div></div>
+        <div class="metric"><div class="metric-label">Quality</div><div class="metric-value" id="tw-cmp-metric-q">80%</div></div>
+        <div class="metric"><div class="metric-label">New size</div><div class="metric-value" id="tw-cmp-new">—</div></div>
+        <div class="metric"><div class="metric-label">Reduction</div><div class="metric-value" id="tw-cmp-red">—</div></div>
+      </div>
+    )}
+
+    {mode === "resize" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-res-w">Width (px)</label>
+          <input type="number" id="tw-res-w" min="1" value={defaultWidth} />
+        </div>
+        <div class="field">
+          <label for="tw-res-h">Height (px)</label>
+          <input type="number" id="tw-res-h" min="1" value={defaultHeight} />
+        </div>
+        <div class="field">
+          <label class="flex items-center gap-2 cursor-pointer pt-3">
+            <input type="checkbox" id="tw-res-lock" checked />
+            <span class="text-xs text-ink">Lock aspect ratio</span>
+          </label>
+        </div>
+        <div class="field">
+          <label for="tw-res-pct">Scale (<span id="tw-res-pct-val">100</span>%)</label>
+          <input type="range" id="tw-res-pct" min="5" max="200" value="100" />
+        </div>
+        <div class="field col-span-full">
+          <span class="field-label">Quick Presets</span>
+          <div class="target-presets">
+            <button class="preset" type="button" data-preset-w="1920" data-preset-h="1080">1920×1080 (HD)</button>
+            <button class="preset" type="button" data-preset-w="1080" data-preset-h="1080">1080×1080 (Square)</button>
+            <button class="preset" type="button" data-preset-w="1200" data-preset-h="630">1200×630 (Social)</button>
+            <button class="preset" type="button" data-preset-w="1280" data-preset-h="720">1280×720 (YouTube)</button>
+            <button class="preset" type="button" data-preset-w="512" data-preset-h="512">512×512 (Icon)</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {mode === "crop" && (
+      <div class="controls">
+        <div class="field col-span-full">
+          <label>Crop aspect ratio preset</label>
+          <div class="flex gap-2 flex-wrap mt-2">
+            <button class="preset active" type="button" data-crop-ratio="free">Freeform</button>
+            <button class="preset" type="button" data-crop-ratio="1">1:1 Square</button>
+            <button class="preset" type="button" data-crop-ratio="1.7778">16:9 Landscape</button>
+            <button class="preset" type="button" data-crop-ratio="0.5625">9:16 Story</button>
+            <button class="preset" type="button" data-crop-ratio="0.7778">35:45 (Passport)</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {mode === "rotate" && (
+      <div class="flex gap-2.5 flex-wrap mt-4">
+        <button class="btn btn-ghost" id="tw-rot-left" type="button">⟲ Rotate Left</button>
+        <button class="btn btn-ghost" id="tw-rot-right" type="button">⟳ Rotate Right</button>
+        <button class="btn btn-ghost" id="tw-flip-h" type="button">⇋ Flip Horizontal</button>
+        <button class="btn btn-ghost" id="tw-flip-v" type="button">⇵ Flip Vertical</button>
+      </div>
+    )}
+
+    {mode === "watermark" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-wm-text">Watermark text</label>
+          <input type="text" id="tw-wm-text" value="ImageAll / XPlus Nexus" />
+        </div>
+        <div class="field">
+          <label for="tw-wm-color">Color</label>
+          <input type="color" id="tw-wm-color" value="#ffffff" />
+        </div>
+        <div class="field">
+          <label for="tw-wm-size">Size (<span id="tw-wm-size-val">36</span>px)</label>
+          <input type="range" id="tw-wm-size" min="10" max="140" value="36" />
+        </div>
+        <div class="field">
+          <label for="tw-wm-opacity">Opacity (<span id="tw-wm-opacity-val">60</span>%)</label>
+          <input type="range" id="tw-wm-opacity" min="5" max="100" value="60" />
+        </div>
+        <div class="field">
+          <label for="tw-wm-pos">Position</label>
+          <select id="tw-wm-pos">
+            <option value="bottom-right" selected>Bottom right</option>
+            <option value="bottom-left">Bottom left</option>
+            <option value="top-right">Top right</option>
+            <option value="top-left">Top left</option>
+            <option value="center">Center</option>
+            <option value="tile">Repeating tile</option>
+          </select>
+        </div>
+      </div>
+    )}
+
+    {mode === "convert" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-cvt-fmt">Convert to format</label>
+          <select id="tw-cvt-fmt">
+            <option value="image/png" selected={defaultFormat === "image/png"}>PNG</option>
+            <option value="image/jpeg" selected={defaultFormat === "image/jpeg"}>JPG</option>
+            <option value="image/webp" selected={defaultFormat === "image/webp"}>WEBP</option>
+          </select>
+        </div>
+      </div>
+    )}
+
+    {mode === "palette" && (
+      <div class="w-full mt-4">
+        <div class="swatches" id="tw-pal-swatches"></div>
+        <div class="contrast-box mt-3" id="tw-pal-contrast">Select two swatches to calculate WCAG AA contrast ratio.</div>
+      </div>
+    )}
+
+    {mode === "pdf" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-pdf-size">Page size</label>
+          <select id="tw-pdf-size">
+            <option value="a4" selected>A4</option>
+            <option value="letter">Letter</option>
+            <option value="fit">Fit to image</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-pdf-orientation">Orientation</label>
+          <select id="tw-pdf-orientation">
+            <option value="portrait" selected>Portrait</option>
+            <option value="landscape">Landscape</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-pdf-quality">Quality</label>
+          <select id="tw-pdf-quality">
+            <option value="small">Smallest</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="high">High Quality</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-pdf-dpi">DPI</label>
+          <select id="tw-pdf-dpi">
+            <option value="72">72 DPI</option>
+            <option value="96" selected>96 DPI</option>
+            <option value="150">150 DPI</option>
+            <option value="300">300 DPI</option>
+          </select>
+        </div>
+      </div>
+    )}
+
+    {mode === "bg-remove" && (
+      <div class="mt-4">
+        <button class="btn btn-primary" id="tw-bg-run" type="button">Remove Background</button>
+      </div>
+    )}
+
+    <!-- Universal Actions -->
+    <div class="row-actions mt-5">
+      {mode === "resize" && (
+        <button class="btn btn-ghost" id="tw-res-apply" type="button">Apply Resize</button>
+      )}
+      <button class="btn btn-primary" id="tw-download" type="button">
+        Download Result
+      </button>
+      <button class="btn btn-ghost" id="tw-reset" type="button">
+        Reset
+      </button>
+    </div>
+
+    <!-- Status message -->
+    <p class="status" id="tw-status" aria-live="polite"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script>
+  (function () {
+    const ws = document.getElementById("active-tool-workspace");
+    if (!ws) return;
+
+    const mode = ws.getAttribute("data-tool-mode") || "compress";
+    const defaultTargetKB = Number(ws.getAttribute("data-target-kb")) || 100;
+    const defaultW = Number(ws.getAttribute("data-default-w")) || 0;
+    const defaultH = Number(ws.getAttribute("data-default-h")) || 0;
+    const defaultFmt = ws.getAttribute("data-default-fmt") || "image/jpeg";
+
+    const drop = document.getElementById("tw-drop");
+    const input = document.getElementById("tw-input") as HTMLInputElement;
+    const preview = document.getElementById("tw-preview");
+    const canvas = document.getElementById("tw-canvas") as HTMLCanvasElement;
+    const ctx = canvas ? canvas.getContext("2d") : null;
+    const downloadBtn = document.getElementById("tw-download") as HTMLButtonElement;
+    const resetBtn = document.getElementById("tw-reset") as HTMLButtonElement;
+    const statusEl = document.getElementById("tw-status");
+
+    let currentFile: File | null = null;
+    let srcImg: HTMLImageElement | null = null;
+    let lastBlob: Blob | null = null;
+    let pdfItems: Array<{ file: File; url: string; img: HTMLImageElement }> = [];
+
+    function setStatus(msg: string, cls?: string) {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.className = "status" + (cls ? " " + cls : "");
+    }
+
+    function fmtBytes(n: number) {
+      if (n < 1024) return n + " B";
+      if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+      return (n / (1024 * 1024)).toFixed(2) + " MB";
+    }
+
+    function downloadBlob(blob: Blob, filename: string) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function loadImage(file: File): Promise<{ img: HTMLImageElement; url: string }> {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => resolve({ img, url });
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    // Init dropzone
+    if (drop && input) {
+      drop.addEventListener("click", () => input.click());
+      drop.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+      });
+      drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("drag"); });
+      drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+      drop.addEventListener("drop", (e) => {
+        e.preventDefault();
+        drop.classList.remove("drag");
+        if (e.dataTransfer && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+      });
+      input.addEventListener("change", () => {
+        if (input.files && input.files.length) handleFiles(input.files);
+      });
+    }
+
+    function handleFiles(files: FileList) {
+      if (mode === "pdf") {
+        Array.from(files).forEach((f) => {
+          loadImage(f).then((r) => {
+            pdfItems.push({ file: f, url: r.url, img: r.img });
+            renderPdfList();
+          });
+        });
+        if (preview) preview.style.display = "grid";
+        return;
+      }
+
+      currentFile = files[0];
+      loadImage(currentFile).then((r) => {
+        srcImg = r.img;
+        if (canvas && ctx) {
+          canvas.width = r.img.naturalWidth;
+          canvas.height = r.img.naturalHeight;
+          ctx.drawImage(r.img, 0, 0);
+        }
+        if (preview) preview.style.display = "grid";
+        setupInitialMode();
+      }).catch(() => {
+        setStatus("Could not decode image in browser. Please try another format.", "err");
+      });
+    }
+
+    // ================= SPECIFIC MODE BEHAVIORS ================= //
+
+    // 1. COMPRESS
+    let cmpMode = ws.getAttribute("data-tool-slug")?.includes("kb") ? "target" : "quality";
+    const qEl = document.getElementById("tw-cmp-q") as HTMLInputElement;
+    const qVal = document.getElementById("tw-cmp-q-val");
+    const tEl = document.getElementById("tw-cmp-t") as HTMLInputElement;
+    const fmtEl = document.getElementById("tw-cmp-fmt") as HTMLSelectElement;
+
+    async function encodeCanvas(quality: number, type: string): Promise<Blob | null> {
+      if (!canvas) return null;
+      return new Promise((resolve) => {
+        canvas.toBlob(resolve, type, type === "image/png" ? undefined : quality);
+      });
+    }
+
+    async function refreshCompress() {
+      if (!srcImg || !currentFile || !canvas) return;
+      const type = fmtEl ? fmtEl.value : "image/jpeg";
+      let blob: Blob | null = null;
+      let finalQ = 0.8;
+
+      if (cmpMode === "target" && tEl && type !== "image/png") {
+        const targetBytes = (Number(tEl.value) || 100) * 1024;
+        let low = 0.05, high = 1.0;
+        for (let i = 0; i < 9; i++) {
+          const mid = (low + high) / 2;
+          const candidate = await encodeCanvas(mid, type);
+          if (!candidate) break;
+          if (candidate.size <= targetBytes) {
+            blob = candidate;
+            finalQ = mid;
+            low = mid;
+          } else {
+            high = mid;
+          }
+        }
+        if (!blob) blob = await encodeCanvas(low, type);
+      } else {
+        finalQ = (qEl ? Number(qEl.value) : 80) / 100;
+        blob = await encodeCanvas(finalQ, type);
+      }
+
+      lastBlob = blob;
+      if (blob && currentFile) {
+        const origSizeEl = document.getElementById("tw-cmp-orig");
+        const newSizeEl = document.getElementById("tw-cmp-new");
+        const qMetric = document.getElementById("tw-cmp-metric-q");
+        const redEl = document.getElementById("tw-cmp-red");
+        if (origSizeEl) origSizeEl.textContent = fmtBytes(currentFile.size);
+        if (newSizeEl) newSizeEl.textContent = fmtBytes(blob.size);
+        if (qMetric) qMetric.textContent = Math.round(finalQ * 100) + "%";
+        if (redEl) {
+          const redPct = Math.max(0, (1 - blob.size / currentFile.size) * 100).toFixed(1);
+          redEl.textContent = redPct + "%";
+        }
+        setStatus(`Output size: ${fmtBytes(blob.size)} (${Math.round(finalQ * 100)}% quality). Ready to download.`, "ok");
+      }
+    }
+
+    if (qEl && qVal) {
+      qEl.addEventListener("input", () => {
+        qVal.textContent = qEl.value;
+        if (cmpMode === "quality") refreshCompress();
+      });
+    }
+
+    const qModeBtn = document.getElementById("tw-cmp-q-mode");
+    const tModeBtn = document.getElementById("tw-cmp-t-mode");
+    if (qModeBtn && tModeBtn) {
+      qModeBtn.addEventListener("click", () => {
+        cmpMode = "quality";
+        qModeBtn.classList.add("active");
+        tModeBtn.classList.remove("active");
+        if (qEl) qEl.disabled = false;
+        if (tEl) tEl.disabled = true;
+        const qField = document.getElementById("tw-cmp-q-field");
+        const tField = document.getElementById("tw-cmp-t-field");
+        if (qField) qField.style.opacity = "1";
+        if (tField) tField.style.opacity = "0.55";
+        refreshCompress();
+      });
+      tModeBtn.addEventListener("click", () => {
+        cmpMode = "target";
+        tModeBtn.classList.add("active");
+        qModeBtn.classList.remove("active");
+        if (qEl) qEl.disabled = true;
+        if (tEl) tEl.disabled = false;
+        const qField = document.getElementById("tw-cmp-q-field");
+        const tField = document.getElementById("tw-cmp-t-field");
+        if (qField) qField.style.opacity = "0.55";
+        if (tField) tField.style.opacity = "1";
+        refreshCompress();
+      });
+    }
+
+    document.querySelectorAll("[data-kb]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const kb = btn.getAttribute("data-kb") || "100";
+        if (tEl) tEl.value = kb;
+        document.querySelectorAll("[data-kb]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        if (tModeBtn) tModeBtn.click();
+      });
+    });
+
+    if (fmtEl) fmtEl.addEventListener("change", refreshCompress);
+    if (tEl) tEl.addEventListener("input", refreshCompress);
+
+    // 2. RESIZE
+    const resW = document.getElementById("tw-res-w") as HTMLInputElement;
+    const resH = document.getElementById("tw-res-h") as HTMLInputElement;
+    const resLock = document.getElementById("tw-res-lock") as HTMLInputElement;
+    const resPct = document.getElementById("tw-res-pct") as HTMLInputElement;
+    const resPctVal = document.getElementById("tw-res-pct-val");
+    const resApply = document.getElementById("tw-res-apply");
+
+    if (resW && resH) {
+      resW.addEventListener("input", () => {
+        if (srcImg && resLock && resLock.checked && srcImg.naturalWidth) {
+          const ratio = srcImg.naturalHeight / srcImg.naturalWidth;
+          resH.value = String(Math.round(Number(resW.value) * ratio));
+        }
+      });
+      resH.addEventListener("input", () => {
+        if (srcImg && resLock && resLock.checked && srcImg.naturalHeight) {
+          const ratio = srcImg.naturalWidth / srcImg.naturalHeight;
+          resW.value = String(Math.round(Number(resH.value) * ratio));
+        }
+      });
+    }
+
+    if (resPct && resPctVal) {
+      resPct.addEventListener("input", () => {
+        resPctVal.textContent = resPct.value;
+        if (srcImg) {
+          const scale = Number(resPct.value) / 100;
+          if (resW) resW.value = String(Math.round(srcImg.naturalWidth * scale));
+          if (resH) resH.value = String(Math.round(srcImg.naturalHeight * scale));
+        }
+      });
+    }
+
+    document.querySelectorAll("[data-preset-w]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const w = btn.getAttribute("data-preset-w") || "";
+        const h = btn.getAttribute("data-preset-h") || "";
+        if (resW) resW.value = w;
+        if (resH) resH.value = h;
+        if (resLock) resLock.checked = false;
+        if (resApply) resApply.click();
+      });
+    });
+
+    if (resApply) {
+      resApply.addEventListener("click", () => {
+        if (!srcImg || !canvas || !ctx) return;
+        const targetW = Math.max(1, Number(resW.value) || srcImg.naturalWidth);
+        const targetH = Math.max(1, Number(resH.value) || srcImg.naturalHeight);
+        canvas.width = targetW;
+        canvas.height = targetH;
+        ctx.clearRect(0, 0, targetW, targetH);
+        ctx.drawImage(srcImg, 0, 0, targetW, targetH);
+        setStatus(`Applied resize to ${targetW}×${targetH}px. Ready to download.`, "ok");
+      });
+    }
+
+    // 3. CROP
+    let cropBox: { x: number; y: number; w: number; h: number } | null = null;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let cropRatio: number | "free" = "free";
+
+    function drawCropOverlay() {
+      if (!srcImg || !canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(srcImg, 0, 0);
+      if (cropBox) {
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(0, 0, canvas.width, cropBox.y);
+        ctx.fillRect(0, cropBox.y + cropBox.h, canvas.width, canvas.height - (cropBox.y + cropBox.h));
+        ctx.fillRect(0, cropBox.y, cropBox.x, cropBox.h);
+        ctx.fillRect(cropBox.x + cropBox.w, cropBox.y, canvas.width - (cropBox.x + cropBox.w), cropBox.h);
+        ctx.strokeStyle = "#26e0ff";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
+      }
+    }
+
+    if (canvas && mode === "crop") {
+      canvas.addEventListener("mousedown", (e) => {
+        if (!srcImg || cropRatio !== "free") return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+        startX = (e.clientX - rect.left) * sx;
+        startY = (e.clientY - rect.top) * sy;
+        isDragging = true;
+        cropBox = { x: startX, y: startY, w: 0, h: 0 };
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging || !canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+        const curX = (e.clientX - rect.left) * sx;
+        const curY = (e.clientY - rect.top) * sy;
+        cropBox = {
+          x: Math.min(startX, curX),
+          y: Math.min(startY, curY),
+          w: Math.abs(curX - startX),
+          h: Math.abs(curY - startY),
+        };
+        drawCropOverlay();
+      });
+      window.addEventListener("mouseup", () => { isDragging = false; });
+
+      document.querySelectorAll("[data-crop-ratio]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (!srcImg || !canvas) return;
+          const r = btn.getAttribute("data-crop-ratio");
+          document.querySelectorAll("[data-crop-ratio]").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          if (r === "free") {
+            cropRatio = "free";
+            cropBox = null;
+            drawCropOverlay();
+            setStatus("Freeform mode: drag on the image to draw your crop selection.");
+          } else {
+            const num = Number(r);
+            cropRatio = num;
+            let w = canvas.width * 0.8;
+            let h = w / num;
+            if (h > canvas.height * 0.8) {
+              h = canvas.height * 0.8;
+              w = h * num;
+            }
+            cropBox = {
+              x: (canvas.width - w) / 2,
+              y: (canvas.height - h) / 2,
+              w,
+              h,
+            };
+            drawCropOverlay();
+            setStatus(`Centered crop box locked to ratio (${Math.round(w)}×${Math.round(h)}px).`, "ok");
+          }
+        });
+      });
+    }
+
+    // 4. ROTATE / FLIP
+    let rotation = 0;
+    let flipH = false, flipV = false;
+
+    function renderRotate() {
+      if (!srcImg || !canvas || !ctx) return;
+      const w = srcImg.naturalWidth, h = srcImg.naturalHeight;
+      const swapped = rotation % 180 !== 0;
+      canvas.width = swapped ? h : w;
+      canvas.height = swapped ? w : h;
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+      ctx.drawImage(srcImg, -w / 2, -h / 2);
+      ctx.restore();
+    }
+
+    const rotLeft = document.getElementById("tw-rot-left");
+    const rotRight = document.getElementById("tw-rot-right");
+    const flipHBtn = document.getElementById("tw-flip-h");
+    const flipVBtn = document.getElementById("tw-flip-v");
+    if (rotLeft) rotLeft.addEventListener("click", () => { rotation = (rotation - 90 + 360) % 360; renderRotate(); });
+    if (rotRight) rotRight.addEventListener("click", () => { rotation = (rotation + 90) % 360; renderRotate(); });
+    if (flipHBtn) flipHBtn.addEventListener("click", () => { flipH = !flipH; renderRotate(); });
+    if (flipVBtn) flipVBtn.addEventListener("click", () => { flipV = !flipV; renderRotate(); });
+
+    // 5. WATERMARK
+    function renderWatermark() {
+      if (!srcImg || !canvas || !ctx) return;
+      canvas.width = srcImg.naturalWidth;
+      canvas.height = srcImg.naturalHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(srcImg, 0, 0);
+
+      const text = (document.getElementById("tw-wm-text") as HTMLInputElement)?.value || "";
+      const color = (document.getElementById("tw-wm-color") as HTMLInputElement)?.value || "#ffffff";
+      const size = Number((document.getElementById("tw-wm-size") as HTMLInputElement)?.value) || 36;
+      const opacity = (Number((document.getElementById("tw-wm-opacity") as HTMLInputElement)?.value) || 60) / 100;
+      const pos = (document.getElementById("tw-wm-pos") as HTMLSelectElement)?.value || "bottom-right";
+
+      const sizeVal = document.getElementById("tw-wm-size-val");
+      const opVal = document.getElementById("tw-wm-opacity-val");
+      if (sizeVal) sizeVal.textContent = String(size);
+      if (opVal) opVal.textContent = String(Math.round(opacity * 100));
+
+      ctx.font = `${size}px 'Space Grotesk', sans-serif`;
+      ctx.fillStyle = color;
+      ctx.globalAlpha = opacity;
+      const m = ctx.measureText(text);
+      const pad = size * 0.6;
+
+      if (pos === "tile") {
+        ctx.save();
+        ctx.rotate((-25 * Math.PI) / 180);
+        const stepX = m.width + size * 3;
+        const stepY = size * 4;
+        for (let y = -canvas.height; y < canvas.height * 2; y += stepY) {
+          for (let x = -canvas.width; x < canvas.width * 2; x += stepX) {
+            ctx.fillText(text, x, y);
+          }
+        }
+        ctx.restore();
+      } else {
+        let x = canvas.width - m.width - pad;
+        let y = canvas.height - pad;
+        if (pos === "bottom-left") { x = pad; y = canvas.height - pad; }
+        else if (pos === "top-right") { x = canvas.width - m.width - pad; y = pad + size; }
+        else if (pos === "top-left") { x = pad; y = pad + size; }
+        else if (pos === "center") { x = (canvas.width - m.width) / 2; y = canvas.height / 2; }
+        ctx.fillText(text, x, y);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    ["tw-wm-text", "tw-wm-color", "tw-wm-size", "tw-wm-opacity", "tw-wm-pos"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", renderWatermark);
+    });
+
+    // 6. COLOR PALETTE
+    function extractColors(): number[][] {
+      if (!canvas || !ctx) return [];
+      const w = canvas.width, h = canvas.height;
+      const data = ctx.getImageData(0, 0, w, h).data;
+      const buckets: Record<string, number> = {};
+      const step = Math.max(1, Math.floor((w * h) / 40000));
+      for (let i = 0; i < w * h; i += step) {
+        const idx = i * 4;
+        if (data[idx + 3] < 128) continue;
+        const r = Math.round(data[idx] / 24) * 24;
+        const g = Math.round(data[idx + 1] / 24) * 24;
+        const b = Math.round(data[idx + 2] / 24) * 24;
+        const key = `${r},${g},${b}`;
+        buckets[key] = (buckets[key] || 0) + 1;
+      }
+      const sorted = Object.keys(buckets).sort((a, b) => buckets[b] - buckets[a]);
+      const picked: number[][] = [];
+      sorted.forEach((k) => {
+        if (picked.length >= 6) return;
+        const c = k.split(",").map(Number);
+        const tooClose = picked.some((p) => Math.abs(p[0] - c[0]) + Math.abs(p[1] - c[1]) + Math.abs(p[2] - c[2]) < 60);
+        if (!tooClose) picked.push(c);
+      });
+      return picked;
+    }
+
+    function renderPalette() {
+      const swatchesWrap = document.getElementById("tw-pal-swatches");
+      const contrastBox = document.getElementById("tw-pal-contrast");
+      if (!swatchesWrap) return;
+      swatchesWrap.innerHTML = "";
+      const colors = extractColors();
+      let selected: Array<{ hex: string; rgb: number[]; el: HTMLElement }> = [];
+
+      colors.forEach((c) => {
+        const hex = "#" + c[0].toString(16).padStart(2, "0") + c[1].toString(16).padStart(2, "0") + c[2].toString(16).padStart(2, "0");
+        const el = document.createElement("div");
+        el.className = "swatch";
+        el.innerHTML = `<div class="swatch-color" style="background:${hex}"></div>${hex}`;
+        el.addEventListener("click", () => {
+          navigator.clipboard?.writeText(hex).catch(() => {});
+          if (selected.length === 2) selected = [];
+          selected.push({ hex, rgb: c, el });
+          document.querySelectorAll(".swatch").forEach((s) => s.classList.remove("selected"));
+          selected.forEach((s) => s.el.classList.add("selected"));
+          if (contrastBox) {
+            if (selected.length === 2) {
+              const l = (rgb: number[]) => {
+                const a = rgb.map((v) => {
+                  const s = v / 255;
+                  return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+                });
+                return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+              };
+              const l1 = l(selected[0].rgb) + 0.05;
+              const l2 = l(selected[1].rgb) + 0.05;
+              const ratio = l1 > l2 ? l1 / l2 : l2 / l1;
+              contrastBox.innerHTML = `${selected[0].hex} on ${selected[1].hex} — contrast <strong>${ratio.toFixed(2)}:1</strong> (${ratio >= 4.5 ? "Passes WCAG AA" : "Fails WCAG AA"}).`;
+            } else {
+              contrastBox.textContent = `${hex} copied! Select a second swatch to test contrast.`;
+            }
+          }
+        });
+        swatchesWrap.appendChild(el);
+      });
+    }
+
+    // 7. PDF
+    function renderPdfList() {
+      const listEl = document.getElementById("tw-pdf-list");
+      if (!listEl) return;
+      listEl.innerHTML = "";
+      pdfItems.forEach((it, i) => {
+        const item = document.createElement("div");
+        item.className = "pdf-item";
+        item.innerHTML = `
+          <img src="${it.url}" alt="${it.file.name}" />
+          <span>${i + 1}. ${it.file.name}</span>
+          <button type="button" data-move="-1" ${i === 0 ? "disabled" : ""}>↑</button>
+          <button type="button" data-move="1" ${i === pdfItems.length - 1 ? "disabled" : ""}>↓</button>
+          <button type="button" data-remove="${i}">Remove</button>
+        `;
+        item.querySelector("[data-move='-1']")?.addEventListener("click", () => {
+          const temp = pdfItems[i - 1];
+          pdfItems[i - 1] = pdfItems[i];
+          pdfItems[i] = temp;
+          renderPdfList();
+        });
+        item.querySelector("[data-move='1']")?.addEventListener("click", () => {
+          const temp = pdfItems[i + 1];
+          pdfItems[i + 1] = pdfItems[i];
+          pdfItems[i] = temp;
+          renderPdfList();
+        });
+        item.querySelector("[data-remove]")?.addEventListener("click", () => {
+          pdfItems.splice(i, 1);
+          renderPdfList();
+        });
+        listEl.appendChild(item);
+      });
+      setStatus(`${pdfItems.length} image(s) queued for PDF compilation.`, "ok");
+    }
+
+    // 8. BG REMOVE
+    const bgRunBtn = document.getElementById("tw-bg-run");
+    if (bgRunBtn) {
+      bgRunBtn.addEventListener("click", async () => {
+        if (!currentFile || !canvas || !ctx) return;
+        setStatus("Loading background removal model... (runs 100% locally in browser)", "");
+        try {
+          const mod: any = await import("https://esm.sh/@imgly/background-removal");
+          const removeBackground = mod.default || mod.removeBackground;
+          const blob: Blob = await removeBackground(currentFile);
+          lastBlob = blob;
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            setStatus("Background removed! Ready to download PNG.", "ok");
+          };
+          img.src = URL.createObjectURL(blob);
+        } catch (err: any) {
+          setStatus("Could not load AI model locally: " + (err?.message || "connection error"), "err");
+        }
+      });
+    }
+
+    // Setup initial mode triggers
+    function setupInitialMode() {
+      if (mode === "compress") {
+        refreshCompress();
+      } else if (mode === "resize") {
+        if (defaultW && defaultH) {
+          if (resW) resW.value = String(defaultW);
+          if (resH) resH.value = String(defaultH);
+          if (resApply) resApply.click();
+        } else if (srcImg) {
+          if (resW) resW.value = String(srcImg.naturalWidth);
+          if (resH) resH.value = String(srcImg.naturalHeight);
+        }
+        setStatus(`Loaded at ${srcImg?.naturalWidth}×${srcImg?.naturalHeight}px.`, "ok");
+      } else if (mode === "crop") {
+        drawCropOverlay();
+      } else if (mode === "rotate") {
+        renderRotate();
+      } else if (mode === "watermark") {
+        renderWatermark();
+      } else if (mode === "palette") {
+        renderPalette();
+      } else {
+        setStatus("Image loaded. Adjust settings and download your processed image.", "ok");
+      }
+    }
+
+    // Download Handler
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", async () => {
+        if (mode === "pdf") {
+          if (!pdfItems.length) { setStatus("Add at least one image first.", "err"); return; }
+          const jspdf = (window as any).jspdf;
+          if (!jspdf) { setStatus("PDF generator library unavailable.", "err"); return; }
+
+          try {
+            const pageSize = (document.getElementById("tw-pdf-size") as HTMLSelectElement)?.value || "a4";
+            const orientation = (document.getElementById("tw-pdf-orientation") as HTMLSelectElement)?.value || "portrait";
+            let doc: any = null;
+
+            pdfItems.forEach((it, i) => {
+              const w = it.img.naturalWidth, h = it.img.naturalHeight;
+              const opts = pageSize === "fit"
+                ? { orientation: w >= h ? "landscape" : "portrait", unit: "px", format: [w, h] }
+                : { orientation, unit: "pt", format: pageSize };
+              if (i === 0) doc = new jspdf.jsPDF(opts);
+              else doc.addPage(opts.format, opts.orientation);
+
+              const pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
+              const margin = 12;
+              const scale = Math.min((pageW - margin * 2) / w, (pageH - margin * 2) / h);
+              const dw = w * scale, dh = h * scale;
+              const x = (pageW - dw) / 2, y = (pageH - dh) / 2;
+
+              const c = document.createElement("canvas");
+              c.width = w; c.height = h;
+              c.getContext("2d")?.drawImage(it.img, 0, 0);
+              doc.addImage(c.toDataURL("image/jpeg", 0.85), "JPEG", x, y, dw, dh, undefined, "FAST");
+            });
+
+            const blob = doc.output("blob");
+            downloadBlob(blob, "document.pdf");
+            setStatus(`PDF generated (${fmtBytes(blob.size)}) with ${pdfItems.length} pages.`, "ok");
+          } catch (e: any) {
+            setStatus("Could not generate PDF: " + e?.message, "err");
+          }
+          return;
+        }
+
+        if (!srcImg && !lastBlob) {
+          setStatus("Please upload an image first.", "err");
+          return;
+        }
+
+        if (mode === "crop" && cropBox && cropBox.w > 2 && cropBox.h > 2 && srcImg) {
+          const out = document.createElement("canvas");
+          out.width = Math.round(cropBox.w);
+          out.height = Math.round(cropBox.h);
+          out.getContext("2d")?.drawImage(srcImg, cropBox.x, cropBox.y, cropBox.w, cropBox.h, 0, 0, out.width, out.height);
+          out.toBlob((blob) => {
+            if (blob) downloadBlob(blob, "cropped.png");
+          }, "image/png");
+          return;
+        }
+
+        if (lastBlob) {
+          downloadBlob(lastBlob, "processed-image");
+          return;
+        }
+
+        if (canvas) {
+          const cvtFmt = (document.getElementById("tw-cvt-fmt") as HTMLSelectElement)?.value || defaultFmt || "image/png";
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
+              downloadBlob(blob, `processed.${ext}`);
+              setStatus(`Downloaded ${fmtBytes(blob.size)}.`, "ok");
+            }
+          }, cvtFmt, 0.9);
+        }
+      });
+    }
+
+    // Reset Handler
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        currentFile = null;
+        srcImg = null;
+        lastBlob = null;
+        cropBox = null;
+        pdfItems = [];
+        if (input) input.value = "";
+        if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (preview) preview.style.display = "none";
+        setStatus("Workspace reset. Upload an image to begin.");
+      });
+    }
+  })();
+</script>

@@ -1,0 +1,43 @@
+---
+// CoreValueProps Component - Rendered on every page
+export interface Props {
+  className?: string;
+}
+const { className = "" } = Astro.props;
+---
+<section class={`py-10 ${className}`}>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+    <!-- 100% Private -->
+    <div class="p-6 rounded-2xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan/50 transition-all duration-200 group shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-cyan/10 border border-cyan/30 text-cyan flex items-center justify-center text-lg mb-3.5 group-hover:scale-105 transition-transform">
+        🔒
+      </div>
+      <h3 class="text-base font-display font-semibold text-ink group-hover:text-cyan transition-colors">100% Private</h3>
+      <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">
+        All processing happens in your browser. Your images never leave your device.
+      </p>
+    </div>
+
+    <!-- Lightning Fast -->
+    <div class="p-6 rounded-2xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan/50 transition-all duration-200 group shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-purple/10 border border-purple/30 text-purple flex items-center justify-center text-lg mb-3.5 group-hover:scale-105 transition-transform">
+        ⚡
+      </div>
+      <h3 class="text-base font-display font-semibold text-ink group-hover:text-purple transition-colors">Lightning Fast</h3>
+      <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">
+        Instant processing with no server delays or upload times.
+      </p>
+    </div>
+
+    <!-- Batch Processing -->
+    <div class="p-6 rounded-2xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan/50 transition-all duration-200 group shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-cyan/10 border border-cyan/30 text-cyan flex items-center justify-center text-lg mb-3.5 group-hover:scale-105 transition-transform">
+        📦
+      </div>
+      <h3 class="text-base font-display font-semibold text-ink group-hover:text-cyan transition-colors">Batch Processing</h3>
+      <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">
+        Process multiple images at once and download as ZIP.
+      </p>
+    </div>
+  </div>
+</section>
