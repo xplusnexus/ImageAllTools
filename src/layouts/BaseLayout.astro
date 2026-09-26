@@ -20,7 +20,7 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="theme-color" content="#0a0b0f" />
 
     <!-- Google Fonts -->
@@ -33,7 +33,9 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content="https://www.imagealltools.com/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.imagealltools.com/logo.png" />
 
     <!-- Organization schema, present on every page per SEO §5.5 -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -41,10 +43,12 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
       "@type": "Organization",
       name: "ImageAll",
       url: "https://www.imagealltools.com",
+      logo: "https://www.imagealltools.com/logo.png",
       parentOrganization: {
         "@type": "Organization",
         name: "XPlus Nexus",
-        url: "https://www.xplusnexus.com"
+        url: "https://www.xplusnexus.com",
+        logo: "https://www.imagealltools.com/logo.png"
       },
     })} />
   </head>
