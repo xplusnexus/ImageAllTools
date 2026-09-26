@@ -15,6 +15,183 @@ const CATEGORY_LABEL: Record<string, string> = {
   convert: "Format Converters",
   security: "Security & Privacy",
 };
+
+interface FAQItem {
+  q: string;
+  a: string;
+}
+
+interface FAQCategory {
+  category: string;
+  icon: string;
+  badge: string;
+  items: FAQItem[];
+}
+
+const faqCategories: FAQCategory[] = [
+  {
+    category: "Use Case / Intent-Based Solutions",
+    icon: "🎯",
+    badge: "High SEO Intent",
+    items: [
+      {
+        q: "How do I reduce an image file size for email attachments?",
+        a: "Use our Image Compressor to shrink file size while keeping visual quality clear and legible. Set a target limit (such as 100KB or 200KB) to ensure your photo stays well below email provider attachment limits like Gmail or Outlook 25MB caps."
+      },
+      {
+        q: "How do I make an image smaller for a website without losing quality?",
+        a: "Use our Resize and Compress tools together: first resize your image to its exact responsive display dimensions (e.g. 1200px max width for desktop hero banners), then compress it to modern WebP format. This slashes page payload and improves your Google Core Web Vitals (LCP) score."
+      },
+      {
+        q: "What's the best image size for Instagram, Facebook, and LinkedIn posts?",
+        a: "Use our Resize tool's built-in social presets: 1080×1080px for standard Instagram square (or 1080×1350px for portrait), 1200×630px for Facebook and LinkedIn link previews, and 1280×720px for YouTube video thumbnails."
+      }
+    ]
+  },
+  {
+    category: "General & Trust",
+    icon: "🔒",
+    badge: "100% Free & Private",
+    items: [
+      {
+        q: "Is there a limit to how many images I can edit per day?",
+        a: "No, there's no daily limit. You can use our tools as many times as you need, completely free, with no restrictions on the number of images processed."
+      },
+      {
+        q: "Do you store or save my uploaded images?",
+        a: "No. Since all processing happens locally in your browser via HTML5 Canvas and WebAssembly, we never see, store, or have access to your images. Nothing is ever uploaded to our servers."
+      },
+      {
+        q: "Is AllImageTools.com really 100% free forever?",
+        a: "Yes, our core tools are free with no trial periods, credit limits, or hidden premium tiers."
+      },
+      {
+        q: "Do you add watermarks to processed images?",
+        a: "No. Your images are returned exactly as edited, with no watermarks, brand logos, or unwanted branding added."
+      }
+    ]
+  },
+  {
+    category: "Resize Tool",
+    icon: "📐",
+    badge: "Dimensions & Presets",
+    items: [
+      {
+        q: "What's the maximum image size I can resize?",
+        a: "You can resize images up to 50MB per file and resolutions up to 8K (7680×4320px). Because all calculations execute directly on your device, you are never restricted by server upload limits."
+      },
+      {
+        q: "Can I resize an image to exact pixel dimensions?",
+        a: "Yes, you can enter custom width and height in pixels, scale proportionally by percentage, or choose from common presets (social media, print, web)."
+      },
+      {
+        q: "Will resizing distort my image?",
+        a: "No, you can lock the aspect ratio to prevent stretching or distortion, ensuring crisp and proportional scaling."
+      }
+    ]
+  },
+  {
+    category: "Compress Tool",
+    icon: "🗜️",
+    badge: "KB Optimizer",
+    items: [
+      {
+        q: "How much can I compress an image without losing quality?",
+        a: "Our compressor typically reduces file size by 50–80% while maintaining visual quality, using adjustable compression settings and real-time target KB search."
+      },
+      {
+        q: "What's the difference between lossy and lossless compression?",
+        a: "Lossless compression reduces file size with zero quality loss (ideal for PNG graphics, vector logos, and screenshots); lossy compression allows a greater size reduction with a small, often unnoticeable quality trade-off (best for JPG and WebP photos). You can choose either."
+      }
+    ]
+  },
+  {
+    category: "Crop Tool",
+    icon: "✂️",
+    badge: "Framing & Ratios",
+    items: [
+      {
+        q: "Can I crop images to specific aspect ratios (1:1, 16:9, etc.)?",
+        a: "Yes, preset aspect ratios are available for social media (1:1 square, 4:5 portrait, 16:9 widescreen), YouTube thumbnails, profile pictures, and custom freeform crops."
+      },
+      {
+        q: "Can I crop multiple images to the same dimensions at once?",
+        a: "Yes, batch cropping applies the same crop settings and aspect ratios across multiple images simultaneously."
+      }
+    ]
+  },
+  {
+    category: "Format Conversion",
+    icon: "🔄",
+    badge: "HEIC, WebP, JPG, PNG",
+    items: [
+      {
+        q: "Can I convert HEIC to JPG?",
+        a: "Yes, our converter supports converting Apple iPhone HEIC and HEIF photos directly to JPG or PNG with full high-resolution preservation."
+      },
+      {
+        q: "Can I convert PNG to WebP for faster website loading?",
+        a: "Yes, WebP conversion is supported and recommended for improving website page speed and Google Core Web Vitals scores."
+      },
+      {
+        q: "Does converting formats reduce image quality?",
+        a: "Quality depends on the target format; we optimize default export profiles to minimize loss during conversion and retain alpha transparency when converting between PNG and WebP."
+      }
+    ]
+  },
+  {
+    category: "OCR / Image to Text",
+    icon: "📝",
+    badge: "Text Extraction",
+    items: [
+      {
+        q: "What languages does the OCR tool support?",
+        a: "Our OCR tool supports over 100 languages, with optimized recognition models for English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, and Hindi."
+      },
+      {
+        q: "Can OCR read handwritten text?",
+        a: "Our OCR tool is optimized primarily for printed, typed, and scanned documents, signs, and screenshots. Legible block handwriting can often be recognized, but stylized cursive or low-contrast handwriting will have lower accuracy."
+      },
+      {
+        q: "What image quality is needed for accurate OCR results?",
+        a: "Clear, well-lit images with high-contrast, legible text produce the best results. Blurry, low-resolution, or heavily skewed images may reduce recognition accuracy."
+      }
+    ]
+  },
+  {
+    category: "Technical / Compatibility",
+    icon: "💻",
+    badge: "Browser & Offline",
+    items: [
+      {
+        q: "Which browsers are supported?",
+        a: "Our tools work on all modern browsers, including Google Chrome, Mozilla Firefox, Apple Safari, Microsoft Edge, and Opera on desktop and mobile devices."
+      },
+      {
+        q: "Do I need to install any software or extensions?",
+        a: "No installation needed — everything runs directly in your web browser with zero software or extension downloads."
+      },
+      {
+        q: "Does this work offline?",
+        a: "Yes! Because the tools run 100% on client-side Web APIs, once you have opened the webpage, you can disconnect from Wi-Fi or go into airplane mode and continue editing images offline without network calls."
+      }
+    ]
+  }
+];
+
+const allFaqsFlat = faqCategories.flatMap((c) => c.items);
+const faqPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: allFaqsFlat.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a
+    }
+  }))
+};
 ---
 <BaseLayout
   title="ImageAll — Free Online Image Tools: Compress, Resize, Convert, Crop & More | XPlus Nexus"
@@ -682,37 +859,51 @@ const CATEGORY_LABEL: Record<string, string> = {
     </div>
   </section>
 
-  <!-- ================= GENERAL FAQ & GUIDE ================= -->
-  <section class="py-16 border-t border-border" id="faq">
-    <div class="wrap max-w-4xl">
-      <div class="section-head mb-8">
-        <span class="text-xs font-semibold uppercase tracking-wider text-purple">Help & Documentation</span>
-        <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink mt-1">Frequently Asked Questions</h2>
-        <p class="text-sm text-ink-muted mt-1">Everything you need to know about processing images safely and privately with ImageAll.</p>
+  <!-- ================= CATEGORIZED FAQ & SCHEMA ================= -->
+  <section class="py-16 border-t border-border bg-gradient-to-b from-[#0a0b0f] via-surface to-[#0a0b0f]" id="faq">
+    <div class="wrap max-w-5xl">
+      <div class="section-head mb-12 text-center max-w-2xl mx-auto">
+        <span class="text-xs font-semibold uppercase tracking-wider text-purple px-3 py-1 rounded-full border border-purple/30 bg-purple/10">Help &amp; Knowledge Base</span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-ink mt-3">Frequently Asked Questions</h2>
+        <p class="text-sm sm:text-base text-ink-muted mt-2 leading-relaxed">
+          Everything you need to know about processing images safely, privately, and at maximum quality with ImageAll.
+        </p>
       </div>
 
-      <div class="space-y-3">
-        <details class="faq">
-          <summary>Is ImageAll really free to use?</summary>
-          <p>Yes. Every tool in ImageAll is 100% free with no subscription, no sign-up, and no watermarks on your downloaded images.</p>
-        </details>
-        <details class="faq">
-          <summary>Do you store, see, or upload my images?</summary>
-          <p>No. Every tool processes your image entirely on your own device using client-side HTML5 Canvas and WebAssembly. Your files never touch our servers.</p>
-        </details>
-        <details class="faq">
-          <summary>Which file types does ImageAll support?</summary>
-          <p>ImageAll supports common image formats including JPG, PNG, WEBP, GIF, SVG, BMP, TIFF, and AVIF. Export options vary according to the selected tool.</p>
-        </details>
-        <details class="faq">
-          <summary>Can I compress an image to an exact size like 50KB or 100KB?</summary>
-          <p>Yes! Switch to "Target file size" in the Image Compressor, pick 20KB, 50KB, 100KB, or enter a custom target. Our search engine will optimize the image to stay below your requested file size limit.</p>
-        </details>
-        <details class="faq">
-          <summary>How does ImageAll run without server costs?</summary>
-          <p>Because image computation happens on your computer's browser rather than expensive cloud servers, our hosting only serves static HTML, CSS, and JS files. This allows us to keep the site completely free forever!</p>
-        </details>
+      <div class="space-y-10">
+        {faqCategories.map((group) => (
+          <div class="faq-group rounded-2xl border border-border bg-surface-2/40 p-5 sm:p-7 shadow-sm">
+            <div class="flex items-center justify-between gap-3 mb-5 border-b border-border/60 pb-3.5">
+              <div class="flex items-center gap-2.5">
+                <span class="text-2xl flex-shrink-0" aria-hidden="true">{group.icon}</span>
+                <h3 class="text-lg sm:text-xl font-display font-bold text-ink">{group.category}</h3>
+              </div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-surface border border-border text-cyan">
+                {group.badge}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3.5">
+              {group.items.map((item) => (
+                <details class="faq-item group rounded-xl border border-border bg-surface/90 p-4 transition-all duration-200 hover:border-cyan/50 [&::-webkit-details-marker]:hidden">
+                  <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm sm:text-base font-medium text-ink transition-colors hover:text-cyan list-none">
+                    <span>{item.q}</span>
+                    <span class="text-purple group-open:rotate-45 group-open:text-cyan transition-transform text-2xl leading-none flex-shrink-0 font-bold" aria-hidden="true">
+                      +
+                    </span>
+                  </summary>
+                  <p class="mt-3 text-xs sm:text-sm text-ink-muted leading-relaxed border-t border-border/40 pt-3">
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
+
+      <!-- FAQPage JSON-LD Schema for Google Rich Snippets -->
+      <script type="application/ld+json" set:html={JSON.stringify(faqPageSchema)} />
     </div>
   </section>
 
