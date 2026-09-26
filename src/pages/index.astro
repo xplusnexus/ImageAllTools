@@ -1087,11 +1087,13 @@ const faqPageSchema = {
           if (p.getAttribute("data-jump") === id) {
             p.classList.add("active-pill");
             if (jumpContainer) {
-              const pillRect = p.getBoundingClientRect();
-              const containerRect = jumpContainer.getBoundingClientRect();
-              if (pillRect.left < containerRect.left || pillRect.right > containerRect.right) {
-                p.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-              }
+              const pillLeft = (p as HTMLElement).offsetLeft;
+              const pillWidth = (p as HTMLElement).offsetWidth;
+              const containerWidth = jumpContainer.clientWidth;
+              jumpContainer.scrollTo({
+                left: pillLeft - (containerWidth / 2) + (pillWidth / 2),
+                behavior: "smooth"
+              });
             }
           } else {
             p.classList.remove("active-pill");
@@ -1101,9 +1103,9 @@ const faqPageSchema = {
 
       jumpPills.forEach((pill) => {
         pill.addEventListener("click", (e) => {
-          e.preventDefault();
           const targetId = pill.getAttribute("data-jump");
-          if (!targetId) return;
+          if (!targetId) return; // Let links like WhatsApp DP navigate normally
+          e.preventDefault();
           const targetEl = document.getElementById(targetId);
           if (targetEl) {
             const headerOffset = 130;
