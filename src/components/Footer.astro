@@ -1,61 +1,228 @@
 ---
 const year = new Date().getFullYear();
+
+const coreTools = [
+  { label: "Image Compressor", href: "/image-compressor", badge: "Target KB" },
+  { label: "Image Resizer", href: "/image-resizer" },
+  { label: "Image Cropper", href: "/image-cropper" },
+  { label: "Remove Background", href: "/background-remover", badge: "AI" },
+  { label: "Rotate & Flip", href: "/rotate-image" },
+  { label: "AI Image Upscaler", href: "/ai-image-upscaler", badge: "8K HD" },
+];
+
+const moreTools = [
+  { label: "WhatsApp Full DP Maker", href: "/whatsapp-dp-maker", badge: "Hot" },
+  { label: "Image to PDF Converter", href: "/image-to-pdf", badge: "Multi-Page" },
+  { label: "Resize for Instagram", href: "/resize-image-for-instagram" },
+  { label: "Resize for Facebook", href: "/resize-image-for-facebook-post" },
+  { label: "Color Palette Extractor", href: "/color-palette" },
+  { label: "Blur Image & Privacy", href: "/blur-image" },
+  { label: "All 47 Tools Catalog →", href: "/#catalog", highlight: true },
+];
+
+const companyLinks = [
+  { label: "XPlus Nexus Official Site", href: "https://www.xplusnexus.com/", external: true },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "Contact Support", href: "/contact" },
+];
+
+const socials = [
+  { name: "X", label: "𝕏", href: "https://x.com/xplusnexus", hoverClass: "hover:border-ink hover:text-ink hover:bg-white/10 hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]" },
+  { name: "LinkedIn", label: "in", href: "https://www.linkedin.com/company/xplusnexus", hoverClass: "hover:border-[#0077B5] hover:text-[#0077B5] hover:bg-[#0077B5]/15 hover:shadow-[0_0_12px_rgba(0,119,181,0.3)]" },
+  { name: "GitHub", label: "GH", href: "https://github.com/xplusnexus", hoverClass: "hover:border-purple hover:text-purple hover:bg-purple/15 hover:shadow-[0_0_12px_rgba(167,107,255,0.3)]" },
+  { name: "YouTube", label: "▶", href: "https://www.youtube.com/@xplusnexus", hoverClass: "hover:border-[#FF0000] hover:text-[#FF0000] hover:bg-[#FF0000]/15 hover:shadow-[0_0_12px_rgba(255,0,0,0.3)]" },
+  { name: "Instagram", label: "IG", href: "https://www.instagram.com/xplusnexus", hoverClass: "hover:border-[#E1306C] hover:text-[#E1306C] hover:bg-[#E1306C]/15 hover:shadow-[0_0_12px_rgba(225,48,108,0.3)]" },
+  { name: "Facebook", label: "f", href: "https://www.facebook.com/xplusnexus", hoverClass: "hover:border-[#1877F2] hover:text-[#1877F2] hover:bg-[#1877F2]/15 hover:shadow-[0_0_12px_rgba(24,119,242,0.3)]" },
+];
 ---
-<footer class="border-t border-border mt-20 pt-14 pb-8 bg-[#08090c] text-ink">
-  <div class="wrap grid grid-cols-1 md:grid-cols-4 gap-8">
-    <div class="md:col-span-1">
-      <a class="brand flex items-center gap-3 font-display font-bold text-lg text-ink hover:opacity-90 transition" href="https://www.xplusnexus.com" target="_blank" rel="noopener">
-        <img src="/logo.png" alt="XPlus Nexus Logo" class="w-9 h-9 rounded-xl object-cover border border-cyan/40 shadow-[0_0_15px_rgba(38,224,255,0.25)]" />
-        <span>XPlus Nexus</span>
-      </a>
-      <p class="text-xs text-ink-muted mt-3 leading-relaxed max-w-sm">
-        ImageAll is part of the XPlus Nexus product family. Free, privacy-first image tools designed to run 100% locally in your browser.
-      </p>
-      <div class="flex gap-2.5 mt-4 flex-wrap" aria-label="XPlus Nexus on social media">
-        <a href="https://x.com/xplusnexus" aria-label="XPlus Nexus on X" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">𝕏</a>
-        <a href="https://www.linkedin.com/company/xplusnexus" aria-label="XPlus Nexus on LinkedIn" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">in</a>
-        <a href="https://github.com/xplusnexus" aria-label="XPlus Nexus on GitHub" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">GH</a>
-        <a href="https://www.youtube.com/@xplusnexus" aria-label="XPlus Nexus on YouTube" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">▶</a>
-        <a href="https://www.instagram.com/xplusnexus" aria-label="XPlus Nexus on Instagram" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">IG</a>
-        <a href="https://www.facebook.com/xplusnexus" aria-label="XPlus Nexus on Facebook" rel="me noopener" target="_blank" class="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-xs text-ink hover:border-cyan hover:text-cyan transition-colors">f</a>
+<footer class="relative mt-24 border-t border-border/80 bg-gradient-to-b from-[#0a0b0f] via-[#08090d] to-[#040507] text-ink overflow-hidden">
+  <!-- Glowing top border accent -->
+  <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan/50 via-purple/40 to-transparent" aria-hidden="true"></div>
+
+  <!-- Ambient light blobs -->
+  <div class="absolute -top-24 left-1/4 w-96 h-96 bg-cyan/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute -bottom-24 right-1/4 w-96 h-96 bg-purple/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+  <div class="wrap relative z-10 pt-16 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+      <!-- 1. Brand & Mission Column -->
+      <div class="md:col-span-5 lg:col-span-4 flex flex-col justify-between">
+        <div>
+          <a
+            class="brand group inline-flex items-center gap-3.5 font-display font-bold text-xl text-ink hover:opacity-95 transition"
+            href="https://www.xplusnexus.com"
+            target="_blank"
+            rel="noopener"
+            aria-label="XPlus Nexus Official Website"
+          >
+            <div class="relative">
+              <img
+                src="/logo.png"
+                alt="XPlus Nexus 3D Chrome Logo"
+                class="w-12 h-12 rounded-2xl object-cover border border-cyan/50 p-0.5 bg-surface-2/90 shadow-[0_0_20px_rgba(38,224,255,0.25)] group-hover:scale-105 group-hover:border-cyan group-hover:shadow-[0_0_25px_rgba(38,224,255,0.4)] transition-all duration-300"
+              />
+              <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#00D084] rounded-full border-2 border-[#0a0b0f]" title="Active Client-Side Engine"></span>
+            </div>
+            <div>
+              <span class="text-xl tracking-tight text-white group-hover:text-cyan transition-colors">XPlus Nexus</span>
+              <span class="text-[10px] font-semibold tracking-widest uppercase text-cyan block opacity-85">Innovate · Build · Grow</span>
+            </div>
+          </a>
+
+          <p class="text-xs sm:text-sm text-ink-muted mt-4 leading-relaxed max-w-sm">
+            <strong class="text-ink">ImageAll</strong> is part of the XPlus Nexus product family. High-speed, privacy-first creative utilities engineered to run 100% locally in your browser with zero cloud file storage.
+          </p>
+
+          <!-- Security trust indicator badge -->
+          <div class="mt-5 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-border/80 bg-surface/80 text-[11px] font-medium text-ink-muted shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-[#00D084] animate-pulse"></span>
+            <span>Zero-Knowledge Engine · 0 ms Server Lag</span>
+          </div>
+        </div>
+
+        <!-- Social Media Channels with Brand Hover Accents -->
+        <div class="mt-6">
+          <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted/80 mb-2.5 font-sans">
+            Connect With XPlus Nexus
+          </div>
+          <div class="flex gap-2 flex-wrap" aria-label="XPlus Nexus on social media">
+            {socials.map((s) => (
+              <a
+                href={s.href}
+                aria-label={`XPlus Nexus on ${s.name}`}
+                rel="me noopener"
+                target="_blank"
+                class={`w-9 h-9 rounded-xl border border-border/80 bg-surface/70 flex items-center justify-center text-xs font-bold text-ink transition-all duration-200 ${s.hoverClass} hover:-translate-y-0.5 shadow-sm`}
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Core Tools Column -->
+      <div class="md:col-span-3 lg:col-span-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-cyan mb-4 font-sans flex items-center gap-2">
+          <span>⚡</span>
+          <span>Core Tools</span>
+        </h4>
+        <ul class="space-y-2.5 text-xs sm:text-sm">
+          {coreTools.map((t) => (
+            <li>
+              <a
+                href={t.href}
+                class="group flex items-center justify-between gap-2 text-ink-muted hover:text-ink hover:translate-x-1 transition-all duration-200 py-0.5"
+              >
+                <span class="group-hover:text-cyan transition-colors">{t.label}</span>
+                {t.badge && (
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-surface-2 border border-border text-cyan">
+                    {t.badge}
+                  </span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 3. More Tools & Suites Column -->
+      <div class="md:col-span-4 lg:col-span-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-purple mb-4 font-sans flex items-center gap-2">
+          <span>🛠️</span>
+          <span>Popular Suites</span>
+        </h4>
+        <ul class="space-y-2.5 text-xs sm:text-sm">
+          {moreTools.map((t) => (
+            <li>
+              <a
+                href={t.href}
+                class={`group flex items-center justify-between gap-2 py-0.5 transition-all duration-200 hover:translate-x-1 ${
+                  t.highlight
+                    ? "font-bold text-cyan hover:brightness-125"
+                    : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                <span class={t.highlight ? "text-cyan" : "group-hover:text-purple transition-colors"}>
+                  {t.label}
+                </span>
+                {t.badge && (
+                  <span class={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                    t.badge === "Hot"
+                      ? "bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366]"
+                      : "bg-surface-2 border-border text-purple"
+                  }`}>
+                    {t.badge}
+                  </span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 4. Company & Legal Column -->
+      <div class="md:col-span-12 lg:col-span-2">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-ink-muted mb-4 font-sans flex items-center gap-2">
+          <span>🏢</span>
+          <span>Company &amp; Legal</span>
+        </h4>
+        <ul class="space-y-2.5 text-xs sm:text-sm">
+          {companyLinks.map((c) => (
+            <li>
+              <a
+                href={c.href}
+                target={c.external ? "_blank" : undefined}
+                rel={c.external ? "noopener" : undefined}
+                class="group flex items-center gap-1.5 text-ink-muted hover:text-cyan hover:translate-x-1 transition-all duration-200 py-0.5"
+              >
+                <span>{c.label}</span>
+                {c.external && (
+                  <span class="text-[10px] text-ink-muted group-hover:text-cyan" aria-hidden="true">↗</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-6 p-3.5 rounded-xl border border-border/60 bg-surface-2/40 text-[11px] text-ink-muted leading-relaxed">
+          <strong class="text-ink font-semibold block mb-0.5">Need a Custom Tool?</strong>
+          We build tailored client-side image solutions for enterprise workflows.
+        </div>
       </div>
     </div>
-    
-    <div>
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3 font-sans">Core Tools</h4>
-      <ul class="space-y-2 text-xs text-ink/80">
-        <li><a href="/image-compressor" class="hover:text-cyan transition-colors">Image Compressor</a></li>
-        <li><a href="/image-resizer" class="hover:text-cyan transition-colors">Image Resizer</a></li>
-        <li><a href="/image-cropper" class="hover:text-cyan transition-colors">Image Cropper</a></li>
-        <li><a href="/background-remover" class="hover:text-cyan transition-colors">Remove Background</a></li>
-        <li><a href="/rotate-image" class="hover:text-cyan transition-colors">Rotate & Flip</a></li>
-      </ul>
+
+    <!-- Bottom Copyright & Trust Bar -->
+    <div class="mt-14 pt-6 border-t border-border/70 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-ink-muted">
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <span>© {year} <strong class="text-ink">XPlus Nexus</strong>. All rights reserved.</span>
+        <span class="hidden sm:inline text-border">•</span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="text-cyan">⚡</span>
+          <span>Hosted on Hostinger Business Cloud</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span class="text-[11px] text-ink-muted/80">100% Client-Side WebAssembly &amp; HTML5 Canvas</span>
+        <button
+          type="button"
+          id="footer-back-to-top"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-border bg-surface text-ink hover:border-cyan hover:text-cyan transition-all text-xs cursor-pointer shadow-sm"
+          aria-label="Scroll back to top"
+        >
+          <span>Top</span>
+          <span>↑</span>
+        </button>
+      </div>
     </div>
-    
-    <div>
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3 font-sans">More Tools</h4>
-      <ul class="space-y-2 text-xs text-ink/80">
-        <li><a href="/add-watermark" class="hover:text-cyan transition-colors">Add Watermark</a></li>
-        <li><a href="/image-to-pdf" class="hover:text-cyan transition-colors">Image to PDF</a></li>
-        <li><a href="/color-palette" class="hover:text-cyan transition-colors">Color Palette Extractor</a></li>
-        <li><a href="/blur-image" class="hover:text-cyan transition-colors">Blur Image</a></li>
-        <li><a href="/#catalog" class="hover:text-cyan transition-colors">All 47 Tools Catalog</a></li>
-      </ul>
-    </div>
-    
-    <div>
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3 font-sans">Company & Legal</h4>
-      <ul class="space-y-2 text-xs text-ink/80">
-        <li><a href="https://www.xplusnexus.com" target="_blank" class="hover:text-cyan transition-colors">XPlus Nexus Home</a></li>
-        <li><a href="/privacy-policy" class="hover:text-cyan transition-colors">Privacy Policy</a></li>
-        <li><a href="/terms-of-service" class="hover:text-cyan transition-colors">Terms of Service</a></li>
-        <li><a href="/contact" class="hover:text-cyan transition-colors">Contact Support</a></li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="wrap mt-10 pt-5 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-ink-muted">
-    <span>© {year} XPlus Nexus. All rights reserved.</span>
-    <span>ImageAll — 100% Client-Side Private Image Toolkit. Hosted on Hostinger.</span>
   </div>
 </footer>
+
+<script>
+  // Smooth scroll back to top button
+  document.getElementById("footer-back-to-top")?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
