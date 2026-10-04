@@ -1,0 +1,134 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Terms of Service — ImageAll by XPlus Nexus";
+const description = "Review the Terms of Service for ImageAll by XPlus Nexus. Understand user rights, client-side zero-storage processing, and acceptable use policies.";
+const lastUpdated = "October 2026";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://imagealltools.com/terms-of-service"
+  keywords="terms of service, user agreement, privacy first image tools, client side processing, xplus nexus terms"
+>
+  <main id="main" class="py-12 md:py-20">
+    <div class="wrap max-w-4xl">
+      <!-- Breadcrumb Nav -->
+      <nav class="flex items-center gap-2 text-xs text-ink-muted mb-8" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-cyan transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-ink">Terms of Service</span>
+      </nav>
+
+      <!-- Header Section -->
+      <header class="mb-12 border-b border-border/60 pb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs font-semibold mb-4">
+          <span>📜</span>
+          <span>Legal Agreement</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-white mb-4">
+          Terms of Service
+        </h1>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          Last Updated: <strong class="text-ink">{lastUpdated}</strong>. Please read these terms carefully before utilizing our browser-based image utilities.
+        </p>
+      </header>
+
+      <!-- Content Section -->
+      <div class="space-y-10 text-ink-muted leading-relaxed text-sm sm:text-base">
+        <!-- 1. Acceptance -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-cyan font-mono text-lg">01.</span>
+            <span>Acceptance of Terms</span>
+          </h2>
+          <p class="mb-3">
+            By accessing or using <strong class="text-ink">ImageAll</strong> (accessible via imagealltools.com), a web property created and operated by <strong class="text-ink">XPlus Nexus</strong> ("we", "us", or "our"), you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you must discontinue use of our services immediately.
+          </p>
+          <p>
+            We reserve the right to amend or update these terms at any time. Continued use of our site following any published revisions constitutes affirmative acceptance of the updated terms.
+          </p>
+        </section>
+
+        <!-- 2. Client-Side Processing & Intellectual Property -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-cyan font-mono text-lg">02.</span>
+            <span>Client-Side Processing &amp; Content Ownership</span>
+          </h2>
+          <p class="mb-3">
+            ImageAll operates using <strong class="text-ink">100% client-side technologies</strong>, including HTML5 Canvas and WebAssembly. Your images, files, photos, and graphic data are processed directly inside your browser's local sandbox memory:
+          </p>
+          <ul class="list-disc list-inside space-y-2 ml-2 mb-4 text-ink-muted">
+            <li><strong class="text-ink">Zero Server Uploads:</strong> Your images are never uploaded to, stored on, or inspected by our servers.</li>
+            <li><strong class="text-ink">100% Ownership:</strong> You retain full copyright, intellectual property rights, and ownership of all original files and processed outputs.</li>
+            <li><strong class="text-ink">No Data Mining:</strong> We do not harvest, monetize, train machine learning models, or distribute your uploaded creative works.</li>
+          </ul>
+        </section>
+
+        <!-- 3. Permitted & Acceptable Use -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-cyan font-mono text-lg">03.</span>
+            <span>Permitted &amp; Acceptable Use</span>
+          </h2>
+          <p class="mb-3">
+            You agree to use ImageAll solely for lawful purposes. You agree not to use the service to:
+          </p>
+          <ul class="list-disc list-inside space-y-2 ml-2 text-ink-muted">
+            <li>Process, create, or distribute imagery that violates local, national, or international laws, including child exploitation or illicit materials.</li>
+            <li>Infringe on the intellectual property, copyright, patent, trademark, or trade secret rights of third parties.</li>
+            <li>Attempt to reverse-engineer, inject malicious scripts, or disrupt the operation of the website, hosting infrastructure, or connected networks.</li>
+            <li>Deploy automated bots, spiders, or scrapers in an abusive manner that degrades site availability for other worldwide users.</li>
+          </ul>
+        </section>
+
+        <!-- 4. Disclaimer of Warranties -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-cyan font-mono text-lg">04.</span>
+            <span>Disclaimer of Warranties</span>
+          </h2>
+          <p class="mb-3">
+            ImageAll and all accompanying software tools are provided strictly on an <strong class="text-ink">"AS IS"</strong> and <strong class="text-ink">"AS AVAILABLE"</strong> basis without warranties of any kind, whether express or implied.
+          </p>
+          <p>
+            While we strive for 100% mathematical precision and reliability across modern browsers, XPlus Nexus does not warrant that tool functions will be uninterrupted, error-free, compatible with every legacy browser, or that processing will meet your specific business requirements.
+          </p>
+        </section>
+
+        <!-- 5. Limitation of Liability -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-cyan font-mono text-lg">05.</span>
+            <span>Limitation of Liability</span>
+          </h2>
+          <p>
+            To the maximum extent permitted by applicable law, in no event shall XPlus Nexus, its founders, directors, employees, or partners be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data corruption, or business interruption arising out of or in connection with your use of ImageAll.
+          </p>
+        </section>
+
+        <!-- 6. Contact Information -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-cyan/40 bg-gradient-to-br from-surface to-surface-2 shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-3 flex items-center gap-2.5">
+            <span>📫</span>
+            <span>Questions &amp; Contact</span>
+          </h2>
+          <p class="mb-4">
+            If you have questions regarding these Terms of Service or enterprise licensing requirements, please contact our legal and support team:
+          </p>
+          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#08090d] border border-cyan/30 text-ink">
+            <span class="text-cyan font-mono font-semibold">support@xplusnexus.com</span>
+            <a
+              href="mailto:support@xplusnexus.com?subject=Terms%20of%20Service%20Inquiry"
+              class="px-2.5 py-1 rounded bg-cyan/20 hover:bg-cyan/30 text-cyan text-xs font-semibold transition"
+            >
+              Email Us ↗
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

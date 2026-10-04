@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Page Not Found (404) — ImageAll by XPlus Nexus";
+const description = "The page or image tool you are looking for does not exist or has been moved. Explore our 45 free online creative utilities.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://imagealltools.com/404"
+>
+  <main id="main" class="py-20 md:py-32 text-center">
+    <div class="wrap max-w-2xl">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs font-semibold mb-6">
+        <span>🔍</span>
+        <span>Error 404 · Page Not Found</span>
+      </div>
+
+      <h1 class="text-6xl sm:text-7xl md:text-8xl font-display font-extrabold tracking-tight text-white mb-4">
+        4<span class="text-cyan">0</span>4
+      </h1>
+
+      <p class="text-base sm:text-lg text-ink-muted mb-8 max-w-md mx-auto leading-relaxed">
+        The tool or page you requested could not be located. It may have been updated, renamed, or moved.
+      </p>
+
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a
+          href="/"
+          class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan to-purple text-bg font-bold text-sm shadow-[0_0_24px_rgba(38,224,255,0.35)] hover:opacity-95 transition"
+        >
+          Explore All 45 Tools
+        </a>
+        <a
+          href="/contact"
+          class="px-6 py-3 rounded-xl border border-border bg-surface-2 hover:border-cyan text-ink text-sm font-semibold transition"
+        >
+          Contact Support
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

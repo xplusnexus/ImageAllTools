@@ -132,6 +132,7 @@ canvas {
 
 .field input[type="number"],
 .field input[type="text"],
+.field textarea,
 .field select {
   background: var(--surface-2);
   border: 1px solid var(--border);
@@ -140,6 +141,15 @@ canvas {
   padding: 9px 10px;
   font-size: 0.9rem;
   font-family: inherit;
+}
+
+.code-editor-textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  resize: vertical;
 }
 
 .field input[type="range"] {
@@ -533,6 +543,72 @@ body.focus-mode :focus {
   .target-presets { gap: 5px; }
   .preset { padding: 6px 8px; font-size: 0.74rem; }
   .mode-option { padding: 7px 10px; font-size: 0.8rem; }
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents auto-zoom on mobile Safari */
+  }
+}
+
+/* 4K TV & Ultrawide Display Responsiveness */
+@media (min-width: 1600px) {
+  .wrap {
+    max-width: 1260px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .wrap {
+    max-width: 1440px;
+  }
+  body {
+    font-size: 17px;
+  }
+}
+
+/* Google Translate Widget & Stealth Styling */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+body {
+  top: 0px !important;
+  position: static !important;
+}
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+.skiptranslate iframe {
+  display: none !important;
+}
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.goog-te-gadget {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  font-family: inherit !important;
+}
+.goog-te-gadget .goog-te-combo {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  outline: none !important;
+  width: 100% !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -640,4 +716,187 @@ body.focus-mode :focus {
   font-size: 0.85em;
   font-family: monospace;
 }
+
+/* ==========================================================================
+   1. Google Website Translator Stealth Styles
+   Prevents Google's top iframe banner from pushing the page down or breaking sticky header
+   ========================================================================== */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+#google_translate_element {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Prevent translation wrapper from breaking font families */
+font {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   2. Comprehensive Multi-Device Responsiveness (Mobile, Tablet, Desktop, TV)
+   ========================================================================== */
+
+/* Universal mobile-first container safety */
+html, body {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+/* --- Mobile Devices (0px - 640px) --- */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0 16px;
+  }
+
+  .tool-card-box {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  /* Prevent automatic iOS Safari zoom-in on input tap */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Compact workspace and dropzone */
+  .workspace {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .dropzone {
+    padding: 20px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* Smooth scrollable button toolbars */
+  .tool-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Ensure canvas doesn't breach small screens */
+  .canvas-holder {
+    max-height: 320px;
+  }
+
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* --- Tablets & Foldables (641px - 1024px) --- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .wrap {
+    padding: 0 20px;
+  }
+
+  .tool-card-box {
+    padding: 26px 20px;
+  }
+
+  .canvas-holder {
+    max-height: 400px;
+  }
+}
+
+/* --- Laptops & Standard Desktops (1025px - 1599px) --- */
+@media (min-width: 1025px) and (max-width: 1599px) {
+  .wrap {
+    max-width: 1140px;
+  }
+}
+
+/* --- Ultrawide & High-Resolution Desktops (1600px - 2559px) --- */
+@media (min-width: 1600px) {
+  .wrap {
+    max-width: 1320px;
+    padding: 0 32px;
+  }
+
+  .tool-card-box {
+    padding: 38px;
+    border-radius: 20px;
+  }
+
+  .canvas-holder {
+    max-height: 520px;
+  }
+}
+
+/* --- 4K Ultra HD & Smart TV Displays (2560px - 3839px) --- */
+@media (min-width: 2560px) {
+  html {
+    font-size: 18px; /* Increases readability for 10-foot viewing distance on large TV screens */
+  }
+
+  .wrap {
+    max-width: 1560px;
+    padding: 0 40px;
+  }
+
+  .tool-card-box {
+    padding: 44px;
+    border-radius: 24px;
+  }
+
+  .canvas-holder {
+    max-height: 640px;
+  }
+}
+
+/* --- 8K Ultra HD & Giant Presentation Screens (3840px+) --- */
+@media (min-width: 3840px) {
+  html {
+    font-size: 21px; /* Scaled for ultra-high pixel density / 8K TV */
+  }
+
+  .wrap {
+    max-width: 1880px;
+    padding: 0 48px;
+  }
+
+  .tool-card-box {
+    padding: 52px;
+    border-radius: 28px;
+  }
+
+  .canvas-holder {
+    max-height: 780px;
+  }
+}
+
 

@@ -1,0 +1,131 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Privacy Policy — ImageAll by XPlus Nexus";
+const description = "Learn how ImageAll by XPlus Nexus safeguards your privacy with 100% client-side zero-storage image processing. No server uploads, zero file tracking.";
+const lastUpdated = "October 2026";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://imagealltools.com/privacy-policy"
+  keywords="privacy policy, zero knowledge image tools, client side processing, no upload image editor, gdpr compliant image tools"
+>
+  <main id="main" class="py-12 md:py-20">
+    <div class="wrap max-w-4xl">
+      <!-- Breadcrumb Nav -->
+      <nav class="flex items-center gap-2 text-xs text-ink-muted mb-8" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-cyan transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-ink">Privacy Policy</span>
+      </nav>
+
+      <!-- Header Section -->
+      <header class="mb-12 border-b border-border/60 pb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#00D084]/40 bg-[#00D084]/10 text-[#00D084] text-xs font-semibold mb-4">
+          <span class="w-2 h-2 rounded-full bg-[#00D084] animate-pulse"></span>
+          <span>Zero-Knowledge Privacy Guaranteed</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-white mb-4">
+          Privacy Policy
+        </h1>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          Last Updated: <strong class="text-ink">{lastUpdated}</strong>. Your creative privacy is our highest priority.
+        </p>
+      </header>
+
+      <!-- Content Sections -->
+      <div class="space-y-10 text-ink-muted leading-relaxed text-sm sm:text-base">
+        <!-- 1. Core Commitment -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-[#00D084] font-mono text-lg">01.</span>
+            <span>Our Privacy Architecture: 100% In-Browser</span>
+          </h2>
+          <p class="mb-4">
+            At <strong class="text-ink">ImageAll</strong> (by <strong class="text-ink">XPlus Nexus</strong>), we believe your private images and documents should remain exclusively yours. Unlike traditional online converters that upload your photos to remote cloud servers, <strong class="text-[#00D084]">ImageAll runs 100% locally on your own computer, phone, or tablet</strong>.
+          </p>
+          <div class="p-4 rounded-xl border border-[#00D084]/30 bg-[#00D084]/5 text-xs sm:text-sm text-ink mb-4">
+            🔒 <strong>The Zero-Storage Guarantee:</strong> When you drag, drop, or select a photo on ImageAll, it is decoded into your device's local memory (RAM) via HTML5 Canvas and client-side WebAssembly. It is <em>never</em> sent across the internet to our backend servers.
+          </div>
+        </section>
+
+        <!-- 2. What We Never Collect -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-[#00D084] font-mono text-lg">02.</span>
+            <span>What We Never Collect or Store</span>
+          </h2>
+          <ul class="list-disc list-inside space-y-2.5 ml-2 text-ink-muted">
+            <li><strong class="text-ink">Your Images &amp; Documents:</strong> No photos, PDFs, graphics, or metadata are ever saved on any database or cloud disk.</li>
+            <li><strong class="text-ink">Facial &amp; Biometric Data:</strong> Face blurring and detection algorithms execute entirely on your GPU/CPU using client-side scripts.</li>
+            <li><strong class="text-ink">Personal Identifiable Information (PII):</strong> We do not ask for your name, phone number, physical address, or credit card information.</li>
+          </ul>
+        </section>
+
+        <!-- 3. Local Storage & Language Cookies -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-[#00D084] font-mono text-lg">03.</span>
+            <span>Local Storage &amp; Cookies</span>
+          </h2>
+          <p class="mb-3">
+            ImageAll uses minimal, strictly essential browser storage to deliver a smooth user experience:
+          </p>
+          <ul class="list-disc list-inside space-y-2 ml-2 text-ink-muted">
+            <li><strong class="text-ink">Language Preferences:</strong> If you select a preferred worldwide language (e.g. Spanish, French, Hindi), we save your choice in <code class="text-cyan bg-surface-2 px-1.5 py-0.5 rounded text-xs">localStorage</code> and a standard <code class="text-cyan bg-surface-2 px-1.5 py-0.5 rounded text-xs">googtrans</code> cookie so your language persists as you browse different tools.</li>
+            <li><strong class="text-ink">No Tracking Cookies:</strong> We do not deploy third-party advertising cookies that track your browsing activity across other websites.</li>
+          </ul>
+        </section>
+
+        <!-- 4. Global Compliance (GDPR, CCPA & Global Users) -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-[#00D084] font-mono text-lg">04.</span>
+            <span>GDPR, CCPA &amp; International Compliance</span>
+          </h2>
+          <p class="mb-3">
+            Because ImageAll does not collect, hold, or sell user personal data:
+          </p>
+          <ul class="list-disc list-inside space-y-2 ml-2 text-ink-muted">
+            <li><strong class="text-ink">Under the GDPR (European Union):</strong> We adhere to the principle of Data Minimization (Article 5) and Privacy by Design (Article 25) by ensuring zero personal data leaves your terminal.</li>
+            <li><strong class="text-ink">Under the CCPA / CPRA (California, US):</strong> We do not sell or share any consumer personal information to third parties.</li>
+            <li><strong class="text-ink">Worldwide Users:</strong> Citizens of all countries worldwide benefit from identical high-tier cryptographic privacy standards.</li>
+          </ul>
+        </section>
+
+        <!-- 5. Security & Infrastructure -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-4 flex items-center gap-2.5">
+            <span class="text-[#00D084] font-mono text-lg">05.</span>
+            <span>Security &amp; Cloud Infrastructure</span>
+          </h2>
+          <p>
+            The static web assets of ImageAll are hosted on modern high-speed Hostinger Business Cloud infrastructure with end-to-end HTTPS / TLS 1.3 encryption. Content Security Policies are implemented to prevent unauthorized script injections.
+          </p>
+        </section>
+
+        <!-- 6. Privacy Contact -->
+        <section class="p-6 sm:p-8 rounded-2xl border border-cyan/40 bg-gradient-to-br from-surface to-surface-2 shadow-sm">
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-3 flex items-center gap-2.5">
+            <span>🛡️</span>
+            <span>Contact Privacy Office</span>
+          </h2>
+          <p class="mb-4">
+            If you have questions, feedback, or requests concerning our zero-storage privacy practices:
+          </p>
+          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#08090d] border border-cyan/30 text-ink">
+            <span class="text-cyan font-mono font-semibold">support@xplusnexus.com</span>
+            <a
+              href="mailto:support@xplusnexus.com?subject=Privacy%20Inquiry"
+              class="px-2.5 py-1 rounded bg-cyan/20 hover:bg-cyan/30 text-cyan text-xs font-semibold transition"
+            >
+              Email Us ↗
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

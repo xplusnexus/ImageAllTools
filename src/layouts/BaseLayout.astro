@@ -8,33 +8,83 @@ export interface Props {
   title: string;
   description: string;
   canonicalPath: string; // e.g. "/image-resizer"
+  keyword?: string;
 }
-const { title, description, canonicalPath } = Astro.props;
-const canonicalURL = new URL(canonicalPath, Astro.site);
+const { title, description, canonicalPath, keyword } = Astro.props;
+const siteUrl = Astro.site || "https://www.imagealltools.com";
+const canonicalURL = new URL(canonicalPath, siteUrl);
+const fullCanonical = canonicalURL.toString();
+
+const defaultKeywords = "free image tools, image compressor, image resizer, image cropper, background remover, format converter, photo editor, client-side, on-device image processing, no watermark, online photo tools worldwide";
+const metaKeywords = keyword ? `${keyword}, ${defaultKeywords}` : defaultKeywords;
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
+    <meta name="keywords" content={metaKeywords} />
+    <link rel="canonical" href={fullCanonical} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="theme-color" content="#0a0b0f" />
+
+    <!-- Worldwide Audience, Distribution & International Geo Targeting -->
+    <meta name="distribution" content="global" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="rating" content="General" />
+    <meta name="target" content="all" />
+    <meta name="audience" content="all" />
+    <meta name="geo.region" content="US, GB, IN, CA, AU, DE, FR, JP, BR, Worldwide" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Worldwide Multilingual hreflang Alternative Links for Search Crawlers -->
+    <link rel="alternate" hreflang="x-default" href={fullCanonical} />
+    <link rel="alternate" hreflang="en" href={fullCanonical} />
+    <link rel="alternate" hreflang="es" href={fullCanonical} />
+    <link rel="alternate" hreflang="fr" href={fullCanonical} />
+    <link rel="alternate" hreflang="de" href={fullCanonical} />
+    <link rel="alternate" hreflang="pt" href={fullCanonical} />
+    <link rel="alternate" hreflang="hi" href={fullCanonical} />
+    <link rel="alternate" hreflang="ja" href={fullCanonical} />
+    <link rel="alternate" hreflang="zh" href={fullCanonical} />
+    <link rel="alternate" hreflang="ar" href={fullCanonical} />
+    <link rel="alternate" hreflang="ru" href={fullCanonical} />
+    <link rel="alternate" hreflang="id" href={fullCanonical} />
+    <link rel="alternate" hreflang="it" href={fullCanonical} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Open Graph / social -->
+    <!-- Open Graph / Worldwide Social Localization -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={fullCanonical} />
+    <meta property="og:site_name" content="ImageAll by XPlus Nexus" />
     <meta property="og:image" content="https://www.imagealltools.com/logo.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta property="og:locale:alternate" content="hi_IN" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="ar_SA" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:locale:alternate" content="id_ID" />
+    <meta property="og:locale:alternate" content="it_IT" />
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@xplusnexus" />
+    <meta name="twitter:creator" content="@xplusnexus" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://www.imagealltools.com/logo.png" />
 
     <!-- Organization schema, present on every page per SEO §5.5 -->
@@ -60,5 +110,7 @@ const canonicalURL = new URL(canonicalPath, Astro.site);
     </main>
     <Footer />
     <AccessibilityAssistant />
+    <!-- Global Google Translate Mount Point -->
+    <div id="google_translate_element" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;"></div>
   </body>
 </html>

@@ -10,7 +10,10 @@ const { slug = "image-compressor", toolName = "Image Tool", engine = "client" } 
 // Determine tool type from slug
 let mode = "compress";
 if (slug.includes("resize")) mode = "resize";
-else if (slug.includes("crop") || slug.includes("dp-maker") || slug.includes("passport")) mode = "crop";
+else if (slug.includes("html-to-image") || slug.includes("html-to-img") || slug.includes("base64")) mode = "html-to-image";
+else if (slug.includes("whatsapp-dp") || slug.includes("full-dp") || slug.includes("no-crop") || slug.includes("dp-maker")) mode = "whatsapp-dp";
+else if (slug.includes("circle")) mode = "circle";
+else if (slug.includes("crop") || slug.includes("passport")) mode = "crop";
 else if (slug.includes("rotate") || slug.includes("flip")) mode = "rotate";
 else if (slug.includes("watermark") || slug.includes("add-text") || slug.includes("meme")) mode = "watermark";
 else if (slug.includes("pdf")) mode = "pdf";
@@ -18,13 +21,19 @@ else if (slug.includes("palette")) mode = "palette";
 else if (slug.includes("background") || slug.includes("bg-remove")) mode = "bg-remove";
 else if (slug.includes("to-") || slug.includes("convert")) mode = "convert";
 else if (slug.includes("blur") || slug.includes("censor") || slug.includes("pixelat")) mode = "blur";
+else if (slug.includes("collage")) mode = "collage";
 
 // Default presets
 let defaultTargetKB = "100";
-if (slug.includes("20kb")) defaultTargetKB = "20";
+if (slug.includes("15kb")) defaultTargetKB = "15";
+else if (slug.includes("20kb")) defaultTargetKB = "20";
+else if (slug.includes("40kb")) defaultTargetKB = "40";
 else if (slug.includes("50kb")) defaultTargetKB = "50";
 else if (slug.includes("100kb")) defaultTargetKB = "100";
 else if (slug.includes("200kb")) defaultTargetKB = "200";
+else if (slug.includes("300kb")) defaultTargetKB = "300";
+else if (slug.includes("1mb")) defaultTargetKB = "1024";
+else if (slug.includes("2mb")) defaultTargetKB = "2048";
 
 let defaultWidth = "";
 let defaultHeight = "";
@@ -53,15 +62,35 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 >
   <!-- Universal Dropzone -->
   <div class="dropzone" id="tw-drop" tabindex="0" role="button" aria-label={`Upload image for ${toolName}`}>
-    <strong>Click to upload</strong> or drag an image here. Supports JPG, PNG, WEBP, GIF, SVG, AVIF.
+    {mode === "html-to-image" ? (
+      <span><strong>Paste HTML/CSS code or drag an image / Base64</strong> here. Convert code to PNG/JPG or images to Base64 Data URIs.</span>
+    ) : mode === "whatsapp-dp" ? (
+      <span><strong>Click to upload</strong> or drag your full photo here. Fit any vertical or horizontal picture into a WhatsApp Full DP with no crop!</span>
+    ) : slug.includes("instagram") ? (
+      <span><strong>Click to upload</strong> or drag your photo here. Resize for Instagram posts (1:1 Square, 4:5 Portrait) and Stories (9:16) without cropping!</span>
+    ) : slug.includes("facebook") ? (
+      <span><strong>Click to upload</strong> or drag your photo here. Resize for Facebook profile picture (1:1), cover photo (820×312), and feed posts (1200×630) with no crop!</span>
+    ) : mode === "palette" ? (
+      <span><strong>Click to upload</strong> or drag your photo, artwork, or UI design here. Extract dominant colors, seasonal color palettes, and hex codes instantly!</span>
+    ) : mode === "bg-remove" ? (
+      <span><strong>Click to upload</strong> or drag your portrait, product, logo, or signature here. Instant background removal with transparent PNG cutout or solid studio backdrop!</span>
+    ) : mode === "crop" ? (
+      <span><strong>Click to upload</strong> or drag your image here. Crop freeform or lock to 1:1 Square, 4:5, 16:9, Passport, or Circular avatar shapes!</span>
+    ) : mode === "collage" ? (
+      <span><strong>Click to upload</strong> or drag 2 to 9+ photos here to build your collage. Supports JPG, PNG, WEBP, AVIF.</span>
+    ) : mode === "pdf" ? (
+      <span><strong>Click to upload</strong> or drag multiple images here to convert to PDF.</span>
+    ) : (
+      <span><strong>Click to upload</strong> or drag an image here. Supports JPG, PNG, WEBP, GIF, SVG, AVIF.</span>
+    )}
   </div>
-  <input type="file" id="tw-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple={mode === "pdf"} hidden />
+  <input type="file" id="tw-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple={mode === "pdf" || mode === "collage"} hidden />
 
   <!-- Multi-file PDF list container (only for PDF) -->
   {mode === "pdf" && <div id="tw-pdf-list" class="pdf-list"></div>}
 
-  <!-- Preview Row (hidden until image loaded) -->
-  <div class="preview-row" id="tw-preview" style="display:none;">
+  <!-- Preview Row (hidden until image loaded, or displayed immediately for html-to-image) -->
+  <div class="preview-row" id="tw-preview" style={mode === "html-to-image" ? "display:grid;" : "display:none;"}>
     {mode !== "pdf" && (
       <div class="canvas-holder">
         <canvas id="tw-canvas"></canvas>
@@ -97,8 +126,18 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
             <span class="helper">KB maximum goal</span>
           </div>
           <div class="target-presets">
-            {["20", "50", "80", "100", "150", "200"].map((kb) => (
-              <button class={`preset ${defaultTargetKB === kb ? "active" : ""}`} type="button" data-kb={kb}>{kb} KB</button>
+            {[
+              { kb: "15", label: "15 KB" },
+              { kb: "20", label: "20 KB" },
+              { kb: "40", label: "40 KB" },
+              { kb: "50", label: "50 KB" },
+              { kb: "100", label: "100 KB" },
+              { kb: "200", label: "200 KB" },
+              { kb: "300", label: "300 KB" },
+              { kb: "1024", label: "1 MB" },
+              { kb: "2048", label: "2 MB" },
+            ].map(({ kb, label }) => (
+              <button class={`preset ${defaultTargetKB === kb ? "active" : ""}`} type="button" data-kb={kb}>{label}</button>
             ))}
           </div>
         </div>
@@ -113,6 +152,54 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
     {mode === "resize" && (
       <div class="controls">
+        <div class="field col-span-full">
+          <span class="field-label">Quick Presets</span>
+          {slug.includes("facebook") ? (
+            <div class="target-presets mt-1">
+              <button class="preset active" type="button" data-preset-w="1200" data-preset-h="630">📱 Feed Post (1200×630 - Link / 1.91:1)</button>
+              <button class="preset" type="button" data-preset-w="2048" data-preset-h="2048">👤 Profile Picture (2048×2048 HD - 1:1)</button>
+              <button class="preset" type="button" data-preset-w="820" data-preset-h="312">🖼️ Cover Photo (820×312 Desktop Safe)</button>
+              <button class="preset" type="button" data-preset-w="1640" data-preset-h="624">🌟 Cover Photo HD (1640×624 - 2x Retina)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1080">📸 Square Post (1080×1080 - 1:1)</button>
+              <button class="preset" type="button" data-preset-w="1920" data-preset-h="1005">🎉 Event Banner (1920×1005)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1920">🎬 Story & Reel (1080×1920)</button>
+            </div>
+          ) : slug.includes("instagram") ? (
+            <div class="target-presets mt-1">
+              <button class="preset active" type="button" data-preset-w="1080" data-preset-h="1080">📸 Square 1:1 (1080×1080)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1350">📱 Portrait 4:5 (1080×1350 - Best)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1920">🎬 Story / Reel 9:16 (1080×1920)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="566">🖼️ Landscape 1.91:1 (1080×566)</button>
+              <button class="preset" type="button" data-preset-w="1200" data-preset-h="630">📘 Facebook (1200×630)</button>
+            </div>
+          ) : (
+            <div class="target-presets mt-1">
+              <button class="preset" type="button" data-preset-w="1920" data-preset-h="1080">1920×1080 (HD)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1080">1080×1080 (Square)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1350">1080×1350 (IG 4:5)</button>
+              <button class="preset" type="button" data-preset-w="1080" data-preset-h="1920">1080×1920 (Story)</button>
+              <button class="preset" type="button" data-preset-w="1200" data-preset-h="630">1200×630 (Social)</button>
+              <button class="preset" type="button" data-preset-w="1280" data-preset-h="720">1280×720 (YouTube)</button>
+            </div>
+          )}
+        </div>
+
+        <div class="field">
+          <label for="tw-res-fit">Fit & No-Crop Method</label>
+          <select id="tw-res-fit">
+            <option value="blur" selected={slug.includes("instagram") || slug.includes("facebook")}>✨ Fit (No-Crop) with Aesthetic Blur</option>
+            <option value="white">🤍 Fit (No-Crop) with Clean White Padding</option>
+            <option value="black">🖤 Fit (No-Crop) with Black Letterbox</option>
+            <option value="cover">✂️ Center Crop to Fill (No Borders)</option>
+            <option value="stretch" selected={!slug.includes("instagram") && !slug.includes("facebook")}>↔️ Stretch / Exact Dimensions</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-res-pad">Padding / Margin (<span id="tw-res-pad-val">0</span>%)</label>
+          <input type="range" id="tw-res-pad" min="0" max="25" value="0" />
+        </div>
+
         <div class="field">
           <label for="tw-res-w">Width (px)</label>
           <input type="number" id="tw-res-w" min="1" value={defaultWidth} />
@@ -123,7 +210,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         </div>
         <div class="field">
           <label class="flex items-center gap-2 cursor-pointer pt-3">
-            <input type="checkbox" id="tw-res-lock" checked />
+            <input type="checkbox" id="tw-res-lock" checked={!slug.includes("instagram")} />
             <span class="text-xs text-ink">Lock aspect ratio</span>
           </label>
         </div>
@@ -132,14 +219,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           <input type="range" id="tw-res-pct" min="5" max="200" value="100" />
         </div>
         <div class="field col-span-full">
-          <span class="field-label">Quick Presets</span>
-          <div class="target-presets">
-            <button class="preset" type="button" data-preset-w="1920" data-preset-h="1080">1920×1080 (HD)</button>
-            <button class="preset" type="button" data-preset-w="1080" data-preset-h="1080">1080×1080 (Square)</button>
-            <button class="preset" type="button" data-preset-w="1200" data-preset-h="630">1200×630 (Social)</button>
-            <button class="preset" type="button" data-preset-w="1280" data-preset-h="720">1280×720 (YouTube)</button>
-            <button class="preset" type="button" data-preset-w="512" data-preset-h="512">512×512 (Icon)</button>
-          </div>
+          <button class="btn btn-primary" id="tw-res-apply" type="button">🔄 Apply Resize & Render</button>
         </div>
       </div>
     )}
@@ -147,55 +227,357 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     {mode === "crop" && (
       <div class="controls">
         <div class="field col-span-full">
-          <label>Crop aspect ratio preset</label>
-          <div class="flex gap-2 flex-wrap mt-2">
-            <button class="preset active" type="button" data-crop-ratio="free">Freeform</button>
-            <button class="preset" type="button" data-crop-ratio="1">1:1 Square</button>
-            <button class="preset" type="button" data-crop-ratio="1.7778">16:9 Landscape</button>
-            <button class="preset" type="button" data-crop-ratio="0.5625">9:16 Story</button>
-            <button class="preset" type="button" data-crop-ratio="0.7778">35:45 (Passport)</button>
+          <span class="field-label">Crop Aspect Ratio Presets</span>
+          <div class="target-presets mt-1">
+            <button class="preset active" type="button" data-crop-ratio="free">✨ Freeform</button>
+            <button class="preset" type="button" data-crop-ratio="1">📸 1:1 Square (PFP / Avatar)</button>
+            <button class="preset" type="button" data-crop-ratio="0.8">📱 4:5 Portrait (IG Feed)</button>
+            <button class="preset" type="button" data-crop-ratio="1.7778">🖥️ 16:9 Landscape (YouTube)</button>
+            <button class="preset" type="button" data-crop-ratio="0.5625">🎬 9:16 Story / Reel</button>
+            <button class="preset" type="button" data-crop-ratio="1.3333">📷 4:3 Standard</button>
+            <button class="preset" type="button" data-crop-ratio="1.5">🖼️ 3:2 DSLR Print</button>
+            <button class="preset" type="button" data-crop-ratio="0.7778">🛂 35:45 (Passport / Visa)</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tw-crop-shape">Crop Shape</label>
+          <select id="tw-crop-shape">
+            <option value="rect" selected>Rectangle / Square</option>
+            <option value="circle">⭕ Circle / Round Avatar (Transparent PNG)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-crop-fmt">Output Format</label>
+          <select id="tw-crop-fmt">
+            <option value="image/png" selected>PNG (Lossless / Transparent)</option>
+            <option value="image/jpeg">JPG (Compressed / Small Size)</option>
+            <option value="image/webp">WEBP (Modern Web)</option>
+          </select>
+        </div>
+
+        <div class="field col-span-full">
+          <div class="text-xs text-ink-muted flex items-center justify-between pt-1">
+            <span>Selection: <strong id="tw-crop-dims" class="text-ink">Draw box or select preset</strong></span>
+            <button class="btn btn-sm btn-ghost text-xs" id="tw-crop-center-btn" type="button">🎯 Center 80% Box</button>
           </div>
         </div>
       </div>
     )}
 
+    {mode === "circle" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-circ-bg">Background outside circle</label>
+          <select id="tw-circ-bg">
+            <option value="transparent" selected>Transparent PNG (Zero Background)</option>
+            <option value="#ffffff">Solid White (#ffffff)</option>
+            <option value="#0c0d12">Solid Dark Slate (#0c0d12)</option>
+            <option value="#fdfbf7">Aesthetic Cream (#fdfbf7)</option>
+            <option value="custom">Custom Color Picker</option>
+          </select>
+        </div>
+        <div class="field" id="tw-circ-custom-bg-field" style="display:none;">
+          <label for="tw-circ-custom-bg">Pick background color</label>
+          <input type="color" id="tw-circ-custom-bg" value="#ffffff" />
+        </div>
+        <div class="field">
+          <label for="tw-circ-border-width">Profile ring border (<span id="tw-circ-border-width-val">0</span>px)</label>
+          <input type="range" id="tw-circ-border-width" min="0" max="36" value="0" />
+        </div>
+        <div class="field">
+          <label for="tw-circ-border-color">Ring / Border color</label>
+          <div class="flex items-center gap-2">
+            <input type="color" id="tw-circ-border-color" value="#ef4444" class="w-10 h-9 p-1 rounded border border-border cursor-pointer bg-transparent" />
+            <div class="flex gap-1.5 flex-wrap">
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#ef4444]" type="button" data-circ-color="#ef4444" title="Red Circle (+30% Trend)"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#26e0ff]" type="button" data-circ-color="#26e0ff" title="Neon Cyan"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#eab308]" type="button" data-circ-color="#eab308" title="Gold Ring"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#ffffff]" type="button" data-circ-color="#ffffff" title="White Ring"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#0c0d12]" type="button" data-circ-color="#0c0d12" title="Dark Slate Ring"></button>
+            </div>
+          </div>
+        </div>
+        <div class="field col-span-full flex gap-2">
+          <button class="btn btn-ghost" id="tw-circ-center" type="button">🎯 Center Circle</button>
+          <button class="btn btn-ghost" id="tw-circ-max" type="button">⛶ Fit Full Width/Height</button>
+        </div>
+      </div>
+    )}
+
     {mode === "rotate" && (
-      <div class="flex gap-2.5 flex-wrap mt-4">
-        <button class="btn btn-ghost" id="tw-rot-left" type="button">⟲ Rotate Left</button>
-        <button class="btn btn-ghost" id="tw-rot-right" type="button">⟳ Rotate Right</button>
-        <button class="btn btn-ghost" id="tw-flip-h" type="button">⇋ Flip Horizontal</button>
-        <button class="btn btn-ghost" id="tw-flip-v" type="button">⇵ Flip Vertical</button>
+      <div class="controls">
+        <div class="field col-span-full">
+          <label class="block mb-2 font-medium text-ink">{slug.includes("flip") ? "Mirror & Flip Options" : "Rotate & Orientation Controls"}</label>
+          <div class="flex gap-2.5 flex-wrap">
+            <button class={`btn ${slug.includes("flip") ? "btn-primary" : "btn-ghost"}`} id="tw-flip-h" type="button">⇋ Flip Horizontal (Mirror Left/Right)</button>
+            <button class="btn btn-ghost" id="tw-flip-v" type="button">⇵ Flip Vertical (Upside Down)</button>
+            <button class="btn btn-ghost" id="tw-rot-right" type="button">⟳ Rotate 90° Clockwise</button>
+            <button class="btn btn-ghost" id="tw-rot-left" type="button">⟲ Rotate 90° Counter-Clockwise</button>
+            <button class="btn btn-ghost" id="tw-rot-reset" type="button">↺ Reset Orientation</button>
+          </div>
+          <div class="mt-3 flex items-center gap-3">
+            <span class="text-xs text-ink-muted" id="tw-flip-status">Orientation: Original | Angle: 0°</span>
+          </div>
+        </div>
       </div>
     )}
 
     {mode === "watermark" && (
       <div class="controls">
+        {slug.includes("meme") ? (
+          <>
+            <div class="field col-span-full">
+              <label for="tw-wm-text">Top meme text</label>
+              <input type="text" id="tw-wm-text" value="ONE DOES NOT SIMPLY" />
+            </div>
+            <div class="field col-span-full">
+              <label for="tw-meme-bottom">Bottom meme text</label>
+              <input type="text" id="tw-meme-bottom" value="CREATE MEMES WITH WATERMARKS" />
+            </div>
+          </>
+        ) : (
+          <div class="field col-span-full">
+            <label for="tw-wm-text">{slug.includes("add-text") ? "Text to add on image" : "Watermark / Caption text"}</label>
+            <input type="text" id="tw-wm-text" value={slug.includes("add-text") ? "Your Text Here" : "ImageAll / XPlus Nexus"} />
+          </div>
+        )}
         <div class="field">
-          <label for="tw-wm-text">Watermark text</label>
-          <input type="text" id="tw-wm-text" value="ImageAll / XPlus Nexus" />
+          <label for="tw-wm-font">Font style / Meme font</label>
+          <select id="tw-wm-font">
+            <option value="'Impact', sans-serif" selected={slug.includes("meme")}>Classic Meme Font (Impact)</option>
+            <option value="'Space Grotesk', sans-serif" selected={!slug.includes("meme")}>Modern Bold (Space Grotesk)</option>
+            <option value="'Inter', sans-serif">Clean Minimal (Inter)</option>
+            <option value="Georgia, serif">Classic Editorial (Serif)</option>
+            <option value="'Courier New', monospace">Typewriter (Monospace)</option>
+            <option value="cursive">Handwriting Script</option>
+          </select>
         </div>
         <div class="field">
-          <label for="tw-wm-color">Color</label>
+          <label for="tw-wm-color">Text color</label>
           <input type="color" id="tw-wm-color" value="#ffffff" />
         </div>
         <div class="field">
-          <label for="tw-wm-size">Size (<span id="tw-wm-size-val">36</span>px)</label>
-          <input type="range" id="tw-wm-size" min="10" max="140" value="36" />
+          <label for="tw-wm-size">Font size (<span id="tw-wm-size-val">{slug.includes("meme") ? "52" : "42"}</span>px)</label>
+          <input type="range" id="tw-wm-size" min="16" max="220" value={slug.includes("meme") ? "52" : "42"} />
         </div>
         <div class="field">
-          <label for="tw-wm-opacity">Opacity (<span id="tw-wm-opacity-val">60</span>%)</label>
-          <input type="range" id="tw-wm-opacity" min="5" max="100" value="60" />
+          <label for="tw-wm-opacity">Opacity (<span id="tw-wm-opacity-val">100</span>%)</label>
+          <input type="range" id="tw-wm-opacity" min="10" max="100" value="100" />
         </div>
+        {!slug.includes("meme") && (
+          <div class="field">
+            <label for="tw-wm-pos">Position</label>
+            <select id="tw-wm-pos">
+              <option value="center" selected>Center (Hero Overlay)</option>
+              <option value="top-center">Top Center (Header)</option>
+              <option value="bottom-center">Bottom Center (Subtitle)</option>
+              <option value="bottom-right">Bottom Right (Signature)</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="top-left">Top Left</option>
+              <option value="tile">Repeating Tile Watermark</option>
+            </select>
+          </div>
+        )}
         <div class="field">
-          <label for="tw-wm-pos">Position</label>
-          <select id="tw-wm-pos">
-            <option value="bottom-right" selected>Bottom right</option>
-            <option value="bottom-left">Bottom left</option>
-            <option value="top-right">Top right</option>
-            <option value="top-left">Top left</option>
-            <option value="center">Center</option>
-            <option value="tile">Repeating tile</option>
+          <label class="flex items-center gap-2 cursor-pointer pt-3">
+            <input type="checkbox" id="tw-wm-shadow" checked />
+            <span class="text-xs text-ink">{slug.includes("meme") ? "Heavy black stroke (Classic Meme outline)" : "Dark text outline (always readable)"}</span>
+          </label>
+        </div>
+      </div>
+    )}
+
+    {mode === "html-to-image" && (
+      <div class="controls">
+        <div class="field col-span-full">
+          <span class="field-label">Conversion Mode</span>
+          <div class="mode-switch" role="group" aria-label="HTML to Image Mode Selection">
+            <button class="mode-option active" id="tw-h2i-tab-code" type="button">💻 HTML / CSS to Image</button>
+            <button class="mode-option" id="tw-h2i-tab-img2b64" type="button">🖼️ Image to Base64 & HTML</button>
+            <button class="mode-option" id="tw-h2i-tab-b642img" type="button">🔄 Base64 to Image</button>
+          </div>
+        </div>
+
+        <!-- TAB 1: HTML / CSS to Image -->
+        <div id="tw-h2i-pane-code" class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="field col-span-full">
+            <span class="field-label">Quick Starter Templates</span>
+            <div class="target-presets mt-1">
+              <button class="preset active" type="button" id="tw-h2i-preset-card">Modern Card</button>
+              <button class="preset" type="button" id="tw-h2i-preset-code">Code Terminal</button>
+              <button class="preset" type="button" id="tw-h2i-preset-quote">Testimonial Quote</button>
+              <button class="preset" type="button" id="tw-h2i-preset-pricing">Pricing Badge</button>
+              <button class="preset" type="button" id="tw-h2i-preset-receipt">Receipt / Invoice</button>
+            </div>
+          </div>
+
+          <div class="field col-span-full">
+            <div class="flex justify-between items-center mb-1">
+              <label for="tw-h2i-code" class="font-semibold text-xs text-ink">HTML & Inline CSS Code</label>
+              <span class="text-xs text-cyan">HTML5, Flexbox & Gradients supported</span>
+            </div>
+            <textarea id="tw-h2i-code" class="code-editor-textarea w-full" rows="7" spellcheck="false"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="tw-h2i-width">Canvas Width (px)</label>
+            <input type="number" id="tw-h2i-width" min="200" max="2560" value="540" />
+          </div>
+
+          <div class="field">
+            <label for="tw-h2i-height">Canvas Height (px)</label>
+            <input type="number" id="tw-h2i-height" min="0" max="2560" value="0" placeholder="0 = Auto Height" />
+          </div>
+
+          <div class="field">
+            <label for="tw-h2i-scale">Rendering Quality / Scale</label>
+            <select id="tw-h2i-scale">
+              <option value="1">1x Standard Web (Fast)</option>
+              <option value="2" selected>2x Retina HD (Ultra Crisp Text)</option>
+              <option value="3">3x 4K Ultra Print Quality</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="tw-h2i-bg">Canvas Background</label>
+            <select id="tw-h2i-bg">
+              <option value="transparent" selected>Transparent (PNG Only)</option>
+              <option value="white">Pure White (#ffffff)</option>
+              <option value="dark">Dark Slate (#0f172a)</option>
+              <option value="gradient">Deep Mesh Gradient</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="tw-h2i-fmt">Output Format</label>
+            <select id="tw-h2i-fmt">
+              <option value="image/png" selected>PNG (Lossless & Transparent)</option>
+              <option value="image/jpeg">JPG (Compressed / Web)</option>
+              <option value="image/webp">WEBP (Next-Gen Web)</option>
+              <option value="application/pdf">PDF Document (Print / TNPDS)</option>
+            </select>
+          </div>
+
+          <div class="field flex items-end gap-2">
+            <button class="btn btn-primary w-full" id="tw-h2i-render" type="button">⚡ Render HTML to Preview</button>
+            <button class="btn btn-ghost" id="tw-h2i-copy-img" type="button" title="Copy rendered image to clipboard">📋 Copy Image</button>
+          </div>
+        </div>
+
+        <!-- TAB 2: Image to Base64 & HTML Code -->
+        <div id="tw-h2i-pane-img2b64" class="col-span-full grid grid-cols-1 gap-3" style="display:none;">
+          <div class="field">
+            <div class="flex justify-between items-center mb-1">
+              <label for="tw-b64-output" class="font-semibold text-xs text-ink">Base64 Data URI (data:image/png;base64,...)</label>
+              <span id="tw-b64-size" class="text-xs text-cyan">Upload an image above to generate</span>
+            </div>
+            <textarea id="tw-b64-output" class="code-editor-textarea w-full" rows="4" readonly placeholder="Upload an image using the box above to generate Base64 Data URI..."></textarea>
+            <div class="mt-2 flex gap-2">
+              <button class="btn btn-ghost" id="tw-b64-copy-uri" type="button">📋 Copy Base64 String</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="tw-b64-img-tag" class="font-semibold text-xs text-ink">HTML &lt;img&gt; Tag (Ready to embed)</label>
+            <textarea id="tw-b64-img-tag" class="code-editor-textarea w-full" rows="2" readonly placeholder='&lt;img src="data:image/png;base64,..." alt="Embedded Image" /&gt;'></textarea>
+            <div class="mt-2">
+              <button class="btn btn-ghost" id="tw-b64-copy-imgtag" type="button">📋 Copy HTML &lt;img&gt; Code</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="tw-b64-css-tag" class="font-semibold text-xs text-ink">CSS Background Property</label>
+            <textarea id="tw-b64-css-tag" class="code-editor-textarea w-full" rows="2" readonly placeholder='background-image: url("data:image/png;base64,...");'></textarea>
+            <div class="mt-2">
+              <button class="btn btn-ghost" id="tw-b64-copy-csstag" type="button">📋 Copy CSS Background</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Base64 to Image -->
+        <div id="tw-h2i-pane-b642img" class="col-span-full grid grid-cols-1 gap-3" style="display:none;">
+          <div class="field">
+            <label for="tw-b64-input" class="font-semibold text-xs text-ink">Paste Base64 String or Data URI</label>
+            <textarea id="tw-b64-input" class="code-editor-textarea w-full" rows="5" placeholder="Paste data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."></textarea>
+          </div>
+          <div class="field">
+            <button class="btn btn-primary" id="tw-b64-decode-btn" type="button">🔄 Decode Base64 to Image</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {mode === "whatsapp-dp" && (
+      <div class="controls">
+        <div class="field col-span-full">
+          <span class="field-label">One-Tap Style Presets</span>
+          <div class="target-presets mt-1">
+            <button class="preset active" type="button" id="tw-dp-preset-blur">✨ Aesthetic Blur</button>
+            <button class="preset" type="button" id="tw-dp-preset-black">🖤 Full Black DP (+350%)</button>
+            <button class="preset" type="button" id="tw-dp-preset-white">🤍 Clean White</button>
+            <button class="preset" type="button" id="tw-dp-preset-gradient">🌈 Deep Gradient</button>
+            <button class="preset" type="button" id="tw-dp-preset-circle">⭕ 100% Circle Safe</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-bg">Background Style</label>
+          <select id="tw-dp-bg">
+            <option value="blur" selected>Aesthetic Blurred Photo (Gaussian Blur)</option>
+            <option value="black">Full Black DP (#000000 - Trending)</option>
+            <option value="white">Clean White (#ffffff)</option>
+            <option value="gradient">Deep Twilight Gradient</option>
+            <option value="custom">Custom Color Palette</option>
           </select>
+        </div>
+
+        <div class="field" id="tw-dp-custom-color-field" style="display:none;">
+          <label for="tw-dp-custom-color">Custom Background Color</label>
+          <input type="color" id="tw-dp-custom-color" value="#0f172a" />
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-size">WhatsApp DP Size</label>
+          <select id="tw-dp-size">
+            <option value="640" selected>640×640 px (WhatsApp Standard HD)</option>
+            <option value="1080">1080×1080 px (Full HD Ultra Crisp)</option>
+            <option value="500">500×500 px (Fast Mobile)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-padding">Margin / Padding (<span id="tw-dp-padding-val">8</span>%)</label>
+          <input type="range" id="tw-dp-padding" min="0" max="30" value="8" />
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-zoom">Photo Zoom / Scale (<span id="tw-dp-zoom-val">100</span>%)</label>
+          <input type="range" id="tw-dp-zoom" min="70" max="140" value="100" />
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-pos">Vertical Alignment</label>
+          <select id="tw-dp-pos">
+            <option value="center" selected>Center (Balanced)</option>
+            <option value="top">Top (Headroom / Face Priority)</option>
+            <option value="bottom">Bottom (Body Focus)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-dp-radius">Corner Radius (<span id="tw-dp-radius-val">0</span>px)</label>
+          <input type="range" id="tw-dp-radius" min="0" max="40" value="0" />
+        </div>
+
+        <div class="field col-span-full">
+          <label class="flex items-center gap-2 cursor-pointer pt-2">
+            <input type="checkbox" id="tw-dp-guide" checked />
+            <span class="text-xs text-ink font-semibold">Show WhatsApp Circular Safe-Zone (Green dashed ring preview)</span>
+          </label>
+          <span class="text-xs text-muted block mt-1">Shows the exact circular area WhatsApp displays in chat lists. The green guide is automatically removed from your download!</span>
         </div>
       </div>
     )}
@@ -214,9 +596,74 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     )}
 
     {mode === "palette" && (
-      <div class="w-full mt-4">
-        <div class="swatches" id="tw-pal-swatches"></div>
-        <div class="contrast-box mt-3" id="tw-pal-contrast">Select two swatches to calculate WCAG AA contrast ratio.</div>
+      <div class="controls">
+        <div class="field col-span-full">
+          <span class="field-label">Curated Seasonal & Aesthetic Palettes</span>
+          <div class="target-presets mt-1">
+            <button class="preset" type="button" data-pal-preset="autumn">🍂 Autumn / Fall</button>
+            <button class="preset" type="button" data-pal-preset="soft-autumn">🍁 Soft Autumn</button>
+            <button class="preset" type="button" data-pal-preset="deep-winter">❄️ Deep Winter</button>
+            <button class="preset" type="button" data-pal-preset="soft-summer">☀️ Soft Summer</button>
+            <button class="preset" type="button" data-pal-preset="bright-spring">🌸 Bright Spring</button>
+            <button class="preset" type="button" data-pal-preset="jewel">💎 Jewel Tones</button>
+            <button class="preset" type="button" data-pal-preset="green">🌿 Shades of Green</button>
+            <button class="preset" type="button" data-pal-preset="blue">🌊 Ocean Blue</button>
+            <button class="preset" type="button" data-pal-preset="halloween">🎃 Halloween</button>
+            <button class="preset" type="button" data-pal-preset="viridis">📊 Viridis (Data)</button>
+            <button class="preset" type="button" id="tw-pal-random-btn">🎲 Randomize (Coolors Style)</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tw-pal-count">Palette Size</label>
+          <select id="tw-pal-count">
+            <option value="5">5 Swatches</option>
+            <option value="6" selected>6 Swatches (Default)</option>
+            <option value="8">8 Swatches</option>
+            <option value="10">10 Swatches (Extended)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-pal-format">Color Code Format</label>
+          <select id="tw-pal-format">
+            <option value="hex" selected>HEX (#RRGGBB)</option>
+            <option value="rgb">RGB (rgb(r, g, b))</option>
+            <option value="hsl">HSL (hsl(h, s%, l%))</option>
+          </select>
+        </div>
+
+        <div class="field col-span-full">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-semibold text-ink">Extracted Swatches (Click swatch to copy, click 2 to check WCAG contrast)</span>
+            <span class="text-xs text-cyan" id="tw-pal-hint">Click image to sample custom color</span>
+          </div>
+          <div class="swatches" id="tw-pal-swatches"></div>
+        </div>
+
+        <div class="field col-span-full">
+          <div class="contrast-box" id="tw-pal-contrast">Click any swatch to copy code. Select two swatches to test WCAG AA / AAA accessibility contrast.</div>
+        </div>
+
+        <div class="field col-span-full" id="tw-pal-analysis-box">
+          <div class="p-3 rounded-lg bg-surface-alt border border-border flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-base" id="tw-pal-season-icon">🎨</span>
+              <div>
+                <strong class="text-ink" id="tw-pal-season-title">Color Season Analysis: Warm Autumn</strong>
+                <p class="text-ink-muted mt-0.5" id="tw-pal-season-desc">Upload a photo to detect warm/cool undertones and seasonal palette classification.</p>
+              </div>
+            </div>
+            <span class="badge text-[11px] px-2 py-0.5 bg-accent/15 text-accent font-semibold whitespace-nowrap" id="tw-pal-season-badge">Seasonal Match</span>
+          </div>
+        </div>
+
+        <div class="field col-span-full flex gap-2 flex-wrap pt-2">
+          <button class="btn btn-ghost text-xs" id="tw-pal-copy-hexes" type="button">📋 Copy All Hex Codes</button>
+          <button class="btn btn-ghost text-xs" id="tw-pal-copy-css" type="button">🎨 Copy CSS Variables</button>
+          <button class="btn btn-ghost text-xs" id="tw-pal-copy-tailwind" type="button">⚡ Copy Tailwind Config</button>
+          <button class="btn btn-ghost text-xs" id="tw-pal-copy-json" type="button">📄 Copy JSON</button>
+        </div>
       </div>
     )}
 
@@ -238,11 +685,12 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           </select>
         </div>
         <div class="field">
-          <label for="tw-pdf-quality">Quality</label>
+          <label for="tw-pdf-quality">Compression & Quality</label>
           <select id="tw-pdf-quality">
-            <option value="small">Smallest</option>
-            <option value="balanced" selected>Balanced</option>
-            <option value="high">High Quality</option>
+            <option value="300kb">Compress to ~300KB (TNPDS, TNeGA & Portals)</option>
+            <option value="small">Smallest Size (High Compression)</option>
+            <option value="balanced" selected>Balanced Quality (~80%)</option>
+            <option value="high">High Quality (Original Clarity)</option>
           </select>
         </div>
         <div class="field">
@@ -257,9 +705,160 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       </div>
     )}
 
+    {mode === "blur" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-blur-effect">Blur effect</label>
+          <select id="tw-blur-effect">
+            <option value="smooth" selected>Aesthetic Soft Blur (Gaussian)</option>
+            <option value="motion">Motion Blur Effect (Speed Blur)</option>
+            <option value="pixelate">Censor Pixelate / Mosaic</option>
+            <option value="blackout">Privacy Blackout Bar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-blur-scope">Blur area</label>
+          <select id="tw-blur-scope">
+            <option value="selection" selected>Selected Area / Face (Drag box)</option>
+            <option value="background">Background Blur (Portrait / Bokeh)</option>
+            <option value="entire">Entire Photo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-blur-radius">Blur intensity (<span id="tw-blur-radius-val">20</span>px)</label>
+          <input type="range" id="tw-blur-radius" min="4" max="80" value="20" />
+        </div>
+        <div class="field col-span-full flex gap-2">
+          <button class="btn btn-ghost" id="tw-blur-center" type="button">🎯 Focus Face Box (Center)</button>
+          <button class="btn btn-ghost" id="tw-blur-clear" type="button">↺ Clear Blur</button>
+        </div>
+      </div>
+    )}
+
+    {mode === "collage" && (
+      <div class="controls">
+        <div class="field">
+          <label for="tw-col-layout">Grid layout</label>
+          <select id="tw-col-layout">
+            <option value="auto" selected>Smart Auto Grid (Balanced)</option>
+            <option value="2-side">2 Photos: Side-by-Side (1×2)</option>
+            <option value="2-stack">2 Photos: Stacked (2×1)</option>
+            <option value="3-left-big">3 Photos: 1 Hero Left + 2 Stacked Right</option>
+            <option value="3-strip">3 Photos: Horizontal Strip (1×3)</option>
+            <option value="4-grid">4 Photos: Classic 2×2 Grid</option>
+            <option value="4-top-big">4 Photos: 1 Hero Top + 3 Bottom</option>
+            <option value="6-grid">6 Photos: 3×2 Grid</option>
+            <option value="9-grid">9 Photos: 3×3 Grid</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-col-ratio">Canvas aspect ratio</label>
+          <select id="tw-col-ratio">
+            <option value="1:1" selected>1:1 Square (Instagram Post / DP)</option>
+            <option value="4:5">4:5 Portrait (Instagram Feed / Mobile)</option>
+            <option value="9:16">9:16 Story / Reels / TikTok</option>
+            <option value="16:9">16:9 Landscape / YouTube</option>
+            <option value="4:3">4:3 Classic Photo Frame</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="tw-col-gap">Border spacing (<span id="tw-col-gap-val">12</span>px)</label>
+          <input type="range" id="tw-col-gap" min="0" max="40" value="12" />
+        </div>
+        <div class="field">
+          <label for="tw-col-radius">Corner roundness (<span id="tw-col-radius-val">10</span>px)</label>
+          <input type="range" id="tw-col-radius" min="0" max="40" value="10" />
+        </div>
+        <div class="field">
+          <label for="tw-col-bg">Frame color</label>
+          <div class="flex items-center gap-2">
+            <input type="color" id="tw-col-bg" value="#ffffff" class="w-10 h-9 p-1 rounded border border-border cursor-pointer bg-transparent" />
+            <div class="flex gap-1.5 flex-wrap">
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-white" type="button" data-col-color="#ffffff" title="White"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#0c0d12]" type="button" data-col-color="#0c0d12" title="Dark Slate"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#fdfbf7]" type="button" data-col-color="#fdfbf7" title="Aesthetic Cream"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#fce7f3]" type="button" data-col-color="#fce7f3" title="Pastel Pink"></button>
+              <button class="w-6 h-6 rounded-full border border-border/80 bg-[#f5ebe0]" type="button" data-col-color="#f5ebe0" title="Warm Beige"></button>
+            </div>
+          </div>
+        </div>
+        <div class="field col-span-full">
+          <div class="flex items-center justify-between gap-2 mt-2">
+            <span class="text-xs text-ink-muted" id="tw-col-count">0 photos in collage</span>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost text-xs py-1 px-3" id="tw-col-add-btn" type="button">+ Add More Photos</button>
+              <button class="btn btn-ghost text-xs py-1 px-3" id="tw-col-clear-btn" type="button">↺ Clear</button>
+            </div>
+          </div>
+          <div class="flex gap-2 overflow-x-auto py-2" id="tw-col-thumbs"></div>
+        </div>
+      </div>
+    )}
+
     {mode === "bg-remove" && (
-      <div class="mt-4">
-        <button class="btn btn-primary" id="tw-bg-run" type="button">Remove Background</button>
+      <div class="controls">
+        <div class="field col-span-full">
+          <span class="field-label">One-Click Backdrop Presets</span>
+          <div class="target-presets mt-1">
+            <button class="preset active" type="button" id="tw-bg-preset-trans">✨ Transparent PNG (Cutout)</button>
+            <button class="preset" type="button" id="tw-bg-preset-white">⚪ Pure White (Amazon / E-Commerce)</button>
+            <button class="preset" type="button" id="tw-bg-preset-blue">🔵 Passport Light Blue (Visa)</button>
+            <button class="preset" type="button" id="tw-bg-preset-red">🔴 Bold Red (Badge / Banner)</button>
+            <button class="preset" type="button" id="tw-bg-preset-dark">🖤 Dark Slate (#0f172a)</button>
+            <button class="preset" type="button" id="tw-bg-preset-blur">🔮 Soft Background Blur (Portrait Bokeh)</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tw-bg-type">Backdrop Style</label>
+          <select id="tw-bg-type">
+            <option value="transparent" selected>✨ Transparent (Alpha PNG Cutout)</option>
+            <option value="white">⚪ Solid Pure White (#ffffff - E-Commerce)</option>
+            <option value="passport-blue">🔵 Passport / Visa Light Blue (#3b82f6)</option>
+            <option value="custom">🎨 Custom Solid Color</option>
+            <option value="blur">🔮 Soft Blurred Original Background (Bokeh)</option>
+          </select>
+        </div>
+
+        <div class="field" id="tw-bg-custom-field" style="display:none;">
+          <label for="tw-bg-custom-color">Custom Background Color</label>
+          <input type="color" id="tw-bg-custom-color" value="#ffffff" />
+        </div>
+
+        <div class="field">
+          <label for="tw-bg-sample">Sample Background Color</label>
+          <select id="tw-bg-sample">
+            <option value="auto-corners" selected>Auto 4 Corners & Outer Border</option>
+            <option value="white-studio">White / Light Studio Backdrop</option>
+            <option value="dark-studio">Dark / Black Studio Backdrop</option>
+            <option value="green-screen">Green Screen / Chroma Key</option>
+            <option value="top-left">Top-Left Corner Pixel</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tw-bg-tolerance">Removal Sensitivity / Tolerance (<span id="tw-bg-tol-val">28</span>%)</label>
+          <input type="range" id="tw-bg-tolerance" min="5" max="85" value="28" />
+        </div>
+
+        <div class="field">
+          <label for="tw-bg-feather">Edge Smoothness / Feather (<span id="tw-bg-feather-val">2</span>px)</label>
+          <input type="range" id="tw-bg-feather" min="0" max="6" value="2" />
+        </div>
+
+        <div class="field">
+          <label for="tw-bg-fmt">Download Format</label>
+          <select id="tw-bg-fmt">
+            <option value="image/png" selected>PNG (Preserves Transparency)</option>
+            <option value="image/jpeg">JPG (Best for White / Colored Backdrops)</option>
+            <option value="image/webp">WEBP (Compact Next-Gen)</option>
+          </select>
+        </div>
+
+        <div class="field col-span-full flex gap-2 flex-wrap">
+          <button class="btn btn-primary" id="tw-bg-run" type="button">⚡ Re-apply Background Removal</button>
+          <button class="btn btn-ghost" id="tw-bg-restore" type="button">↺ Show Original</button>
+        </div>
       </div>
     )}
 
@@ -327,6 +926,11 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       document.body.appendChild(a);
       a.click();
       a.remove();
+      try {
+        const count = parseInt(localStorage.getItem('imageall_user_processed') || '0', 10) + 1;
+        localStorage.setItem('imageall_user_processed', count.toString());
+        window.dispatchEvent(new CustomEvent('imageall:processed', { detail: { count } }));
+      } catch (e) {}
     }
 
     function loadImage(file: File): Promise<{ img: HTMLImageElement; url: string }> {
@@ -366,6 +970,52 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           });
         });
         if (preview) preview.style.display = "grid";
+        return;
+      }
+
+      if (mode === "collage") {
+        const fileArr = Array.from(files);
+        Promise.all(fileArr.map((f) => loadImage(f).then((r) => ({ file: f, url: r.url, img: r.img }))))
+          .then((loaded) => {
+            collageItems.push(...loaded);
+            renderCollage();
+            renderCollageThumbs();
+          })
+          .catch(() => {
+            setStatus("Some images could not be loaded.", "err");
+          });
+        if (preview) preview.style.display = "grid";
+        return;
+      }
+
+      if (mode === "html-to-image") {
+        currentFile = files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const b64 = e.target?.result as string;
+          const outEl = document.getElementById("tw-b64-output") as HTMLTextAreaElement;
+          const sizeEl = document.getElementById("tw-b64-size");
+          const imgTagEl = document.getElementById("tw-b64-img-tag") as HTMLTextAreaElement;
+          const cssTagEl = document.getElementById("tw-b64-css-tag") as HTMLTextAreaElement;
+          if (outEl) outEl.value = b64;
+          if (sizeEl) sizeEl.textContent = `${fmtBytes(b64.length)} (${b64.length.toLocaleString()} chars)`;
+          if (imgTagEl) imgTagEl.value = `<img src="${b64}" alt="Embedded Image" />`;
+          if (cssTagEl) cssTagEl.value = `background-image: url("${b64}");`;
+        };
+        reader.readAsDataURL(currentFile);
+
+        loadImage(currentFile).then((r) => {
+          srcImg = r.img;
+          if (canvas && ctx) {
+            canvas.width = r.img.naturalWidth;
+            canvas.height = r.img.naturalHeight;
+            ctx.drawImage(r.img, 0, 0);
+          }
+          if (preview) preview.style.display = "grid";
+          setStatus(`Loaded image (${r.img.naturalWidth}×${r.img.naturalHeight}px) & generated Base64 Data URI!`, "ok");
+        }).catch(() => {
+          setStatus("Could not load image.", "err");
+        });
         return;
       }
 
@@ -499,7 +1149,74 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     const resLock = document.getElementById("tw-res-lock") as HTMLInputElement;
     const resPct = document.getElementById("tw-res-pct") as HTMLInputElement;
     const resPctVal = document.getElementById("tw-res-pct-val");
+    const resFitEl = document.getElementById("tw-res-fit") as HTMLSelectElement;
+    const resPadEl = document.getElementById("tw-res-pad") as HTMLInputElement;
+    const resPadVal = document.getElementById("tw-res-pad-val");
     const resApply = document.getElementById("tw-res-apply");
+
+    function renderResize() {
+      if (!srcImg || !canvas || !ctx) return;
+      const targetW = Math.max(1, Number(resW?.value) || srcImg.naturalWidth);
+      const targetH = Math.max(1, Number(resH?.value) || srcImg.naturalHeight);
+      const fitMode = resFitEl?.value || (ws?.getAttribute("data-tool-slug")?.includes("instagram") ? "blur" : "stretch");
+      const padPct = (Number(resPadEl?.value) || 0) / 100;
+
+      canvas.width = targetW;
+      canvas.height = targetH;
+      ctx.clearRect(0, 0, targetW, targetH);
+
+      const srcW = srcImg.naturalWidth;
+      const srcH = srcImg.naturalHeight;
+
+      if (fitMode === "stretch") {
+        ctx.drawImage(srcImg, 0, 0, targetW, targetH);
+      } else if (fitMode === "cover") {
+        const scale = Math.max(targetW / srcW, targetH / srcH);
+        const dw = srcW * scale;
+        const dh = srcH * scale;
+        const dx = (targetW - dw) / 2;
+        const dy = (targetH - dh) / 2;
+        ctx.drawImage(srcImg, dx, dy, dw, dh);
+      } else {
+        // "blur", "white", "black"
+        if (fitMode === "blur") {
+          ctx.save();
+          ctx.filter = "blur(30px) brightness(0.85)";
+          const bgScale = Math.max(targetW / srcW, targetH / srcH) * 1.1;
+          const bgW = srcW * bgScale;
+          const bgH = srcH * bgScale;
+          ctx.drawImage(srcImg, (targetW - bgW) / 2, (targetH - bgH) / 2, bgW, bgH);
+          ctx.restore();
+        } else if (fitMode === "white") {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, targetW, targetH);
+        } else if (fitMode === "black") {
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(0, 0, targetW, targetH);
+        }
+
+        const availW = targetW * (1 - padPct * 2);
+        const availH = targetH * (1 - padPct * 2);
+        const fitScale = Math.min(availW / srcW, availH / srcH);
+        const fgW = Math.round(srcW * fitScale);
+        const fgH = Math.round(srcH * fitScale);
+        const fgX = Math.round((targetW - fgW) / 2);
+        const fgY = Math.round((targetH - fgH) / 2);
+
+        if (fitMode === "blur" && (padPct > 0.02 || fgW < targetW || fgH < targetH)) {
+          ctx.save();
+          ctx.shadowColor = "rgba(0,0,0,0.38)";
+          ctx.shadowBlur = 20;
+          ctx.shadowOffsetY = 4;
+          ctx.drawImage(srcImg, fgX, fgY, fgW, fgH);
+          ctx.restore();
+        } else {
+          ctx.drawImage(srcImg, fgX, fgY, fgW, fgH);
+        }
+      }
+
+      setStatus(`Resized to ${targetW}×${targetH}px (${fitMode === "blur" ? "No-Crop Blur" : fitMode === "cover" ? "Center Fill" : fitMode === "white" ? "White Borders" : fitMode === "black" ? "Black Letterbox" : "Exact Stretch"}). Ready to download.`, "ok");
+    }
 
     if (resW && resH) {
       resW.addEventListener("input", () => {
@@ -507,12 +1224,14 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           const ratio = srcImg.naturalHeight / srcImg.naturalWidth;
           resH.value = String(Math.round(Number(resW.value) * ratio));
         }
+        renderResize();
       });
       resH.addEventListener("input", () => {
         if (srcImg && resLock && resLock.checked && srcImg.naturalHeight) {
           const ratio = srcImg.naturalWidth / srcImg.naturalHeight;
           resW.value = String(Math.round(Number(resH.value) * ratio));
         }
+        renderResize();
       });
     }
 
@@ -523,7 +1242,16 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           const scale = Number(resPct.value) / 100;
           if (resW) resW.value = String(Math.round(srcImg.naturalWidth * scale));
           if (resH) resH.value = String(Math.round(srcImg.naturalHeight * scale));
+          renderResize();
         }
+      });
+    }
+
+    if (resFitEl) resFitEl.addEventListener("change", renderResize);
+    if (resPadEl && resPadVal) {
+      resPadEl.addEventListener("input", () => {
+        resPadVal.textContent = resPadEl.value;
+        renderResize();
       });
     }
 
@@ -534,70 +1262,225 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         if (resW) resW.value = w;
         if (resH) resH.value = h;
         if (resLock) resLock.checked = false;
-        if (resApply) resApply.click();
+        document.querySelectorAll("[data-preset-w]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderResize();
       });
     });
 
     if (resApply) {
-      resApply.addEventListener("click", () => {
-        if (!srcImg || !canvas || !ctx) return;
-        const targetW = Math.max(1, Number(resW.value) || srcImg.naturalWidth);
-        const targetH = Math.max(1, Number(resH.value) || srcImg.naturalHeight);
-        canvas.width = targetW;
-        canvas.height = targetH;
-        ctx.clearRect(0, 0, targetW, targetH);
-        ctx.drawImage(srcImg, 0, 0, targetW, targetH);
-        setStatus(`Applied resize to ${targetW}×${targetH}px. Ready to download.`, "ok");
-      });
+      resApply.addEventListener("click", renderResize);
     }
 
     // 3. CROP
     let cropBox: { x: number; y: number; w: number; h: number } | null = null;
     let isDragging = false;
+    let isMoving = false;
+    let moveStartX = 0, moveStartY = 0, boxStartX = 0, boxStartY = 0;
     let startX = 0, startY = 0;
     let cropRatio: number | "free" = "free";
+    let cropShape: "rect" | "circle" = "rect";
+
+    const cropShapeEl = document.getElementById("tw-crop-shape") as HTMLSelectElement;
+    const cropFmtEl = document.getElementById("tw-crop-fmt") as HTMLSelectElement;
+    const cropDimsEl = document.getElementById("tw-crop-dims");
+    const cropCenterBtn = document.getElementById("tw-crop-center-btn");
 
     function drawCropOverlay() {
       if (!srcImg || !canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(srcImg, 0, 0);
-      if (cropBox) {
-        ctx.fillStyle = "rgba(0,0,0,0.5)";
-        ctx.fillRect(0, 0, canvas.width, cropBox.y);
-        ctx.fillRect(0, cropBox.y + cropBox.h, canvas.width, canvas.height - (cropBox.y + cropBox.h));
-        ctx.fillRect(0, cropBox.y, cropBox.x, cropBox.h);
-        ctx.fillRect(cropBox.x + cropBox.w, cropBox.y, canvas.width - (cropBox.x + cropBox.w), cropBox.h);
-        ctx.strokeStyle = "#26e0ff";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
+
+      if (cropBox && Math.abs(cropBox.w) > 2 && Math.abs(cropBox.h) > 2) {
+        const bx = Math.min(cropBox.x, cropBox.x + cropBox.w);
+        const by = Math.min(cropBox.y, cropBox.y + cropBox.h);
+        const bw = Math.abs(cropBox.w);
+        const bh = Math.abs(cropBox.h);
+
+        ctx.save();
+        // Dim outside area
+        ctx.fillStyle = "rgba(0, 0, 0, 0.58)";
+        ctx.beginPath();
+        ctx.rect(0, 0, canvas.width, canvas.height);
+
+        if (cropShape === "circle") {
+          const cx = bx + bw / 2;
+          const cy = by + bh / 2;
+          const rx = bw / 2;
+          const ry = bh / 2;
+          ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2, true);
+          ctx.fill();
+
+          // Stroke circular border
+          ctx.strokeStyle = "#26e0ff";
+          ctx.lineWidth = 2.5;
+          ctx.setLineDash([6, 4]);
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          ctx.rect(bx + bw, by, -bw, bh);
+          ctx.fill();
+
+          // Stroke rectangular border
+          ctx.strokeStyle = "#26e0ff";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(bx, by, bw, bh);
+
+          // Rule of thirds grid
+          ctx.strokeStyle = "rgba(38, 224, 255, 0.35)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bx + bw / 3, by);
+          ctx.lineTo(bx + bw / 3, by + bh);
+          ctx.moveTo(bx + (bw * 2) / 3, by);
+          ctx.lineTo(bx + (bw * 2) / 3, by + bh);
+          ctx.moveTo(bx, by + bh / 3);
+          ctx.lineTo(bx + bw, by + bh / 3);
+          ctx.moveTo(bx, by + (bh * 2) / 3);
+          ctx.lineTo(bx + bw, by + (bh * 2) / 3);
+          ctx.stroke();
+
+          // Corner handles
+          const hs = 8;
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(bx, by, hs, hs);
+          ctx.fillRect(bx + bw - hs, by, hs, hs);
+          ctx.fillRect(bx, by + bh - hs, hs, hs);
+          ctx.fillRect(bx + bw - hs, by + bh - hs, hs, hs);
+        }
+        ctx.restore();
+
+        if (cropDimsEl) {
+          const ratioStr = (bw / (bh || 1)).toFixed(2);
+          cropDimsEl.textContent = `${Math.round(bw)} × ${Math.round(bh)} px (${ratioStr}:1)`;
+        }
+      } else {
+        if (cropDimsEl) cropDimsEl.textContent = "Draw box or select preset";
+      }
+    }
+
+    function setCenterCrop(ratio: number | "free") {
+      if (!canvas) return;
+      let w = canvas.width * 0.8;
+      let h = canvas.height * 0.8;
+      if (ratio !== "free") {
+        h = w / ratio;
+        if (h > canvas.height * 0.8) {
+          h = canvas.height * 0.8;
+          w = h * ratio;
+        }
+      }
+      cropBox = {
+        x: Math.round((canvas.width - w) / 2),
+        y: Math.round((canvas.height - h) / 2),
+        w: Math.round(w),
+        h: Math.round(h),
+      };
+      drawCropOverlay();
+      if (cropDimsEl) {
+        cropDimsEl.textContent = `${Math.round(w)} × ${Math.round(h)} px`;
       }
     }
 
     if (canvas && mode === "crop") {
-      canvas.addEventListener("mousedown", (e) => {
-        if (!srcImg || cropRatio !== "free") return;
+      const getPos = (e: MouseEvent | Touch) => {
         const rect = canvas.getBoundingClientRect();
-        const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
-        startX = (e.clientX - rect.left) * sx;
-        startY = (e.clientY - rect.top) * sy;
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+      };
+
+      const handlePointerDown = (pos: { x: number; y: number }) => {
+        if (!srcImg) return;
+        // Check if inside existing box to drag/move
+        if (cropBox && Math.abs(cropBox.w) > 4 && Math.abs(cropBox.h) > 4) {
+          const bx = Math.min(cropBox.x, cropBox.x + cropBox.w);
+          const by = Math.min(cropBox.y, cropBox.y + cropBox.h);
+          const bw = Math.abs(cropBox.w);
+          const bh = Math.abs(cropBox.h);
+          if (pos.x >= bx && pos.x <= bx + bw && pos.y >= by && pos.y <= by + bh) {
+            isMoving = true;
+            moveStartX = pos.x;
+            moveStartY = pos.y;
+            boxStartX = bx;
+            boxStartY = by;
+            return;
+          }
+        }
+
+        // Outside existing box: start new crop drag
         isDragging = true;
+        startX = pos.x;
+        startY = pos.y;
         cropBox = { x: startX, y: startY, w: 0, h: 0 };
-      });
-      window.addEventListener("mousemove", (e) => {
-        if (!isDragging || !canvas) return;
-        const rect = canvas.getBoundingClientRect();
-        const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
-        const curX = (e.clientX - rect.left) * sx;
-        const curY = (e.clientY - rect.top) * sy;
-        cropBox = {
-          x: Math.min(startX, curX),
-          y: Math.min(startY, curY),
-          w: Math.abs(curX - startX),
-          h: Math.abs(curY - startY),
-        };
-        drawCropOverlay();
-      });
-      window.addEventListener("mouseup", () => { isDragging = false; });
+      };
+
+      const handlePointerMove = (pos: { x: number; y: number }) => {
+        if (!srcImg || !canvas) return;
+        if (isMoving && cropBox) {
+          const dx = pos.x - moveStartX;
+          const dy = pos.y - moveStartY;
+          const bw = Math.abs(cropBox.w);
+          const bh = Math.abs(cropBox.h);
+          cropBox.x = Math.max(0, Math.min(canvas.width - bw, boxStartX + dx));
+          cropBox.y = Math.max(0, Math.min(canvas.height - bh, boxStartY + dy));
+          cropBox.w = bw;
+          cropBox.h = bh;
+          drawCropOverlay();
+          return;
+        }
+
+        if (isDragging) {
+          let curW = pos.x - startX;
+          let curH = pos.y - startY;
+
+          if (cropRatio !== "free") {
+            const signX = curW >= 0 ? 1 : -1;
+            const signY = curH >= 0 ? 1 : -1;
+            const absW = Math.abs(curW);
+            const absH = Math.abs(curH);
+            curW = signX * Math.min(absW, absH * cropRatio);
+            curH = signY * (Math.abs(curW) / cropRatio);
+          }
+
+          cropBox = {
+            x: curW >= 0 ? startX : startX + curW,
+            y: curH >= 0 ? startY : startY + curH,
+            w: Math.abs(curW),
+            h: Math.abs(curH),
+          };
+          drawCropOverlay();
+        }
+      };
+
+      const handlePointerUp = () => {
+        isDragging = false;
+        isMoving = false;
+        if (cropBox && Math.abs(cropBox.w) > 4 && Math.abs(cropBox.h) > 4) {
+          setStatus(`Crop area selected (${Math.round(cropBox.w)}×${Math.round(cropBox.h)}px). Drag inside to move, or click Download.`, "ok");
+        }
+      };
+
+      canvas.addEventListener("mousedown", (e) => handlePointerDown(getPos(e)));
+      window.addEventListener("mousemove", (e) => handlePointerMove(getPos(e)));
+      window.addEventListener("mouseup", handlePointerUp);
+
+      canvas.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+          e.preventDefault();
+          handlePointerDown(getPos(e.touches[0]));
+        }
+      }, { passive: false });
+
+      window.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1 && (isDragging || isMoving)) {
+          handlePointerMove(getPos(e.touches[0]));
+        }
+      }, { passive: false });
+
+      window.addEventListener("touchend", handlePointerUp);
 
       document.querySelectorAll("[data-crop-ratio]").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -607,34 +1490,52 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           btn.classList.add("active");
           if (r === "free") {
             cropRatio = "free";
-            cropBox = null;
-            drawCropOverlay();
-            setStatus("Freeform mode: drag on the image to draw your crop selection.");
+            setStatus("Freeform crop mode: drag on the image to create any custom rectangle.");
+            if (!cropBox) setCenterCrop("free");
+            else drawCropOverlay();
           } else {
-            const num = Number(r);
-            cropRatio = num;
-            let w = canvas.width * 0.8;
-            let h = w / num;
-            if (h > canvas.height * 0.8) {
-              h = canvas.height * 0.8;
-              w = h * num;
-            }
-            cropBox = {
-              x: (canvas.width - w) / 2,
-              y: (canvas.height - h) / 2,
-              w,
-              h,
-            };
-            drawCropOverlay();
-            setStatus(`Centered crop box locked to ratio (${Math.round(w)}×${Math.round(h)}px).`, "ok");
+            cropRatio = Number(r);
+            setCenterCrop(cropRatio);
+            setStatus(`Centered crop box locked to ratio (${Math.round(cropBox?.w || 0)}×${Math.round(cropBox?.h || 0)}px).`, "ok");
           }
         });
       });
+
+      if (cropShapeEl) {
+        cropShapeEl.addEventListener("change", () => {
+          cropShape = (cropShapeEl.value as "rect" | "circle") || "rect";
+          if (cropShape === "circle" && cropRatio === "free") {
+            cropRatio = 1;
+            const sqBtn = document.querySelector('[data-crop-ratio="1"]');
+            if (sqBtn) {
+              document.querySelectorAll("[data-crop-ratio]").forEach((b) => b.classList.remove("active"));
+              sqBtn.classList.add("active");
+            }
+          }
+          if (!cropBox) setCenterCrop(cropRatio);
+          else drawCropOverlay();
+          setStatus(`Crop shape set to ${cropShape === "circle" ? "⭕ Circle Avatar (Transparent PNG)" : "Rectangle"}.`, "ok");
+        });
+      }
+
+      if (cropCenterBtn) {
+        cropCenterBtn.addEventListener("click", () => {
+          setCenterCrop(cropRatio);
+          setStatus("Centered crop box reset to 80% canvas.", "ok");
+        });
+      }
     }
 
     // 4. ROTATE / FLIP
     let rotation = 0;
     let flipH = false, flipV = false;
+
+    const rotLeft = document.getElementById("tw-rot-left");
+    const rotRight = document.getElementById("tw-rot-right");
+    const flipHBtn = document.getElementById("tw-flip-h");
+    const flipVBtn = document.getElementById("tw-flip-v");
+    const rotResetBtn = document.getElementById("tw-rot-reset");
+    const flipStatusEl = document.getElementById("tw-flip-status");
 
     function renderRotate() {
       if (!srcImg || !canvas || !ctx) return;
@@ -648,16 +1549,25 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
       ctx.drawImage(srcImg, -w / 2, -h / 2);
       ctx.restore();
+
+      const mirrorText = flipH ? "Mirror Horizontal: ON" : "Mirror: OFF";
+      const vertText = flipV ? "Upside Down: ON" : "Vertical: Normal";
+      if (flipStatusEl) {
+        flipStatusEl.textContent = `${mirrorText} | ${vertText} | Rotation: ${rotation}°`;
+      }
+      setStatus(`Applied transformation (${flipH ? "Flipped Horizontally (Mirror). " : ""}${flipV ? "Flipped Vertically. " : ""}Angle: ${rotation}°). Ready to download.`, "ok");
     }
 
-    const rotLeft = document.getElementById("tw-rot-left");
-    const rotRight = document.getElementById("tw-rot-right");
-    const flipHBtn = document.getElementById("tw-flip-h");
-    const flipVBtn = document.getElementById("tw-flip-v");
     if (rotLeft) rotLeft.addEventListener("click", () => { rotation = (rotation - 90 + 360) % 360; renderRotate(); });
     if (rotRight) rotRight.addEventListener("click", () => { rotation = (rotation + 90) % 360; renderRotate(); });
     if (flipHBtn) flipHBtn.addEventListener("click", () => { flipH = !flipH; renderRotate(); });
     if (flipVBtn) flipVBtn.addEventListener("click", () => { flipV = !flipV; renderRotate(); });
+    if (rotResetBtn) rotResetBtn.addEventListener("click", () => {
+      rotation = 0;
+      flipH = false;
+      flipV = false;
+      renderRotate();
+    });
 
     // 5. WATERMARK
     function renderWatermark() {
@@ -678,9 +1588,50 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       if (sizeVal) sizeVal.textContent = String(size);
       if (opVal) opVal.textContent = String(Math.round(opacity * 100));
 
-      ctx.font = `${size}px 'Space Grotesk', sans-serif`;
-      ctx.fillStyle = color;
+      const font = (document.getElementById("tw-wm-font") as HTMLSelectElement)?.value || "'Space Grotesk', sans-serif";
+      const shadowChecked = (document.getElementById("tw-wm-shadow") as HTMLInputElement)?.checked ?? true;
+
+      ctx.font = `bold ${size}px ${font}`;
       ctx.globalAlpha = opacity;
+
+      const isMeme = ws.getAttribute("data-tool-slug")?.includes("meme");
+      const bottomTextEl = document.getElementById("tw-meme-bottom") as HTMLInputElement;
+      const bottomText = isMeme && bottomTextEl ? bottomTextEl.value : "";
+
+      if (isMeme) {
+        ctx.textAlign = "center";
+        const strokeW = Math.max(3, size * 0.12);
+
+        if (text) {
+          const topY = Math.max(20, canvas.height * 0.04);
+          ctx.textBaseline = "top";
+          if (shadowChecked) {
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = strokeW;
+            ctx.lineJoin = "round";
+            ctx.strokeText(text.toUpperCase(), canvas.width / 2, topY);
+          }
+          ctx.fillStyle = color;
+          ctx.fillText(text.toUpperCase(), canvas.width / 2, topY);
+        }
+
+        if (bottomText) {
+          const botY = canvas.height - Math.max(20, canvas.height * 0.04);
+          ctx.textBaseline = "bottom";
+          if (shadowChecked) {
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = strokeW;
+            ctx.lineJoin = "round";
+            ctx.strokeText(bottomText.toUpperCase(), canvas.width / 2, botY);
+          }
+          ctx.fillStyle = color;
+          ctx.fillText(bottomText.toUpperCase(), canvas.width / 2, botY);
+        }
+        return;
+      }
+
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
       const m = ctx.measureText(text);
       const pad = size * 0.6;
 
@@ -691,74 +1642,240 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         const stepY = size * 4;
         for (let y = -canvas.height; y < canvas.height * 2; y += stepY) {
           for (let x = -canvas.width; x < canvas.width * 2; x += stepX) {
+            if (shadowChecked) {
+              ctx.strokeStyle = "rgba(0,0,0,0.8)";
+              ctx.lineWidth = Math.max(2, size * 0.08);
+              ctx.strokeText(text, x, y);
+            }
+            ctx.fillStyle = color;
             ctx.fillText(text, x, y);
           }
         }
         ctx.restore();
       } else {
-        let x = canvas.width - m.width - pad;
-        let y = canvas.height - pad;
-        if (pos === "bottom-left") { x = pad; y = canvas.height - pad; }
+        let x = (canvas.width - m.width) / 2;
+        let y = (canvas.height + size * 0.35) / 2;
+
+        if (pos === "bottom-right") { x = canvas.width - m.width - pad; y = canvas.height - pad; }
+        else if (pos === "bottom-left") { x = pad; y = canvas.height - pad; }
+        else if (pos === "bottom-center") { x = (canvas.width - m.width) / 2; y = canvas.height - pad; }
         else if (pos === "top-right") { x = canvas.width - m.width - pad; y = pad + size; }
         else if (pos === "top-left") { x = pad; y = pad + size; }
-        else if (pos === "center") { x = (canvas.width - m.width) / 2; y = canvas.height / 2; }
+        else if (pos === "top-center") { x = (canvas.width - m.width) / 2; y = pad + size; }
+        else if (pos === "center") { x = (canvas.width - m.width) / 2; y = (canvas.height + size * 0.35) / 2; }
+
+        if (shadowChecked) {
+          ctx.strokeStyle = "rgba(0,0,0,0.85)";
+          ctx.lineWidth = Math.max(2, size * 0.08);
+          ctx.lineJoin = "round";
+          ctx.strokeText(text, x, y);
+        }
+        ctx.fillStyle = color;
         ctx.fillText(text, x, y);
       }
       ctx.globalAlpha = 1;
     }
 
-    ["tw-wm-text", "tw-wm-color", "tw-wm-size", "tw-wm-opacity", "tw-wm-pos"].forEach((id) => {
+    ["tw-wm-text", "tw-meme-bottom", "tw-wm-color", "tw-wm-size", "tw-wm-opacity", "tw-wm-pos", "tw-wm-font", "tw-wm-shadow"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener("input", renderWatermark);
     });
 
-    // 6. COLOR PALETTE
-    function extractColors(): number[][] {
-      if (!canvas || !ctx) return [];
-      const w = canvas.width, h = canvas.height;
-      const data = ctx.getImageData(0, 0, w, h).data;
-      const buckets: Record<string, number> = {};
-      const step = Math.max(1, Math.floor((w * h) / 40000));
-      for (let i = 0; i < w * h; i += step) {
-        const idx = i * 4;
-        if (data[idx + 3] < 128) continue;
-        const r = Math.round(data[idx] / 24) * 24;
-        const g = Math.round(data[idx + 1] / 24) * 24;
-        const b = Math.round(data[idx + 2] / 24) * 24;
-        const key = `${r},${g},${b}`;
-        buckets[key] = (buckets[key] || 0) + 1;
-      }
-      const sorted = Object.keys(buckets).sort((a, b) => buckets[b] - buckets[a]);
-      const picked: number[][] = [];
-      sorted.forEach((k) => {
-        if (picked.length >= 6) return;
-        const c = k.split(",").map(Number);
-        const tooClose = picked.some((p) => Math.abs(p[0] - c[0]) + Math.abs(p[1] - c[1]) + Math.abs(p[2] - c[2]) < 60);
-        if (!tooClose) picked.push(c);
-      });
-      return picked;
+    // 6. COLOR PALETTE STUDIO & SEASONAL ANALYSIS
+    let currentPaletteColors: number[][] = [];
+    const palCountEl = document.getElementById("tw-pal-count") as HTMLSelectElement;
+    const palFormatEl = document.getElementById("tw-pal-format") as HTMLSelectElement;
+    const palSwatchesWrap = document.getElementById("tw-pal-swatches");
+    const palContrastBox = document.getElementById("tw-pal-contrast");
+    const palSeasonTitle = document.getElementById("tw-pal-season-title");
+    const palSeasonDesc = document.getElementById("tw-pal-season-desc");
+    const palSeasonBadge = document.getElementById("tw-pal-season-badge");
+    const palSeasonIcon = document.getElementById("tw-pal-season-icon");
+
+    const curatedPresets: Record<string, number[][]> = {
+      "autumn": [[194, 65, 12], [234, 88, 12], [217, 119, 6], [202, 138, 4], [120, 53, 15], [67, 20, 7]],
+      "soft-autumn": [[180, 115, 89], [214, 162, 137], [158, 119, 119], [132, 140, 127], [163, 140, 107], [92, 70, 58]],
+      "deep-winter": [[15, 23, 42], [76, 29, 149], [136, 19, 55], [2, 132, 199], [248, 250, 252], [30, 41, 59]],
+      "soft-summer": [[148, 163, 184], [192, 132, 252], [244, 114, 182], [147, 197, 253], [165, 180, 252], [226, 232, 240]],
+      "bright-spring": [[244, 63, 94], [251, 146, 60], [250, 204, 21], [74, 222, 128], [56, 189, 248], [168, 85, 247]],
+      "jewel": [[131, 24, 67], [88, 28, 135], [20, 83, 45], [12, 74, 110], [180, 83, 9], [76, 5, 25]],
+      "green": [[20, 83, 45], [22, 101, 52], [21, 128, 61], [34, 197, 94], [134, 239, 172], [5, 46, 22]],
+      "blue": [[12, 74, 110], [3, 105, 161], [2, 132, 199], [14, 165, 233], [56, 189, 248], [186, 230, 253]],
+      "halloween": [[234, 88, 12], [249, 115, 22], [88, 28, 135], [17, 24, 39], [107, 114, 128], [254, 240, 138]],
+      "viridis": [[68, 1, 84], [70, 50, 126], [54, 92, 141], [39, 127, 142], [31, 161, 135], [74, 193, 109]]
+    };
+
+    function rgbToHex(r: number, g: number, b: number): string {
+      return "#" + [r, g, b].map((x) => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, "0")).join("");
     }
 
-    function renderPalette() {
-      const swatchesWrap = document.getElementById("tw-pal-swatches");
-      const contrastBox = document.getElementById("tw-pal-contrast");
-      if (!swatchesWrap) return;
-      swatchesWrap.innerHTML = "";
-      const colors = extractColors();
-      let selected: Array<{ hex: string; rgb: number[]; el: HTMLElement }> = [];
+    function rgbToHsl(r: number, g: number, b: number): string {
+      const rn = r / 255, gn = g / 255, bn = b / 255;
+      const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+      let h = 0, s = 0;
+      const l = (max + min) / 2;
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case rn: h = (gn - bn) / d + (gn < bn ? 6 : 0); break;
+          case gn: h = (bn - rn) / d + 2; break;
+          case bn: h = (rn - gn) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+    }
 
+    function formatColor(c: number[]): string {
+      const fmt = palFormatEl?.value || "hex";
+      if (fmt === "rgb") return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+      if (fmt === "hsl") return rgbToHsl(c[0], c[1], c[2]);
+      return rgbToHex(c[0], c[1], c[2]);
+    }
+
+    function extractColors(targetCount = 6): number[][] {
+      if (!canvas || !ctx || canvas.width === 0 || canvas.height === 0) {
+        return curatedPresets["autumn"].slice(0, targetCount);
+      }
+      const w = canvas.width, h = canvas.height;
+      try {
+        const data = ctx.getImageData(0, 0, w, h).data;
+        const buckets: Record<string, number> = {};
+        const step = Math.max(1, Math.floor((w * h) / 45000));
+        for (let i = 0; i < w * h; i += step) {
+          const idx = i * 4;
+          if (data[idx + 3] < 128) continue;
+          const r = Math.round(data[idx] / 24) * 24;
+          const g = Math.round(data[idx + 1] / 24) * 24;
+          const b = Math.round(data[idx + 2] / 24) * 24;
+          const key = `${r},${g},${b}`;
+          buckets[key] = (buckets[key] || 0) + 1;
+        }
+        const sorted = Object.keys(buckets).sort((a, b) => buckets[b] - buckets[a]);
+        const picked: number[][] = [];
+        sorted.forEach((k) => {
+          if (picked.length >= targetCount) return;
+          const c = k.split(",").map(Number);
+          const tooClose = picked.some((p) => Math.abs(p[0] - c[0]) + Math.abs(p[1] - c[1]) + Math.abs(p[2] - c[2]) < 55);
+          if (!tooClose) picked.push(c);
+        });
+        if (picked.length < targetCount) {
+          for (const fallback of curatedPresets["autumn"]) {
+            if (picked.length >= targetCount) break;
+            const tooClose = picked.some((p) => Math.abs(p[0] - fallback[0]) + Math.abs(p[1] - fallback[1]) + Math.abs(p[2] - fallback[2]) < 40);
+            if (!tooClose) picked.push(fallback);
+          }
+        }
+        return picked.slice(0, targetCount);
+      } catch (e) {
+        return curatedPresets["autumn"].slice(0, targetCount);
+      }
+    }
+
+    function analyzeSeasonalPalette(colors: number[][]) {
+      if (!palSeasonTitle || !palSeasonDesc || !palSeasonBadge || !palSeasonIcon || !colors.length) return;
+
+      let totalR = 0, totalG = 0, totalB = 0;
+      let totalLuminance = 0;
       colors.forEach((c) => {
-        const hex = "#" + c[0].toString(16).padStart(2, "0") + c[1].toString(16).padStart(2, "0") + c[2].toString(16).padStart(2, "0");
+        totalR += c[0];
+        totalG += c[1];
+        totalB += c[2];
+        totalLuminance += 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2];
+      });
+      const avgR = totalR / colors.length;
+      const avgB = totalB / colors.length;
+      const avgLum = totalLuminance / colors.length;
+      const warmth = avgR - avgB;
+
+      let season = "Warm Autumn";
+      let desc = "Warm earthy undertones with rich terracotta, amber, olive, and deep gold.";
+      let badge = "True Autumn 🍂";
+      let icon = "🍂";
+
+      if (warmth > 20) {
+        if (avgLum > 140) {
+          season = "Bright Spring";
+          desc = "Warm, vibrant, high-clarity tones with coral, sunny gold, peach, and fresh greens.";
+          badge = "True Spring 🌸";
+          icon = "🌸";
+        } else if (warmth > 40 && avgLum < 110) {
+          season = "Deep Autumn";
+          desc = "Rich, dark, warm palette featuring spiced cinnamon, espresso, burnt orange, and maroon.";
+          badge = "Deep Autumn 🍁";
+          icon = "🍁";
+        } else {
+          season = "Soft / Warm Autumn";
+          desc = "Muted earthy undertones, terracotta, warm taupe, and toasted caramel.";
+          badge = "Soft Autumn 🍂";
+          icon = "🍂";
+        }
+      } else if (warmth < -15) {
+        if (avgLum < 110) {
+          season = "Deep Winter";
+          desc = "Cool, high-contrast, vivid tones including deep navy, royal cobalt, iced berry, and emerald.";
+          badge = "Deep Winter ❄️";
+          icon = "❄️";
+        } else {
+          season = "Soft Summer";
+          desc = "Cool, delicate, powdery tones featuring lavender, rose, muted slate, and soft blue.";
+          badge = "Soft Summer ☀️";
+          icon = "☀️";
+        }
+      } else {
+        if (avgLum > 135) {
+          season = "Light Summer / Neutral";
+          desc = "Soft pastel balance with cool delicate highlights, blush, and airy neutrals.";
+          badge = "Light Summer ⛅";
+          icon = "⛅";
+        } else {
+          season = "Dark / Jewel Tones";
+          desc = "Saturated balance with sapphire, ruby, emerald, and charcoal contrast.";
+          badge = "Jewel Tones 💎";
+          icon = "💎";
+        }
+      }
+
+      palSeasonTitle.textContent = `Color Season Analysis: ${season}`;
+      palSeasonDesc.textContent = desc;
+      palSeasonBadge.textContent = badge;
+      palSeasonIcon.textContent = icon;
+    }
+
+    function renderPalette(keepExistingColors = false) {
+      if (!palSwatchesWrap) return;
+      const count = Number(palCountEl?.value) || 6;
+
+      if (!keepExistingColors || currentPaletteColors.length === 0) {
+        currentPaletteColors = extractColors(count);
+      } else if (currentPaletteColors.length !== count) {
+        if (currentPaletteColors.length < count) {
+          const fresh = extractColors(count);
+          currentPaletteColors = fresh;
+        } else {
+          currentPaletteColors = currentPaletteColors.slice(0, count);
+        }
+      }
+
+      palSwatchesWrap.innerHTML = "";
+      let selected: Array<{ hex: string; formatted: string; rgb: number[]; el: HTMLElement }> = [];
+
+      currentPaletteColors.forEach((c) => {
+        const hex = rgbToHex(c[0], c[1], c[2]);
+        const formatted = formatColor(c);
         const el = document.createElement("div");
         el.className = "swatch";
-        el.innerHTML = `<div class="swatch-color" style="background:${hex}"></div>${hex}`;
+        el.innerHTML = `<div class="swatch-color" style="background:${hex}"></div><span class="text-[11px] font-mono select-all">${formatted}</span>`;
+
         el.addEventListener("click", () => {
-          navigator.clipboard?.writeText(hex).catch(() => {});
+          navigator.clipboard?.writeText(formatted).catch(() => {});
           if (selected.length === 2) selected = [];
-          selected.push({ hex, rgb: c, el });
+          selected.push({ hex, formatted, rgb: c, el });
           document.querySelectorAll(".swatch").forEach((s) => s.classList.remove("selected"));
           selected.forEach((s) => s.el.classList.add("selected"));
-          if (contrastBox) {
+
+          if (palContrastBox) {
             if (selected.length === 2) {
               const l = (rgb: number[]) => {
                 const a = rgb.map((v) => {
@@ -770,13 +1887,144 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
               const l1 = l(selected[0].rgb) + 0.05;
               const l2 = l(selected[1].rgb) + 0.05;
               const ratio = l1 > l2 ? l1 / l2 : l2 / l1;
-              contrastBox.innerHTML = `${selected[0].hex} on ${selected[1].hex} — contrast <strong>${ratio.toFixed(2)}:1</strong> (${ratio >= 4.5 ? "Passes WCAG AA" : "Fails WCAG AA"}).`;
+              const passesAA = ratio >= 4.5;
+              const passesAAA = ratio >= 7.0;
+              const rating = passesAAA ? "Passes AAA (Large & Small Text)" : passesAA ? "Passes AA (Normal Text)" : "Fails WCAG AA (Low Contrast)";
+              palContrastBox.innerHTML = `<strong>${selected[0].hex}</strong> on <strong>${selected[1].hex}</strong> — Contrast Ratio: <strong>${ratio.toFixed(2)}:1</strong> (<span class="${passesAA ? "text-emerald-400 font-semibold" : "text-amber-400 font-semibold"}">${rating}</span>).`;
             } else {
-              contrastBox.textContent = `${hex} copied! Select a second swatch to test contrast.`;
+              palContrastBox.textContent = `Copied ${formatted}! Click a second swatch to test WCAG AA / AAA contrast.`;
             }
           }
         });
-        swatchesWrap.appendChild(el);
+        palSwatchesWrap.appendChild(el);
+      });
+
+      analyzeSeasonalPalette(currentPaletteColors);
+      setStatus(`Palette updated with ${currentPaletteColors.length} swatches. Click swatches to copy or test contrast.`, "ok");
+    }
+
+    // Palette Presets and Eyedropper Listeners
+    document.querySelectorAll("[data-pal-preset]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-pal-preset") || "autumn";
+        if (curatedPresets[key]) {
+          const count = Number(palCountEl?.value) || 6;
+          currentPaletteColors = curatedPresets[key].slice(0, count);
+          renderPalette(true);
+          document.querySelectorAll("[data-pal-preset]").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        }
+      });
+    });
+
+    const palRandomBtn = document.getElementById("tw-pal-random-btn");
+    if (palRandomBtn) {
+      palRandomBtn.addEventListener("click", () => {
+        const count = Number(palCountEl?.value) || 6;
+        const baseHue = Math.floor(Math.random() * 360);
+        const generated: number[][] = [];
+        for (let i = 0; i < count; i++) {
+          const h = (baseHue + i * (360 / count) + Math.floor(Math.random() * 20 - 10) + 360) % 360;
+          const s = 0.45 + Math.random() * 0.45;
+          const l = 0.25 + Math.random() * 0.55;
+
+          const c = (1 - Math.abs(2 * l - 1)) * s;
+          const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+          const m = l - c / 2;
+          let r = 0, g = 0, b = 0;
+          if (h < 60) { r = c; g = x; b = 0; }
+          else if (h < 120) { r = x; g = c; b = 0; }
+          else if (h < 180) { r = 0; g = c; b = x; }
+          else if (h < 240) { r = 0; g = x; b = c; }
+          else if (h < 300) { r = x; g = 0; b = c; }
+          else { r = c; g = 0; b = x; }
+          generated.push([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)]);
+        }
+        currentPaletteColors = generated;
+        renderPalette(true);
+        setStatus("Generated new harmonic color palette (Coolors style)!", "ok");
+      });
+    }
+
+    if (palCountEl) {
+      palCountEl.addEventListener("change", () => renderPalette(false));
+    }
+    if (palFormatEl) {
+      palFormatEl.addEventListener("change", () => renderPalette(true));
+    }
+
+    // Eyedropper on Canvas Click in Palette Mode
+    if (canvas && mode === "palette") {
+      canvas.addEventListener("click", (e) => {
+        if (!ctx || canvas.width === 0 || canvas.height === 0) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = Math.floor((e.clientX - rect.left) * scaleX);
+        const y = Math.floor((e.clientY - rect.top) * scaleY);
+        try {
+          const pixel = ctx.getImageData(x, y, 1, 1).data;
+          const sampled = [pixel[0], pixel[1], pixel[2]];
+          const hex = rgbToHex(sampled[0], sampled[1], sampled[2]);
+          currentPaletteColors.unshift(sampled);
+          const count = Number(palCountEl?.value) || 6;
+          currentPaletteColors = currentPaletteColors.slice(0, count);
+          renderPalette(true);
+          setStatus(`Sampled color ${hex} at (${x}, ${y})! Added to your active palette.`, "ok");
+        } catch (err) {}
+      });
+    }
+
+    // Copy Handlers
+    const copyHexesBtn = document.getElementById("tw-pal-copy-hexes");
+    if (copyHexesBtn) {
+      copyHexesBtn.addEventListener("click", () => {
+        if (!currentPaletteColors.length) return;
+        const hexList = currentPaletteColors.map((c) => rgbToHex(c[0], c[1], c[2])).join(", ");
+        navigator.clipboard?.writeText(hexList).then(() => {
+          setStatus(`Copied all hex codes: ${hexList}`, "ok");
+        });
+      });
+    }
+
+    const copyCssBtn = document.getElementById("tw-pal-copy-css");
+    if (copyCssBtn) {
+      copyCssBtn.addEventListener("click", () => {
+        if (!currentPaletteColors.length) return;
+        const vars = currentPaletteColors.map((c, i) => `  --color-palette-${i + 1}: ${rgbToHex(c[0], c[1], c[2])};`).join("\n");
+        const cssCode = `:root {\n${vars}\n}`;
+        navigator.clipboard?.writeText(cssCode).then(() => {
+          setStatus("Copied CSS Custom Properties (:root variables) to clipboard!", "ok");
+        });
+      });
+    }
+
+    const copyTailwindBtn = document.getElementById("tw-pal-copy-tailwind");
+    if (copyTailwindBtn) {
+      copyTailwindBtn.addEventListener("click", () => {
+        if (!currentPaletteColors.length) return;
+        const weights = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+        const lines = currentPaletteColors.map((c, i) => `      ${weights[i] || (i + 1) * 100}: '${rgbToHex(c[0], c[1], c[2])}',`).join("\n");
+        const twCode = `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        palette: {\n${lines}\n        }\n      }\n    }\n  }\n};`;
+        navigator.clipboard?.writeText(twCode).then(() => {
+          setStatus("Copied Tailwind CSS theme.extend.colors config!", "ok");
+        });
+      });
+    }
+
+    const copyJsonBtn = document.getElementById("tw-pal-copy-json");
+    if (copyJsonBtn) {
+      copyJsonBtn.addEventListener("click", () => {
+        if (!currentPaletteColors.length) return;
+        const payload = currentPaletteColors.map((c, i) => ({
+          index: i + 1,
+          hex: rgbToHex(c[0], c[1], c[2]),
+          rgb: `rgb(${c[0]}, ${c[1]}, ${c[2]})`,
+          hsl: rgbToHsl(c[0], c[1], c[2])
+        }));
+        navigator.clipboard?.writeText(JSON.stringify(payload, null, 2)).then(() => {
+          setStatus("Copied JSON color palette schema to clipboard!", "ok");
+        });
       });
     }
 
@@ -842,6 +2090,1375 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       });
     }
 
+    // 9. BLUR & CENSOR
+    let blurBox: { x: number; y: number; w: number; h: number } | null = null;
+    let isBlurDragging = false;
+    let blurStartX = 0, blurStartY = 0;
+
+    const blurEffectEl = document.getElementById("tw-blur-effect") as HTMLSelectElement;
+    const blurScopeEl = document.getElementById("tw-blur-scope") as HTMLSelectElement;
+    const blurRadiusEl = document.getElementById("tw-blur-radius") as HTMLInputElement;
+    const blurRadiusVal = document.getElementById("tw-blur-radius-val");
+    const blurCenterBtn = document.getElementById("tw-blur-center");
+    const blurClearBtn = document.getElementById("tw-blur-clear");
+
+    function renderBlur(showGuide = true) {
+      if (!srcImg || !canvas || !ctx) return;
+      const w = srcImg.naturalWidth;
+      const h = srcImg.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+
+      const effect = blurEffectEl?.value || "smooth";
+      const scope = blurScopeEl?.value || "selection";
+      const radius = Number(blurRadiusEl?.value) || 20;
+
+      // Draw base sharp image
+      ctx.clearRect(0, 0, w, h);
+      ctx.filter = "none";
+      ctx.drawImage(srcImg, 0, 0, w, h);
+
+      if (!blurBox && (scope === "selection" || scope === "background")) {
+        // default face box centered
+        blurBox = {
+          x: Math.round(w * 0.28),
+          y: Math.round(h * 0.15),
+          w: Math.round(w * 0.44),
+          h: Math.round(h * 0.48),
+        };
+      }
+
+      function applyEffectToRegion(targetCtx: CanvasRenderingContext2D, rx: number, ry: number, rw: number, rh: number) {
+        if (rw <= 0 || rh <= 0) return;
+        if (effect === "smooth") {
+          targetCtx.save();
+          targetCtx.beginPath();
+          targetCtx.rect(rx, ry, rw, rh);
+          targetCtx.clip();
+          targetCtx.filter = `blur(${radius}px)`;
+          targetCtx.drawImage(srcImg, 0, 0, w, h);
+          targetCtx.restore();
+        } else if (effect === "motion") {
+          targetCtx.save();
+          targetCtx.beginPath();
+          targetCtx.rect(rx, ry, rw, rh);
+          targetCtx.clip();
+          const steps = 16;
+          const maxOffset = radius * 2.2;
+          targetCtx.globalAlpha = 1 / (steps / 2);
+          for (let i = -steps / 2; i <= steps / 2; i++) {
+            const offsetX = (i / (steps / 2)) * maxOffset;
+            targetCtx.drawImage(srcImg, offsetX, 0, w, h);
+          }
+          targetCtx.restore();
+        } else if (effect === "pixelate") {
+          const pixelSize = Math.max(6, Math.round(radius * 0.85));
+          const off = document.createElement("canvas");
+          const sw = Math.max(1, Math.round(rw / pixelSize));
+          const sh = Math.max(1, Math.round(rh / pixelSize));
+          off.width = sw;
+          off.height = sh;
+          const octx = off.getContext("2d");
+          if (octx) {
+            octx.imageSmoothingEnabled = true;
+            octx.drawImage(srcImg, rx, ry, rw, rh, 0, 0, sw, sh);
+            targetCtx.save();
+            targetCtx.imageSmoothingEnabled = false;
+            targetCtx.drawImage(off, 0, 0, sw, sh, rx, ry, rw, rh);
+            targetCtx.restore();
+          }
+        } else if (effect === "blackout") {
+          targetCtx.save();
+          targetCtx.fillStyle = "#0c0d12";
+          targetCtx.fillRect(rx, ry, rw, rh);
+          targetCtx.fillStyle = "#ffffff";
+          targetCtx.font = `bold ${Math.max(12, Math.round(rh * 0.22))}px sans-serif`;
+          targetCtx.textAlign = "center";
+          targetCtx.textBaseline = "middle";
+          targetCtx.fillText("PRIVACY PROTECTED", rx + rw / 2, ry + rh / 2);
+          targetCtx.restore();
+        }
+      }
+
+      if (scope === "entire") {
+        applyEffectToRegion(ctx, 0, 0, w, h);
+      } else if (scope === "selection" && blurBox) {
+        applyEffectToRegion(ctx, blurBox.x, blurBox.y, blurBox.w, blurBox.h);
+      } else if (scope === "background" && blurBox) {
+        const offCanvas = document.createElement("canvas");
+        offCanvas.width = w;
+        offCanvas.height = h;
+        const offCtx = offCanvas.getContext("2d");
+        if (offCtx) {
+          applyEffectToRegion(offCtx, 0, 0, w, h);
+          ctx.drawImage(offCanvas, 0, 0);
+
+          ctx.save();
+          ctx.beginPath();
+          const cx = blurBox.x + blurBox.w / 2;
+          const cy = blurBox.y + blurBox.h / 2;
+          const rx = blurBox.w / 2;
+          const ry = blurBox.h / 2;
+          ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(srcImg, 0, 0, w, h);
+          ctx.restore();
+        }
+      }
+
+      if (showGuide && blurBox && (scope === "selection" || scope === "background")) {
+        ctx.save();
+        ctx.strokeStyle = scope === "selection" ? "#26e0ff" : "#ffbb00";
+        ctx.lineWidth = Math.max(2, Math.round(w / 400));
+        ctx.setLineDash([6, 6]);
+        if (scope === "selection") {
+          ctx.strokeRect(blurBox.x, blurBox.y, blurBox.w, blurBox.h);
+        } else {
+          ctx.beginPath();
+          const cx = blurBox.x + blurBox.w / 2;
+          const cy = blurBox.y + blurBox.h / 2;
+          ctx.ellipse(cx, cy, Math.max(1, blurBox.w / 2), Math.max(1, blurBox.h / 2), 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.fillStyle = scope === "selection" ? "#26e0ff" : "#ffbb00";
+        ctx.font = "bold 13px Inter, sans-serif";
+        const tagText = scope === "selection" ? "Face / Censor Box" : "Sharp Portrait Subject";
+        ctx.fillText(tagText, blurBox.x + 4, Math.max(16, blurBox.y - 6));
+        ctx.restore();
+      }
+
+      setStatus(`Applied ${effect} effect (${scope}). Drag on image to adjust area.`, "ok");
+    }
+
+    if (canvas && mode === "blur") {
+      canvas.addEventListener("mousedown", (e) => {
+        if (!srcImg) return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        blurStartX = (e.clientX - rect.left) * sx;
+        blurStartY = (e.clientY - rect.top) * sy;
+        isBlurDragging = true;
+        blurBox = { x: blurStartX, y: blurStartY, w: 0, h: 0 };
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isBlurDragging || !canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        const curX = (e.clientX - rect.left) * sx;
+        const curY = (e.clientY - rect.top) * sy;
+        blurBox = {
+          x: Math.min(blurStartX, curX),
+          y: Math.min(blurStartY, curY),
+          w: Math.abs(curX - blurStartX),
+          h: Math.abs(curY - blurStartY),
+        };
+        renderBlur(true);
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (isBlurDragging) {
+          isBlurDragging = false;
+          renderBlur(true);
+        }
+      });
+    }
+
+    if (blurEffectEl) blurEffectEl.addEventListener("change", () => renderBlur(true));
+    if (blurScopeEl) blurScopeEl.addEventListener("change", () => renderBlur(true));
+    if (blurRadiusEl) {
+      blurRadiusEl.addEventListener("input", () => {
+        if (blurRadiusVal) blurRadiusVal.textContent = blurRadiusEl.value;
+        renderBlur(true);
+      });
+    }
+    if (blurCenterBtn) {
+      blurCenterBtn.addEventListener("click", () => {
+        if (!srcImg) return;
+        const w = srcImg.naturalWidth;
+        const h = srcImg.naturalHeight;
+        blurBox = {
+          x: Math.round(w * 0.28),
+          y: Math.round(h * 0.15),
+          w: Math.round(w * 0.44),
+          h: Math.round(h * 0.48),
+        };
+        renderBlur(true);
+      });
+    }
+    if (blurClearBtn) {
+      blurClearBtn.addEventListener("click", () => {
+        if (!srcImg || !canvas || !ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.filter = "none";
+        ctx.drawImage(srcImg, 0, 0);
+        setStatus("Blur cleared. Adjust settings to reapply blur.");
+      });
+    }
+
+    // 10. PHOTO COLLAGE MAKER
+    let collageItems: { file: File; url: string; img: HTMLImageElement }[] = [];
+
+    const colLayoutEl = document.getElementById("tw-col-layout") as HTMLSelectElement;
+    const colRatioEl = document.getElementById("tw-col-ratio") as HTMLSelectElement;
+    const colGapEl = document.getElementById("tw-col-gap") as HTMLInputElement;
+    const colGapVal = document.getElementById("tw-col-gap-val");
+    const colRadiusEl = document.getElementById("tw-col-radius") as HTMLInputElement;
+    const colRadiusVal = document.getElementById("tw-col-radius-val");
+    const colBgEl = document.getElementById("tw-col-bg") as HTMLInputElement;
+    const colCountEl = document.getElementById("tw-col-count");
+    const colThumbsEl = document.getElementById("tw-col-thumbs");
+    const colAddBtn = document.getElementById("tw-col-add-btn");
+    const colClearBtn = document.getElementById("tw-col-clear-btn");
+
+    function renderCollageThumbs() {
+      if (colCountEl) colCountEl.textContent = `${collageItems.length} photo(s) in collage`;
+      if (!colThumbsEl) return;
+      colThumbsEl.innerHTML = "";
+      collageItems.forEach((item, idx) => {
+        const thumb = document.createElement("div");
+        thumb.className = "relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-border group";
+        thumb.innerHTML = `
+          <img src="${item.url}" class="w-full h-full object-cover" alt="Thumb ${idx + 1}" />
+          <button class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-bl opacity-80 hover:opacity-100" type="button" data-del-idx="${idx}">×</button>
+        `;
+        const delBtn = thumb.querySelector("[data-del-idx]");
+        if (delBtn) {
+          delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            collageItems.splice(idx, 1);
+            renderCollage();
+            renderCollageThumbs();
+          });
+        }
+        colThumbsEl.appendChild(thumb);
+      });
+    }
+
+    function renderCollage() {
+      if (!canvas || !ctx) return;
+      if (!collageItems.length) {
+        setStatus("Upload 2 or more photos to generate your photo collage.", "");
+        return;
+      }
+
+      const ratio = colRatioEl?.value || "1:1";
+      const layout = colLayoutEl?.value || "auto";
+      const gap = Number(colGapEl?.value) ?? 12;
+      const radius = Number(colRadiusEl?.value) ?? 10;
+      const bgColor = colBgEl?.value || "#ffffff";
+
+      // Base canvas size for crisp resolution
+      let cw = 1600;
+      let ch = 1600;
+      if (ratio === "4:5") { cw = 1600; ch = 2000; }
+      else if (ratio === "9:16") { cw = 1440; ch = 2560; }
+      else if (ratio === "16:9") { cw = 1920; ch = 1080; }
+      else if (ratio === "4:3") { cw = 1600; ch = 1200; }
+
+      canvas.width = cw;
+      canvas.height = ch;
+
+      // Fill background frame
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, cw, ch);
+
+      const n = collageItems.length;
+      let cells: { x: number; y: number; w: number; h: number }[] = [];
+
+      const innerX = gap;
+      const innerY = gap;
+      const innerW = cw - gap * 2;
+      const innerH = ch - gap * 2;
+
+      let chosenLayout = layout;
+      if (layout === "auto") {
+        if (n <= 1) chosenLayout = "1-full";
+        else if (n === 2) chosenLayout = ratio === "16:9" || ratio === "4:3" ? "2-side" : "2-stack";
+        else if (n === 3) chosenLayout = "3-left-big";
+        else if (n === 4) chosenLayout = "4-grid";
+        else if (n <= 6) chosenLayout = "6-grid";
+        else chosenLayout = "9-grid";
+      }
+
+      if (chosenLayout === "1-full") {
+        cells.push({ x: innerX, y: innerY, w: innerW, h: innerH });
+      } else if (chosenLayout === "2-side") {
+        const w = (innerW - gap) / 2;
+        cells.push({ x: innerX, y: innerY, w, h: innerH });
+        cells.push({ x: innerX + w + gap, y: innerY, w, h: innerH });
+      } else if (chosenLayout === "2-stack") {
+        const h = (innerH - gap) / 2;
+        cells.push({ x: innerX, y: innerY, w: innerW, h });
+        cells.push({ x: innerX, y: innerY + h + gap, w: innerW, h });
+      } else if (chosenLayout === "3-left-big") {
+        const w1 = (innerW - gap) * 0.55;
+        const w2 = innerW - gap - w1;
+        const h2 = (innerH - gap) / 2;
+        cells.push({ x: innerX, y: innerY, w: w1, h: innerH });
+        cells.push({ x: innerX + w1 + gap, y: innerY, w: w2, h: h2 });
+        cells.push({ x: innerX + w1 + gap, y: innerY + h2 + gap, w: w2, h: h2 });
+      } else if (chosenLayout === "3-strip") {
+        const w = (innerW - gap * 2) / 3;
+        for (let i = 0; i < 3; i++) {
+          cells.push({ x: innerX + i * (w + gap), y: innerY, w, h: innerH });
+        }
+      } else if (chosenLayout === "4-grid") {
+        const w = (innerW - gap) / 2;
+        const h = (innerH - gap) / 2;
+        cells.push({ x: innerX, y: innerY, w, h });
+        cells.push({ x: innerX + w + gap, y: innerY, w, h });
+        cells.push({ x: innerX, y: innerY + h + gap, w, h });
+        cells.push({ x: innerX + w + gap, y: innerY + h + gap, w, h });
+      } else if (chosenLayout === "4-top-big") {
+        const hTop = (innerH - gap) * 0.6;
+        const hBot = innerH - gap - hTop;
+        const wBot = (innerW - gap * 2) / 3;
+        cells.push({ x: innerX, y: innerY, w: innerW, h: hTop });
+        cells.push({ x: innerX, y: innerY + hTop + gap, w: wBot, h: hBot });
+        cells.push({ x: innerX + wBot + gap, y: innerY + hTop + gap, w: wBot, h: hBot });
+        cells.push({ x: innerX + (wBot + gap) * 2, y: innerY + hTop + gap, w: wBot, h: hBot });
+      } else if (chosenLayout === "6-grid") {
+        const cols = ratio === "16:9" ? 3 : 2;
+        const rows = ratio === "16:9" ? 2 : 3;
+        const w = (innerW - gap * (cols - 1)) / cols;
+        const h = (innerH - gap * (rows - 1)) / rows;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            cells.push({ x: innerX + c * (w + gap), y: innerY + r * (h + gap), w, h });
+          }
+        }
+      } else if (chosenLayout === "9-grid") {
+        const w = (innerW - gap * 2) / 3;
+        const h = (innerH - gap * 2) / 3;
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            cells.push({ x: innerX + c * (w + gap), y: innerY + r * (h + gap), w, h });
+          }
+        }
+      }
+
+      // Draw each image in its cell with object-fit: cover and rounded corners
+      cells.forEach((cell, i) => {
+        const item = collageItems[i % collageItems.length];
+        if (!item || !item.img) return;
+
+        ctx.save();
+        ctx.beginPath();
+        if (typeof (ctx as any).roundRect === "function" && radius > 0) {
+          (ctx as any).roundRect(cell.x, cell.y, cell.w, cell.h, radius);
+        } else {
+          ctx.rect(cell.x, cell.y, cell.w, cell.h);
+        }
+        ctx.clip();
+
+        const img = item.img;
+        const imgW = img.naturalWidth || 1;
+        const imgH = img.naturalHeight || 1;
+        const cellRatio = cell.w / cell.h;
+        const imgRatio = imgW / imgH;
+
+        let dw: number, dh: number, dx: number, dy: number;
+        if (imgRatio > cellRatio) {
+          dh = cell.h;
+          dw = cell.h * imgRatio;
+          dx = cell.x + (cell.w - dw) / 2;
+          dy = cell.y;
+        } else {
+          dw = cell.w;
+          dh = cell.w / imgRatio;
+          dx = cell.x;
+          dy = cell.y + (cell.h - dh) / 2;
+        }
+
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.restore();
+      });
+
+      setStatus(`Collage rendered (${collageItems.length} photos, ${cw}×${ch}px, ${ratio}). Ready to download.`, "ok");
+    }
+
+    if (colAddBtn && input) {
+      colAddBtn.addEventListener("click", () => input.click());
+    }
+    if (colClearBtn) {
+      colClearBtn.addEventListener("click", () => {
+        collageItems = [];
+        renderCollageThumbs();
+        if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        setStatus("Collage cleared. Upload new photos to begin.");
+      });
+    }
+
+    document.querySelectorAll("[data-col-color]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const color = btn.getAttribute("data-col-color") || "#ffffff";
+        if (colBgEl) colBgEl.value = color;
+        renderCollage();
+      });
+    });
+
+    if (colLayoutEl) colLayoutEl.addEventListener("change", renderCollage);
+    if (colRatioEl) colRatioEl.addEventListener("change", renderCollage);
+    if (colBgEl) colBgEl.addEventListener("input", renderCollage);
+    if (colGapEl) {
+      colGapEl.addEventListener("input", () => {
+        if (colGapVal) colGapVal.textContent = colGapEl.value;
+        renderCollage();
+      });
+    }
+    if (colRadiusEl) {
+      colRadiusEl.addEventListener("input", () => {
+        if (colRadiusVal) colRadiusVal.textContent = colRadiusEl.value;
+        renderCollage();
+      });
+    }
+
+    // 11. CIRCLE CROP
+    let circCenter = { x: 0, y: 0, r: 0 };
+    let isCircDragging = false;
+    let circDragStartX = 0, circDragStartY = 0;
+    let initialCircCenter = { x: 0, y: 0, r: 0 };
+
+    const circBgEl = document.getElementById("tw-circ-bg") as HTMLSelectElement;
+    const circCustomBgField = document.getElementById("tw-circ-custom-bg-field");
+    const circCustomBgEl = document.getElementById("tw-circ-custom-bg") as HTMLInputElement;
+    const circBorderWidthEl = document.getElementById("tw-circ-border-width") as HTMLInputElement;
+    const circBorderWidthVal = document.getElementById("tw-circ-border-width-val");
+    const circBorderColorEl = document.getElementById("tw-circ-border-color") as HTMLInputElement;
+    const circCenterBtn = document.getElementById("tw-circ-center");
+    const circMaxBtn = document.getElementById("tw-circ-max");
+
+    function initCircCenter() {
+      if (!srcImg) return;
+      const w = srcImg.naturalWidth;
+      const h = srcImg.naturalHeight;
+      const minDim = Math.min(w, h);
+      circCenter = {
+        x: Math.round(w / 2),
+        y: Math.round(h / 2),
+        r: Math.round(minDim * 0.44),
+      };
+    }
+
+    function drawCircleOverlay(showGuide = true) {
+      if (!srcImg || !canvas || !ctx) return;
+      const w = srcImg.naturalWidth;
+      const h = srcImg.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+
+      if (!circCenter.r) initCircCenter();
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(srcImg, 0, 0, w, h);
+
+      const borderWidth = Number(circBorderWidthEl?.value) || 0;
+      const borderColor = circBorderColorEl?.value || "#ef4444";
+
+      if (showGuide) {
+        ctx.save();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+        ctx.beginPath();
+        ctx.rect(0, 0, w, h);
+        ctx.arc(circCenter.x, circCenter.y, circCenter.r, 0, Math.PI * 2, true);
+        ctx.fill();
+
+        ctx.strokeStyle = borderWidth > 0 ? borderColor : "#26e0ff";
+        ctx.lineWidth = Math.max(borderWidth, Math.max(2, Math.round(w / 400)));
+        ctx.beginPath();
+        ctx.arc(circCenter.x, circCenter.y, circCenter.r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(circCenter.x - 10, circCenter.y);
+        ctx.lineTo(circCenter.x + 10, circCenter.y);
+        ctx.moveTo(circCenter.x, circCenter.y - 10);
+        ctx.lineTo(circCenter.x, circCenter.y + 10);
+        ctx.stroke();
+
+        ctx.restore();
+        setStatus(`Circle crop ready (radius: ${circCenter.r}px). Drag to reposition.`, "ok");
+      }
+    }
+
+    if (canvas && mode === "circle") {
+      canvas.addEventListener("mousedown", (e) => {
+        if (!srcImg) return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        circDragStartX = (e.clientX - rect.left) * sx;
+        circDragStartY = (e.clientY - rect.top) * sy;
+        initialCircCenter = { ...circCenter };
+        isCircDragging = true;
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isCircDragging || !canvas || !srcImg) return;
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        const curX = (e.clientX - rect.left) * sx;
+        const curY = (e.clientY - rect.top) * sy;
+        const dx = curX - circDragStartX;
+        const dy = curY - circDragStartY;
+
+        circCenter.x = Math.max(circCenter.r, Math.min(srcImg.naturalWidth - circCenter.r, Math.round(initialCircCenter.x + dx)));
+        circCenter.y = Math.max(circCenter.r, Math.min(srcImg.naturalHeight - circCenter.r, Math.round(initialCircCenter.y + dy)));
+        drawCircleOverlay(true);
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (isCircDragging) {
+          isCircDragging = false;
+          drawCircleOverlay(true);
+        }
+      });
+    }
+
+    if (circBgEl) {
+      circBgEl.addEventListener("change", () => {
+        if (circCustomBgField) {
+          circCustomBgField.style.display = circBgEl.value === "custom" ? "block" : "none";
+        }
+        drawCircleOverlay(true);
+      });
+    }
+    if (circCustomBgEl) circCustomBgEl.addEventListener("input", () => drawCircleOverlay(true));
+    if (circBorderWidthEl) {
+      circBorderWidthEl.addEventListener("input", () => {
+        if (circBorderWidthVal) circBorderWidthVal.textContent = circBorderWidthEl.value;
+        drawCircleOverlay(true);
+      });
+    }
+    if (circBorderColorEl) circBorderColorEl.addEventListener("input", () => drawCircleOverlay(true));
+
+    document.querySelectorAll("[data-circ-color]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const color = btn.getAttribute("data-circ-color") || "#ef4444";
+        if (circBorderColorEl) circBorderColorEl.value = color;
+        if (circBorderWidthEl && Number(circBorderWidthEl.value) === 0) {
+          circBorderWidthEl.value = "6";
+          if (circBorderWidthVal) circBorderWidthVal.textContent = "6";
+        }
+        drawCircleOverlay(true);
+      });
+    });
+
+    if (circCenterBtn) {
+      circCenterBtn.addEventListener("click", () => {
+        initCircCenter();
+        drawCircleOverlay(true);
+      });
+    }
+    if (circMaxBtn) {
+      circMaxBtn.addEventListener("click", () => {
+        if (!srcImg) return;
+        const minDim = Math.min(srcImg.naturalWidth, srcImg.naturalHeight);
+        circCenter = {
+          x: Math.round(srcImg.naturalWidth / 2),
+          y: Math.round(srcImg.naturalHeight / 2),
+          r: Math.round(minDim / 2),
+        };
+        drawCircleOverlay(true);
+      });
+    }
+
+    // 7. HTML TO IMAGE & BASE64 STUDIO
+    const htmlTemplates: Record<string, string> = {
+      card: `<div style="padding: 32px; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #ffffff; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); font-family: system-ui, -apple-system, sans-serif; max-width: 500px; box-sizing: border-box;">
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #06b6d4, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 24px;">⚡</div>
+    <div>
+      <h3 style="margin: 0; font-size: 19px; font-weight: 700; color: #f8fafc;">ImageAll In-Browser Studio</h3>
+      <p style="margin: 2px 0 0; font-size: 13px; color: #94a3b8;">High-Performance Client-Side Rendering</p>
+    </div>
+  </div>
+  <p style="font-size: 15px; line-height: 1.6; color: #cbd5e1; margin: 0 0 20px;">
+    Convert web elements, raw HTML snippets, or complex CSS styling directly into crisp PNG, JPG &amp; PDF graphics with zero server uploads!
+  </p>
+  <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
+    <span style="display: inline-block; padding: 4px 12px; background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3); border-radius: 9999px; font-size: 12px; font-weight: 600;">100% Private On-Device</span>
+    <span style="font-size: 13px; color: #94a3b8;">Retina 2x Crisp</span>
+  </div>
+</div>`,
+
+      code: `<div style="padding: 24px; background: #1e1e1e; color: #d4d4d4; border-radius: 12px; font-family: Consolas, Monaco, monospace; font-size: 14px; box-shadow: 0 20px 30px rgba(0,0,0,0.5); max-width: 500px; border: 1px solid #333333; box-sizing: border-box;">
+  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+    <span style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f56; display: inline-block;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; display: inline-block;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 50%; background: #27c93f; display: inline-block;"></span>
+  </div>
+  <pre style="margin: 0; line-height: 1.6;"><span style="color: #569cd6;">import</span> { <span style="color: #9cdcfe;">htmlToImage</span> } <span style="color: #569cd6;">from</span> <span style="color: #ce9178;">'imageall'</span>;
+
+<span style="color: #569cd6;">const</span> <span style="color: #9cdcfe;">pngBlob</span> = <span style="color: #569cd6;">await</span> <span style="color: #dcdcaa;">htmlToImage</span>(code, {
+  <span style="color: #9cdcfe;">format</span>: <span style="color: #ce9178;">'png'</span>,
+  <span style="color: #9cdcfe;">scale</span>: <span style="color: #b5cea8;">2</span>, <span style="color: #6a9955;">// Crisp 2x Retina</span>
+  <span style="color: #9cdcfe;">transparent</span>: <span style="color: #569cd6;">true</span>
+});
+<span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">'Export Complete 🚀'</span>);</pre>
+</div>`,
+
+      quote: `<div style="padding: 36px; background: #ffffff; color: #1e293b; border-radius: 16px; border-left: 6px solid #8b5cf6; box-shadow: 0 15px 30px rgba(0,0,0,0.08); font-family: system-ui, sans-serif; max-width: 500px; box-sizing: border-box;">
+  <div style="font-size: 36px; color: #8b5cf6; line-height: 1; margin-bottom: 12px; font-weight: bold;">“</div>
+  <p style="font-size: 17px; font-style: italic; color: #334155; margin: 0 0 20px; line-height: 1.6;">
+    The fastest way to render live HTML components, Base64 strings, and dynamic styles into shareable graphics without complex cloud containers.
+  </p>
+  <div style="font-weight: 700; font-size: 15px; color: #0f172a;">Elena Rostova</div>
+  <div style="font-size: 13px; color: #64748b;">Principal Frontend Engineer</div>
+</div>`,
+
+      pricing: `<div style="padding: 30px; background: linear-gradient(135deg, #18181b 0%, #27272a 100%); color: #fafafa; border-radius: 16px; border: 1px solid #3f3f46; text-align: center; font-family: system-ui, sans-serif; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4); box-sizing: border-box;">
+  <span style="background: #3b82f6; color: white; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.05em;">Pro Lifetime</span>
+  <div style="font-size: 44px; font-weight: 800; margin: 16px 0 6px; color: white;">$0 <span style="font-size: 15px; font-weight: 400; color: #a1a1aa;">/ forever</span></div>
+  <p style="font-size: 13px; color: #a1a1aa; margin: 0 0 20px; line-height: 1.5;">Unlimited HTML to PNG/JPG conversions, Base64 encoding &amp; decoding directly on-device.</p>
+  <div style="background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: #04141a; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 14px;">Instant Free Access</div>
+</div>`,
+
+      receipt: `<div style="padding: 28px; background: #fafafa; color: #18181b; border-radius: 12px; border: 1px solid #e4e4e7; font-family: monospace; font-size: 13px; max-width: 420px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); box-sizing: border-box;">
+  <div style="text-align: center; margin-bottom: 16px; border-bottom: 1px dashed #a1a1aa; padding-bottom: 12px;">
+    <h4 style="margin: 0 0 4px; font-size: 16px; font-weight: 700;">IMAGEALL COMMERCE</h4>
+    <p style="margin: 0; color: #71717a; font-size: 11px;">Receipt #INV-2026-9041 • Paid</p>
+  </div>
+  <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <span>In-Browser Rendering Engine</span>
+    <span style="font-weight: 600;">$0.00</span>
+  </div>
+  <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <span>Client-Side Base64 Encoder</span>
+    <span style="font-weight: 600;">$0.00</span>
+  </div>
+  <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+    <span>Retina 2x Export License</span>
+    <span style="font-weight: 600;">$0.00</span>
+  </div>
+  <div style="border-top: 1px dashed #a1a1aa; padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; font-size: 14px;">
+    <span>TOTAL CHARGED</span>
+    <span style="color: #16a34a;">$0.00 FREE</span>
+  </div>
+</div>`
+    };
+
+    function cleanXHtml(html: string): string {
+      return html
+        .replace(/<img\b([^>]*[^\/])>/gi, '<img $1 />')
+        .replace(/<br\b([^>]*[^\/])>/gi, '<br $1 />')
+        .replace(/<hr\b([^>]*[^\/])>/gi, '<hr $1 />')
+        .replace(/<input\b([^>]*[^\/])>/gi, '<input $1 />')
+        .replace(/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[a-f\d]+);)/gi, '&amp;');
+    }
+
+    function measureHtmlHeight(html: string, width: number): number {
+      const m = document.createElement("div");
+      m.style.cssText = `position: absolute; left: -9999px; top: 0; width: ${width}px; visibility: hidden; pointer-events: none; box-sizing: border-box;`;
+      m.innerHTML = html;
+      document.body.appendChild(m);
+      const h = Math.max(80, m.offsetHeight + 24);
+      document.body.removeChild(m);
+      return h;
+    }
+
+    let isH2iInitialized = false;
+
+    function renderHtmlSnippet() {
+      const codeEl = document.getElementById("tw-h2i-code") as HTMLTextAreaElement;
+      if (!codeEl || !canvas || !ctx) return;
+      const rawHtml = codeEl.value.trim() || htmlTemplates.card;
+      const widthInput = document.getElementById("tw-h2i-width") as HTMLInputElement;
+      const heightInput = document.getElementById("tw-h2i-height") as HTMLInputElement;
+      const scaleSelect = document.getElementById("tw-h2i-scale") as HTMLSelectElement;
+      const bgSelect = document.getElementById("tw-h2i-bg") as HTMLSelectElement;
+
+      const w = Math.max(160, Math.min(2560, Number(widthInput?.value) || 540));
+      const userH = Number(heightInput?.value) || 0;
+      const h = userH > 0 ? userH : measureHtmlHeight(rawHtml, w);
+      const scale = Number(scaleSelect?.value) || 2;
+      const bgChoice = bgSelect?.value || "transparent";
+
+      let bgCss = "";
+      if (bgChoice === "white") bgCss = "background-color: #ffffff;";
+      else if (bgChoice === "dark") bgCss = "background-color: #0f172a;";
+      else if (bgChoice === "gradient") bgCss = "background: linear-gradient(135deg, #090d16 0%, #171c2f 50%, #1e1b4b 100%);";
+
+      const xhtml = cleanXHtml(rawHtml);
+      const svgData = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; margin:0; padding:12px; box-sizing:border-box; display:flex; align-items:center; justify-content:center; ${bgCss}">
+      ${xhtml}
+    </div>
+  </foreignObject>
+</svg>`;
+
+      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        canvas.width = w * scale;
+        canvas.height = h * scale;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.drawImage(img, 0, 0, w, h);
+        ctx.restore();
+        URL.revokeObjectURL(url);
+        if (preview) preview.style.display = "grid";
+        setStatus(`Rendered HTML: ${canvas.width}×${canvas.height}px (${scale}x scale). Ready to download.`, "ok");
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        setStatus("Could not render HTML. Please check for unclosed HTML tags or syntax errors.", "err");
+      };
+      img.src = url;
+    }
+
+    function initHtmlToImage() {
+      if (isH2iInitialized) return;
+      isH2iInitialized = true;
+
+      const codeEl = document.getElementById("tw-h2i-code") as HTMLTextAreaElement;
+      if (codeEl && !codeEl.value) {
+        codeEl.value = htmlTemplates.card;
+      }
+
+      // Presets
+      const presetMap: Record<string, string> = {
+        "tw-h2i-preset-card": "card",
+        "tw-h2i-preset-code": "code",
+        "tw-h2i-preset-quote": "quote",
+        "tw-h2i-preset-pricing": "pricing",
+        "tw-h2i-preset-receipt": "receipt",
+      };
+
+      Object.entries(presetMap).forEach(([btnId, tmplKey]) => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            if (codeEl && htmlTemplates[tmplKey]) {
+              codeEl.value = htmlTemplates[tmplKey];
+              document.querySelectorAll("#tw-h2i-pane-code .preset").forEach((b) => b.classList.remove("active"));
+              btn.classList.add("active");
+              renderHtmlSnippet();
+            }
+          });
+        }
+      });
+
+      // Tab switching
+      const tabCode = document.getElementById("tw-h2i-tab-code");
+      const tabImg2B64 = document.getElementById("tw-h2i-tab-img2b64");
+      const tabB642Img = document.getElementById("tw-h2i-tab-b642img");
+      const paneCode = document.getElementById("tw-h2i-pane-code");
+      const paneImg2B64 = document.getElementById("tw-h2i-pane-img2b64");
+      const paneB642Img = document.getElementById("tw-h2i-pane-b642img");
+
+      function switchH2iTab(target: "code" | "img2b64" | "b642img") {
+        [tabCode, tabImg2B64, tabB642Img].forEach((t) => t?.classList.remove("active"));
+        if (paneCode) paneCode.style.display = target === "code" ? "grid" : "none";
+        if (paneImg2B64) paneImg2B64.style.display = target === "img2b64" ? "grid" : "none";
+        if (paneB642Img) paneB642Img.style.display = target === "b642img" ? "grid" : "none";
+
+        if (target === "code") {
+          tabCode?.classList.add("active");
+          renderHtmlSnippet();
+        } else if (target === "img2b64") {
+          tabImg2B64?.classList.add("active");
+          setStatus("Drop or upload an image to convert to Base64 Data URI & HTML code.", "ok");
+        } else {
+          tabB642Img?.classList.add("active");
+          setStatus("Paste your Base64 Data URI below and click Decode to Image.", "ok");
+        }
+      }
+
+      tabCode?.addEventListener("click", () => switchH2iTab("code"));
+      tabImg2B64?.addEventListener("click", () => switchH2iTab("img2b64"));
+      tabB642Img?.addEventListener("click", () => switchH2iTab("b642img"));
+
+      // Trigger buttons and inputs
+      const renderBtn = document.getElementById("tw-h2i-render");
+      renderBtn?.addEventListener("click", renderHtmlSnippet);
+
+      const widthInput = document.getElementById("tw-h2i-width");
+      const heightInput = document.getElementById("tw-h2i-height");
+      const scaleSelect = document.getElementById("tw-h2i-scale");
+      const bgSelect = document.getElementById("tw-h2i-bg");
+
+      [widthInput, heightInput, scaleSelect, bgSelect].forEach((el) => {
+        el?.addEventListener("change", renderHtmlSnippet);
+      });
+
+      // Copy image to clipboard
+      const copyImgBtn = document.getElementById("tw-h2i-copy-img");
+      copyImgBtn?.addEventListener("click", () => {
+        if (!canvas) return;
+        canvas.toBlob((blob) => {
+          if (blob && navigator.clipboard && (window as any).ClipboardItem) {
+            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+              .then(() => setStatus("Rendered image copied to clipboard!", "ok"))
+              .catch(() => setStatus("Clipboard access denied. Use the Download button instead.", "err"));
+          } else {
+            setStatus("Direct clipboard copy not supported in this browser.", "err");
+          }
+        }, "image/png");
+      });
+
+      // Copy URI, HTML tag, CSS property
+      const copyUriBtn = document.getElementById("tw-b64-copy-uri");
+      copyUriBtn?.addEventListener("click", () => {
+        const out = (document.getElementById("tw-b64-output") as HTMLTextAreaElement)?.value;
+        if (out) {
+          navigator.clipboard.writeText(out).then(() => setStatus("Base64 Data URI copied to clipboard!", "ok"));
+        } else {
+          setStatus("Please upload an image first to generate Base64 data.", "err");
+        }
+      });
+
+      const copyImgTagBtn = document.getElementById("tw-b64-copy-imgtag");
+      copyImgTagBtn?.addEventListener("click", () => {
+        const out = (document.getElementById("tw-b64-img-tag") as HTMLTextAreaElement)?.value;
+        if (out) {
+          navigator.clipboard.writeText(out).then(() => setStatus("HTML <img> code copied to clipboard!", "ok"));
+        }
+      });
+
+      const copyCssTagBtn = document.getElementById("tw-b64-copy-csstag");
+      copyCssTagBtn?.addEventListener("click", () => {
+        const out = (document.getElementById("tw-b64-css-tag") as HTMLTextAreaElement)?.value;
+        if (out) {
+          navigator.clipboard.writeText(out).then(() => setStatus("CSS background-image copied to clipboard!", "ok"));
+        }
+      });
+
+      // Decode Base64 to Canvas
+      const decodeBtn = document.getElementById("tw-b64-decode-btn");
+      decodeBtn?.addEventListener("click", () => {
+        const inputStr = ((document.getElementById("tw-b64-input") as HTMLTextAreaElement)?.value || "").trim();
+        if (!inputStr) {
+          setStatus("Please paste a Base64 Data URI or image string first.", "err");
+          return;
+        }
+        const b64Data = inputStr.startsWith("data:") ? inputStr : "data:image/png;base64," + inputStr;
+        const img = new Image();
+        img.onload = () => {
+          if (canvas && ctx) {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            srcImg = img;
+            if (preview) preview.style.display = "grid";
+            setStatus(`Decoded Base64 image (${img.naturalWidth}×${img.naturalHeight}px). Ready to download.`, "ok");
+          }
+        };
+        img.onerror = () => {
+          setStatus("Invalid Base64 image data. Please ensure proper Data URI syntax.", "err");
+        };
+        img.src = b64Data;
+      });
+
+      // Initial render of default template
+      renderHtmlSnippet();
+    }
+
+    // 8. WHATSAPP FULL DP STUDIO
+    const dpBgEl = document.getElementById("tw-dp-bg") as HTMLSelectElement;
+    const dpCustomColorField = document.getElementById("tw-dp-custom-color-field");
+    const dpCustomColorEl = document.getElementById("tw-dp-custom-color") as HTMLInputElement;
+    const dpSizeEl = document.getElementById("tw-dp-size") as HTMLSelectElement;
+    const dpPaddingEl = document.getElementById("tw-dp-padding") as HTMLInputElement;
+    const dpPaddingVal = document.getElementById("tw-dp-padding-val");
+    const dpZoomEl = document.getElementById("tw-dp-zoom") as HTMLInputElement;
+    const dpZoomVal = document.getElementById("tw-dp-zoom-val");
+    const dpPosEl = document.getElementById("tw-dp-pos") as HTMLSelectElement;
+    const dpRadiusEl = document.getElementById("tw-dp-radius") as HTMLInputElement;
+    const dpRadiusVal = document.getElementById("tw-dp-radius-val");
+    const dpGuideCheck = document.getElementById("tw-dp-guide") as HTMLInputElement;
+
+    function renderWhatsAppDp(showCircleGuide = true) {
+      if (!canvas || !ctx) return;
+      const size = Number(dpSizeEl?.value) || 640;
+      canvas.width = size;
+      canvas.height = size;
+      ctx.clearRect(0, 0, size, size);
+
+      const bgType = dpBgEl?.value || "blur";
+      const customColor = dpCustomColorEl?.value || "#0f172a";
+      const paddingPct = Number(dpPaddingEl?.value || 8) / 100;
+      const zoom = Number(dpZoomEl?.value || 100) / 100;
+      const borderRadius = Number(dpRadiusEl?.value || 0);
+      const positionY = dpPosEl?.value || "center";
+
+      // If no image is loaded yet, but black DP is selected
+      if (!srcImg) {
+        if (bgType === "black") {
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(0, 0, size, size);
+          if (showCircleGuide && dpGuideCheck?.checked) {
+            drawWhatsAppGuide(size);
+          }
+          setStatus("Full Black WhatsApp DP generated (pure #000000). Ready to download!", "ok");
+        }
+        return;
+      }
+
+      // 1. Draw Background Margin
+      if (bgType === "blur") {
+        ctx.save();
+        ctx.filter = `blur(${Math.round(size * 0.045)}px) brightness(0.72)`;
+        const overflow = size * 0.12;
+        ctx.drawImage(srcImg, -overflow, -overflow, size + overflow * 2, size + overflow * 2);
+        ctx.restore();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+        ctx.fillRect(0, 0, size, size);
+      } else if (bgType === "black") {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, size, size);
+      } else if (bgType === "white") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, size, size);
+      } else if (bgType === "gradient") {
+        const grad = ctx.createLinearGradient(0, 0, size, size);
+        grad.addColorStop(0, "#090d16");
+        grad.addColorStop(0.5, "#171c2f");
+        grad.addColorStop(1, "#1e1b4b");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, size, size);
+      } else if (bgType === "custom") {
+        ctx.fillStyle = customColor;
+        ctx.fillRect(0, 0, size, size);
+      }
+
+      // 2. Compute inner image dimensions (Fit without crop)
+      const availW = size * (1 - paddingPct * 2) * zoom;
+      const availH = size * (1 - paddingPct * 2) * zoom;
+      const imgW = srcImg.naturalWidth;
+      const imgH = srcImg.naturalHeight;
+      const scale = Math.min(availW / imgW, availH / imgH);
+      const drawW = Math.round(imgW * scale);
+      const drawH = Math.round(imgH * scale);
+
+      const drawX = Math.round((size - drawW) / 2);
+      let drawY = Math.round((size - drawH) / 2);
+      if (positionY === "top") drawY = Math.round(size * paddingPct);
+      else if (positionY === "bottom") drawY = Math.round(size - drawH - size * paddingPct);
+
+      // 3. Draw Inner Photo
+      ctx.save();
+      if (borderRadius > 0) {
+        ctx.beginPath();
+        if ((ctx as any).roundRect) {
+          (ctx as any).roundRect(drawX, drawY, drawW, drawH, borderRadius);
+        } else {
+          ctx.rect(drawX, drawY, drawW, drawH);
+        }
+        ctx.clip();
+      }
+      ctx.drawImage(srcImg, drawX, drawY, drawW, drawH);
+      ctx.restore();
+
+      // 4. Circle safe-zone guide
+      if (showCircleGuide && dpGuideCheck?.checked) {
+        drawWhatsAppGuide(size);
+      }
+      setStatus(`WhatsApp Full DP ready (${size}×${size}px). No crop will occur!`, "ok");
+    }
+
+    function drawWhatsAppGuide(size: number) {
+      if (!ctx) return;
+      ctx.save();
+      const r = size / 2;
+      ctx.beginPath();
+      ctx.arc(r, r, r, 0, Math.PI * 2);
+      ctx.rect(size, 0, -size, size);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.42)";
+      ctx.fill();
+
+      // Green WhatsApp dashed ring
+      ctx.beginPath();
+      ctx.arc(r, r, r - 3, 0, Math.PI * 2);
+      ctx.strokeStyle = "#25D366";
+      ctx.lineWidth = 3;
+      ctx.setLineDash([8, 6]);
+      ctx.stroke();
+
+      // Label
+      ctx.fillStyle = "#25D366";
+      ctx.font = "bold 13px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("WhatsApp Circle Safe-Zone", r, 28);
+      ctx.restore();
+    }
+
+    let isDpInitialized = false;
+    function initWhatsAppDp() {
+      if (isDpInitialized) return;
+      isDpInitialized = true;
+
+      dpBgEl?.addEventListener("change", () => {
+        if (dpCustomColorField) {
+          dpCustomColorField.style.display = dpBgEl.value === "custom" ? "block" : "none";
+        }
+        renderWhatsAppDp(true);
+      });
+
+      dpCustomColorEl?.addEventListener("input", () => renderWhatsAppDp(true));
+      dpSizeEl?.addEventListener("change", () => renderWhatsAppDp(true));
+
+      dpPaddingEl?.addEventListener("input", () => {
+        if (dpPaddingVal) dpPaddingVal.textContent = dpPaddingEl.value;
+        renderWhatsAppDp(true);
+      });
+
+      dpZoomEl?.addEventListener("input", () => {
+        if (dpZoomVal) dpZoomVal.textContent = dpZoomEl.value;
+        renderWhatsAppDp(true);
+      });
+
+      dpPosEl?.addEventListener("change", () => renderWhatsAppDp(true));
+
+      dpRadiusEl?.addEventListener("input", () => {
+        if (dpRadiusVal) dpRadiusVal.textContent = dpRadiusEl.value;
+        renderWhatsAppDp(true);
+      });
+
+      dpGuideCheck?.addEventListener("change", () => renderWhatsAppDp(true));
+
+      // Presets
+      const presetBlur = document.getElementById("tw-dp-preset-blur");
+      const presetBlack = document.getElementById("tw-dp-preset-black");
+      const presetWhite = document.getElementById("tw-dp-preset-white");
+      const presetGradient = document.getElementById("tw-dp-preset-gradient");
+      const presetCircle = document.getElementById("tw-dp-preset-circle");
+
+      function setActivePreset(btn: HTMLElement | null) {
+        [presetBlur, presetBlack, presetWhite, presetGradient, presetCircle].forEach((b) => b?.classList.remove("active"));
+        btn?.classList.add("active");
+      }
+
+      presetBlur?.addEventListener("click", () => {
+        setActivePreset(presetBlur);
+        if (dpBgEl) dpBgEl.value = "blur";
+        if (dpCustomColorField) dpCustomColorField.style.display = "none";
+        if (dpPaddingEl) { dpPaddingEl.value = "8"; if (dpPaddingVal) dpPaddingVal.textContent = "8"; }
+        renderWhatsAppDp(true);
+      });
+
+      presetBlack?.addEventListener("click", () => {
+        setActivePreset(presetBlack);
+        if (dpBgEl) dpBgEl.value = "black";
+        if (dpCustomColorField) dpCustomColorField.style.display = "none";
+        if (dpPaddingEl) { dpPaddingEl.value = "10"; if (dpPaddingVal) dpPaddingVal.textContent = "10"; }
+        if (preview) preview.style.display = "grid";
+        renderWhatsAppDp(true);
+      });
+
+      presetWhite?.addEventListener("click", () => {
+        setActivePreset(presetWhite);
+        if (dpBgEl) dpBgEl.value = "white";
+        if (dpCustomColorField) dpCustomColorField.style.display = "none";
+        if (dpPaddingEl) { dpPaddingEl.value = "10"; if (dpPaddingVal) dpPaddingVal.textContent = "10"; }
+        renderWhatsAppDp(true);
+      });
+
+      presetGradient?.addEventListener("click", () => {
+        setActivePreset(presetGradient);
+        if (dpBgEl) dpBgEl.value = "gradient";
+        if (dpCustomColorField) dpCustomColorField.style.display = "none";
+        renderWhatsAppDp(true);
+      });
+
+      presetCircle?.addEventListener("click", () => {
+        setActivePreset(presetCircle);
+        if (dpPaddingEl) { dpPaddingEl.value = "16"; if (dpPaddingVal) dpPaddingVal.textContent = "16"; }
+        if (dpGuideCheck) dpGuideCheck.checked = true;
+        renderWhatsAppDp(true);
+      });
+    }
+
+    // 10. BACKGROUND REMOVER
+    let isBgRemoveInitialized = false;
+
+    function renderBgRemove(showOriginal = false) {
+      if (!srcImg || !canvas || !ctx) return;
+      const w = srcImg.naturalWidth;
+      const h = srcImg.naturalHeight;
+      canvas.width = w;
+      canvas.height = h;
+
+      if (showOriginal) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.drawImage(srcImg, 0, 0);
+        setStatus("Showing original image. Click 'Re-apply Background Removal' to cut out again.");
+        return;
+      }
+
+      // Offscreen canvas for pixel manipulation
+      const offscreen = document.createElement("canvas");
+      offscreen.width = w;
+      offscreen.height = h;
+      const oCtx = offscreen.getContext("2d", { willReadFrequently: true });
+      if (!oCtx) return;
+      oCtx.drawImage(srcImg, 0, 0);
+      const imgData = oCtx.getImageData(0, 0, w, h);
+      const data = imgData.data;
+
+      const sampleMode = (document.getElementById("tw-bg-sample") as HTMLSelectElement)?.value || "auto-corners";
+      const tolPercent = Number((document.getElementById("tw-bg-tolerance") as HTMLInputElement)?.value) || 28;
+      const feather = Number((document.getElementById("tw-bg-feather") as HTMLInputElement)?.value) || 2;
+      const bgType = (document.getElementById("tw-bg-type") as HTMLSelectElement)?.value || "transparent";
+      const customColor = (document.getElementById("tw-bg-custom-color") as HTMLInputElement)?.value || "#ffffff";
+
+      // 1. Determine sampled backdrop color
+      let bgR = 255, bgG = 255, bgB = 255;
+      if (sampleMode === "white-studio") {
+        bgR = 250; bgG = 250; bgB = 250;
+      } else if (sampleMode === "dark-studio") {
+        bgR = 15; bgG = 15; bgB = 15;
+      } else if (sampleMode === "green-screen") {
+        bgR = 0; bgG = 220; bgB = 0;
+      } else if (sampleMode === "top-left") {
+        bgR = data[0]; bgG = data[1]; bgB = data[2];
+      } else {
+        const cornerIndices = [
+          0,
+          Math.max(0, (w - 1) * 4),
+          Math.max(0, ((h - 1) * w) * 4),
+          Math.max(0, ((h - 1) * w + (w - 1)) * 4),
+          Math.max(0, Math.floor(w / 2) * 4),
+          Math.max(0, ((h - 1) * w + Math.floor(w / 2)) * 4),
+          Math.max(0, (Math.floor(h / 2) * w) * 4),
+          Math.max(0, (Math.floor(h / 2) * w + (w - 1)) * 4),
+        ];
+        let sumR = 0, sumG = 0, sumB = 0;
+        cornerIndices.forEach((idx) => {
+          sumR += data[idx] || 0;
+          sumG += data[idx + 1] || 0;
+          sumB += data[idx + 2] || 0;
+        });
+        bgR = Math.round(sumR / cornerIndices.length);
+        bgG = Math.round(sumG / cornerIndices.length);
+        bgB = Math.round(sumB / cornerIndices.length);
+      }
+
+      const thresh = (tolPercent / 100) * 441.67;
+      const totalPixels = w * h;
+      const isBg = new Uint8Array(totalPixels);
+      const queue = new Int32Array(totalPixels);
+      let qHead = 0;
+      let qTail = 0;
+
+      // Seed all border pixels
+      for (let x = 0; x < w; x++) {
+        let idx = x;
+        let d = Math.hypot(data[idx * 4] - bgR, data[idx * 4 + 1] - bgG, data[idx * 4 + 2] - bgB);
+        if (d <= thresh) { isBg[idx] = 1; queue[qTail++] = idx; }
+
+        idx = (h - 1) * w + x;
+        d = Math.hypot(data[idx * 4] - bgR, data[idx * 4 + 1] - bgG, data[idx * 4 + 2] - bgB);
+        if (d <= thresh && !isBg[idx]) { isBg[idx] = 1; queue[qTail++] = idx; }
+      }
+
+      for (let y = 1; y < h - 1; y++) {
+        let idx = y * w;
+        let d = Math.hypot(data[idx * 4] - bgR, data[idx * 4 + 1] - bgG, data[idx * 4 + 2] - bgB);
+        if (d <= thresh && !isBg[idx]) { isBg[idx] = 1; queue[qTail++] = idx; }
+
+        idx = y * w + (w - 1);
+        d = Math.hypot(data[idx * 4] - bgR, data[idx * 4 + 1] - bgG, data[idx * 4 + 2] - bgB);
+        if (d <= thresh && !isBg[idx]) { isBg[idx] = 1; queue[qTail++] = idx; }
+      }
+
+      // BFS flood fill
+      while (qHead < qTail) {
+        const cur = queue[qHead++];
+        const cx = cur % w;
+        const cy = (cur / w) | 0;
+
+        if (cy > 0) {
+          const n = cur - w;
+          if (!isBg[n]) {
+            const nd = Math.hypot(data[n * 4] - bgR, data[n * 4 + 1] - bgG, data[n * 4 + 2] - bgB);
+            if (nd <= thresh) { isBg[n] = 1; queue[qTail++] = n; }
+          }
+        }
+        if (cy < h - 1) {
+          const n = cur + w;
+          if (!isBg[n]) {
+            const nd = Math.hypot(data[n * 4] - bgR, data[n * 4 + 1] - bgG, data[n * 4 + 2] - bgB);
+            if (nd <= thresh) { isBg[n] = 1; queue[qTail++] = n; }
+          }
+        }
+        if (cx > 0) {
+          const n = cur - 1;
+          if (!isBg[n]) {
+            const nd = Math.hypot(data[n * 4] - bgR, data[n * 4 + 1] - bgG, data[n * 4 + 2] - bgB);
+            if (nd <= thresh) { isBg[n] = 1; queue[qTail++] = n; }
+          }
+        }
+        if (cx < w - 1) {
+          const n = cur + 1;
+          if (!isBg[n]) {
+            const nd = Math.hypot(data[n * 4] - bgR, data[n * 4 + 1] - bgG, data[n * 4 + 2] - bgB);
+            if (nd <= thresh) { isBg[n] = 1; queue[qTail++] = n; }
+          }
+        }
+      }
+
+      // Erase background pixels
+      for (let i = 0; i < totalPixels; i++) {
+        if (isBg[i]) {
+          data[i * 4 + 3] = 0;
+        }
+      }
+
+      // Edge feathering
+      if (feather > 0) {
+        for (let i = 0; i < totalPixels; i++) {
+          if (!isBg[i]) {
+            const cx = i % w;
+            const cy = (i / w) | 0;
+            let nearBg = false;
+            for (let dy = -feather; dy <= feather && !nearBg; dy++) {
+              const ny = cy + dy;
+              if (ny < 0 || ny >= h) continue;
+              for (let dx = -feather; dx <= feather && !nearBg; dx++) {
+                const nx = cx + dx;
+                if (nx < 0 || nx >= w) continue;
+                if (isBg[ny * w + nx]) nearBg = true;
+              }
+            }
+            if (nearBg) {
+              const d = Math.hypot(data[i * 4] - bgR, data[i * 4 + 1] - bgG, data[i * 4 + 2] - bgB);
+              const factor = Math.max(0, Math.min(1, d / (thresh || 1)));
+              data[i * 4 + 3] = Math.round(data[i * 4 + 3] * factor);
+            }
+          }
+        }
+      }
+
+      oCtx.putImageData(imgData, 0, 0);
+
+      // Render replacement backdrop to display canvas
+      ctx.clearRect(0, 0, w, h);
+      if (bgType === "white") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+      } else if (bgType === "passport-blue") {
+        ctx.fillStyle = "#3b82f6";
+        ctx.fillRect(0, 0, w, h);
+      } else if (bgType === "custom") {
+        ctx.fillStyle = customColor;
+        ctx.fillRect(0, 0, w, h);
+      } else if (bgType === "blur") {
+        ctx.save();
+        ctx.filter = "blur(18px)";
+        ctx.drawImage(srcImg, -20, -20, w + 40, h + 40);
+        ctx.restore();
+      }
+      ctx.drawImage(offscreen, 0, 0);
+
+      const typeDesc = bgType === "transparent" ? "transparent PNG" : bgType === "white" ? "pure white backdrop" : bgType === "passport-blue" ? "passport blue" : bgType === "blur" ? "portrait bokeh blur" : "custom color";
+      setStatus(`Background removed (${w}×${h}px, ${typeDesc}). Ready to download!`, "ok");
+    }
+
+    function initBgRemove() {
+      if (isBgRemoveInitialized) return;
+      isBgRemoveInitialized = true;
+
+      const bgTypeEl = document.getElementById("tw-bg-type") as HTMLSelectElement;
+      const customField = document.getElementById("tw-bg-custom-field");
+      const customColorEl = document.getElementById("tw-bg-custom-color");
+      const sampleEl = document.getElementById("tw-bg-sample");
+      const tolEl = document.getElementById("tw-bg-tolerance") as HTMLInputElement;
+      const tolVal = document.getElementById("tw-bg-tol-val");
+      const featherEl = document.getElementById("tw-bg-feather") as HTMLInputElement;
+      const featherVal = document.getElementById("tw-bg-feather-val");
+      const reprocessBtn = document.getElementById("tw-bg-run");
+      const restoreBtn = document.getElementById("tw-bg-restore");
+
+      const pTrans = document.getElementById("tw-bg-preset-trans");
+      const pWhite = document.getElementById("tw-bg-preset-white");
+      const pBlue = document.getElementById("tw-bg-preset-blue");
+      const pRed = document.getElementById("tw-bg-preset-red");
+      const pDark = document.getElementById("tw-bg-preset-dark");
+      const pBlur = document.getElementById("tw-bg-preset-blur");
+
+      function setActivePreset(btn: HTMLElement | null) {
+        document.querySelectorAll("#tw-bg-preset-trans, #tw-bg-preset-white, #tw-bg-preset-blue, #tw-bg-preset-red, #tw-bg-preset-dark, #tw-bg-preset-blur").forEach((b) => b.classList.remove("active"));
+        btn?.classList.add("active");
+      }
+
+      pTrans?.addEventListener("click", () => {
+        setActivePreset(pTrans);
+        if (bgTypeEl) bgTypeEl.value = "transparent";
+        if (customField) customField.style.display = "none";
+        renderBgRemove();
+      });
+
+      pWhite?.addEventListener("click", () => {
+        setActivePreset(pWhite);
+        if (bgTypeEl) bgTypeEl.value = "white";
+        if (customField) customField.style.display = "none";
+        renderBgRemove();
+      });
+
+      pBlue?.addEventListener("click", () => {
+        setActivePreset(pBlue);
+        if (bgTypeEl) bgTypeEl.value = "passport-blue";
+        if (customField) customField.style.display = "none";
+        renderBgRemove();
+      });
+
+      pRed?.addEventListener("click", () => {
+        setActivePreset(pRed);
+        if (bgTypeEl) bgTypeEl.value = "custom";
+        if (customColorEl) customColorEl.value = "#ef4444";
+        if (customField) customField.style.display = "block";
+        renderBgRemove();
+      });
+
+      pDark?.addEventListener("click", () => {
+        setActivePreset(pDark);
+        if (bgTypeEl) bgTypeEl.value = "custom";
+        if (customColorEl) customColorEl.value = "#0f172a";
+        if (customField) customField.style.display = "block";
+        renderBgRemove();
+      });
+
+      pBlur?.addEventListener("click", () => {
+        setActivePreset(pBlur);
+        if (bgTypeEl) bgTypeEl.value = "blur";
+        if (customField) customField.style.display = "none";
+        renderBgRemove();
+      });
+
+      bgTypeEl?.addEventListener("change", () => {
+        if (customField) customField.style.display = bgTypeEl.value === "custom" ? "block" : "none";
+        renderBgRemove();
+      });
+
+      customColorEl?.addEventListener("input", () => renderBgRemove());
+      sampleEl?.addEventListener("change", () => renderBgRemove());
+
+      tolEl?.addEventListener("input", () => {
+        if (tolVal) tolVal.textContent = tolEl.value;
+        renderBgRemove();
+      });
+
+      featherEl?.addEventListener("input", () => {
+        if (featherVal) featherVal.textContent = featherEl.value;
+        renderBgRemove();
+      });
+
+      reprocessBtn?.addEventListener("click", () => renderBgRemove(false));
+      restoreBtn?.addEventListener("click", () => renderBgRemove(true));
+    }
+
     // Setup initial mode triggers
     function setupInitialMode() {
       if (mode === "compress") {
@@ -850,20 +3467,42 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         if (defaultW && defaultH) {
           if (resW) resW.value = String(defaultW);
           if (resH) resH.value = String(defaultH);
-          if (resApply) resApply.click();
         } else if (srcImg) {
           if (resW) resW.value = String(srcImg.naturalWidth);
           if (resH) resH.value = String(srcImg.naturalHeight);
         }
-        setStatus(`Loaded at ${srcImg?.naturalWidth}×${srcImg?.naturalHeight}px.`, "ok");
+        renderResize();
       } else if (mode === "crop") {
-        drawCropOverlay();
+        if (!cropBox) {
+          setCenterCrop("free");
+        } else {
+          drawCropOverlay();
+        }
+      } else if (mode === "circle") {
+        initCircCenter();
+        drawCircleOverlay(true);
       } else if (mode === "rotate") {
+        if (ws?.getAttribute("data-tool-slug")?.includes("flip")) {
+          flipH = true;
+        }
         renderRotate();
       } else if (mode === "watermark") {
         renderWatermark();
       } else if (mode === "palette") {
         renderPalette();
+      } else if (mode === "blur") {
+        renderBlur(true);
+      } else if (mode === "collage") {
+        renderCollage();
+        renderCollageThumbs();
+      } else if (mode === "html-to-image") {
+        initHtmlToImage();
+      } else if (mode === "whatsapp-dp") {
+        initWhatsAppDp();
+        renderWhatsAppDp(true);
+      } else if (mode === "bg-remove") {
+        initBgRemove();
+        renderBgRemove();
       } else {
         setStatus("Image loaded. Adjust settings and download your processed image.", "ok");
       }
@@ -880,10 +3519,31 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           try {
             const pageSize = (document.getElementById("tw-pdf-size") as HTMLSelectElement)?.value || "a4";
             const orientation = (document.getElementById("tw-pdf-orientation") as HTMLSelectElement)?.value || "portrait";
+            const qualityMode = (document.getElementById("tw-pdf-quality") as HTMLSelectElement)?.value || "balanced";
             let doc: any = null;
 
+            let qualityVal = 0.8;
+            let maxDim = 1800;
+            if (qualityMode === "300kb") {
+              const count = Math.max(1, pdfItems.length);
+              qualityVal = count === 1 ? 0.65 : count <= 3 ? 0.5 : 0.35;
+              maxDim = 1200;
+            } else if (qualityMode === "small") {
+              qualityVal = 0.5;
+              maxDim = 1000;
+            } else if (qualityMode === "high") {
+              qualityVal = 0.95;
+              maxDim = 2600;
+            }
+
             pdfItems.forEach((it, i) => {
-              const w = it.img.naturalWidth, h = it.img.naturalHeight;
+              let w = it.img.naturalWidth, h = it.img.naturalHeight;
+              if (w > maxDim || h > maxDim) {
+                const s = Math.min(maxDim / w, maxDim / h);
+                w = Math.max(1, Math.round(w * s));
+                h = Math.max(1, Math.round(h * s));
+              }
+
               const opts = pageSize === "fit"
                 ? { orientation: w >= h ? "landscape" : "portrait", unit: "px", format: [w, h] }
                 : { orientation, unit: "pt", format: pageSize };
@@ -898,16 +3558,190 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
               const c = document.createElement("canvas");
               c.width = w; c.height = h;
-              c.getContext("2d")?.drawImage(it.img, 0, 0);
-              doc.addImage(c.toDataURL("image/jpeg", 0.85), "JPEG", x, y, dw, dh, undefined, "FAST");
+              c.getContext("2d")?.drawImage(it.img, 0, 0, w, h);
+              doc.addImage(c.toDataURL("image/jpeg", qualityVal), "JPEG", x, y, dw, dh, undefined, "FAST");
             });
 
             const blob = doc.output("blob");
             downloadBlob(blob, "document.pdf");
-            setStatus(`PDF generated (${fmtBytes(blob.size)}) with ${pdfItems.length} pages.`, "ok");
+            setStatus(`PDF generated (${fmtBytes(blob.size)}) with ${pdfItems.length} page(s). Ready to download.`, "ok");
           } catch (e: any) {
             setStatus("Could not generate PDF: " + e?.message, "err");
           }
+          return;
+        }
+
+        if (mode === "html-to-image") {
+          if (!canvas || canvas.width === 0 || canvas.height === 0) {
+            setStatus("Please render an HTML snippet or decode an image first.", "err");
+            return;
+          }
+          const fmtSelect = (document.getElementById("tw-h2i-fmt") as HTMLSelectElement)?.value || "image/png";
+          if (fmtSelect === "application/pdf") {
+            const jspdf = (window as any).jspdf;
+            if (!jspdf) { setStatus("PDF generator library unavailable.", "err"); return; }
+            try {
+              const doc = new jspdf.jsPDF({
+                orientation: canvas.width >= canvas.height ? "landscape" : "portrait",
+                unit: "px",
+                format: [canvas.width, canvas.height]
+              });
+              doc.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, canvas.width, canvas.height, undefined, "FAST");
+              const blob = doc.output("blob");
+              downloadBlob(blob, "html-render.pdf");
+              setStatus(`Downloaded PDF document (${fmtBytes(blob.size)}).`, "ok");
+            } catch (err: any) {
+              setStatus("Could not generate PDF: " + err?.message, "err");
+            }
+            return;
+          }
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = fmtSelect === "image/jpeg" ? "jpg" : fmtSelect === "image/webp" ? "webp" : "png";
+              downloadBlob(blob, `html-render.${ext}`);
+              setStatus(`Downloaded ${ext.toUpperCase()} image (${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, fmtSelect, 0.95);
+          return;
+        }
+
+        if (mode === "whatsapp-dp") {
+          const bgType = (document.getElementById("tw-dp-bg") as HTMLSelectElement)?.value;
+          if (!srcImg && bgType !== "black") {
+            setStatus("Please upload a photo first or select Full Black DP.", "err");
+            return;
+          }
+          renderWhatsAppDp(false); // Clean export without circle guide
+          const cvtFmt = defaultFmt || "image/jpeg";
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = cvtFmt === "image/png" ? "png" : "jpg";
+              const prefix = bgType === "black" && !srcImg ? "full-black-whatsapp-dp" : "whatsapp-full-dp";
+              downloadBlob(blob, `${prefix}.${ext}`);
+              setStatus(`Downloaded WhatsApp Full DP (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}). No crop!`, "ok");
+              renderWhatsAppDp(true); // Restore guide after capture
+            }
+          }, cvtFmt, 0.95);
+          return;
+        }
+
+        if (mode === "palette") {
+          if (!currentPaletteColors.length) {
+            renderPalette();
+          }
+          if (!currentPaletteColors.length) {
+            setStatus("No color palette available to export.", "err");
+            return;
+          }
+
+          const outW = 1200;
+          const outH = 630;
+          const out = document.createElement("canvas");
+          out.width = outW;
+          out.height = outH;
+          const octx = out.getContext("2d");
+          if (!octx) return;
+
+          const bgGrad = octx.createLinearGradient(0, 0, outW, outH);
+          bgGrad.addColorStop(0, "#0c0d12");
+          bgGrad.addColorStop(1, "#181a24");
+          octx.fillStyle = bgGrad;
+          octx.fillRect(0, 0, outW, outH);
+
+          octx.fillStyle = "#ffffff";
+          octx.font = "bold 28px system-ui, -apple-system, sans-serif";
+          octx.fillText("COLOR PALETTE & SEASONAL ANALYSIS", 50, 60);
+
+          const seasonText = palSeasonTitle?.textContent?.replace("Color Season Analysis: ", "") || "Warm Autumn";
+          octx.fillStyle = "#26e0ff";
+          octx.font = "600 18px system-ui, -apple-system, sans-serif";
+          octx.fillText(`Archetype: ${seasonText} • Client-Side Extract`, 50, 92);
+
+          const hasImage = srcImg && canvas && canvas.width > 0;
+          if (hasImage) {
+            const imgBoxX = 50, imgBoxY = 130, imgBoxW = 440, imgBoxH = 430;
+            octx.save();
+            octx.beginPath();
+            octx.roundRect(imgBoxX, imgBoxY, imgBoxW, imgBoxH, 16);
+            octx.clip();
+            const imgRatio = srcImg.naturalWidth / srcImg.naturalHeight;
+            const boxRatio = imgBoxW / imgBoxH;
+            let sx = 0, sy = 0, sw = srcImg.naturalWidth, sh = srcImg.naturalHeight;
+            if (imgRatio > boxRatio) {
+              sw = sh * boxRatio;
+              sx = (srcImg.naturalWidth - sw) / 2;
+            } else {
+              sh = sw / boxRatio;
+              sy = (srcImg.naturalHeight - sh) / 2;
+            }
+            octx.drawImage(srcImg, sx, sy, sw, sh, imgBoxX, imgBoxY, imgBoxW, imgBoxH);
+            octx.restore();
+
+            octx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+            octx.lineWidth = 2;
+            octx.beginPath();
+            octx.roundRect(imgBoxX, imgBoxY, imgBoxW, imgBoxH, 16);
+            octx.stroke();
+
+            const swatchStartX = 520;
+            const swatchTotalW = outW - swatchStartX - 50;
+            const numSwatches = currentPaletteColors.length;
+            const barH = Math.floor((imgBoxH - (numSwatches - 1) * 12) / numSwatches);
+
+            currentPaletteColors.forEach((c, i) => {
+              const sy = imgBoxY + i * (barH + 12);
+              const hex = rgbToHex(c[0], c[1], c[2]);
+              const rgbStr = `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+
+              octx.fillStyle = hex;
+              octx.beginPath();
+              octx.roundRect(swatchStartX, sy, swatchTotalW, barH, 10);
+              octx.fill();
+
+              const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2];
+              octx.fillStyle = lum > 140 ? "#0c0d12" : "#ffffff";
+              octx.font = "bold 18px monospace";
+              octx.fillText(hex.toUpperCase(), swatchStartX + 20, sy + barH / 2 + 6);
+
+              octx.font = "500 13px system-ui, sans-serif";
+              octx.fillText(rgbStr, swatchStartX + 140, sy + barH / 2 + 5);
+            });
+          } else {
+            const numSwatches = currentPaletteColors.length;
+            const cardW = Math.floor((outW - 100 - (numSwatches - 1) * 14) / numSwatches);
+            const cardH = 430;
+            const startY = 130;
+
+            currentPaletteColors.forEach((c, i) => {
+              const cx = 50 + i * (cardW + 14);
+              const hex = rgbToHex(c[0], c[1], c[2]);
+              const rgbStr = `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+
+              octx.fillStyle = hex;
+              octx.beginPath();
+              octx.roundRect(cx, startY, cardW, cardH, 12);
+              octx.fill();
+
+              const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2];
+              octx.fillStyle = lum > 140 ? "rgba(0,0,0,0.85)" : "rgba(255,255,255,0.95)";
+              octx.font = "bold 16px monospace";
+              octx.fillText(hex.toUpperCase(), cx + 12, startY + cardH - 34);
+              octx.font = "500 11px system-ui, sans-serif";
+              octx.fillText(rgbStr, cx + 12, startY + cardH - 14);
+            });
+          }
+
+          octx.fillStyle = "#64748b";
+          octx.font = "12px system-ui, -apple-system, sans-serif";
+          octx.fillText("Generated with ImageAllTools Color Palette Studio • https://imagealltools.com/color-palette", 50, 600);
+
+          out.toBlob((blob) => {
+            if (blob) {
+              downloadBlob(blob, "color-palette-swatch-card.png");
+              setStatus(`Downloaded Color Palette Presentation Card (${outW}×${outH}px, ${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, "image/png", 0.95);
           return;
         }
 
@@ -916,19 +3750,173 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           return;
         }
 
-        if (mode === "crop" && cropBox && cropBox.w > 2 && cropBox.h > 2 && srcImg) {
+        if (mode === "crop" && cropBox && Math.abs(cropBox.w) > 2 && Math.abs(cropBox.h) > 2 && srcImg) {
+          const bx = Math.min(cropBox.x, cropBox.x + cropBox.w);
+          const by = Math.min(cropBox.y, cropBox.y + cropBox.h);
+          const bw = Math.round(Math.abs(cropBox.w));
+          const bh = Math.round(Math.abs(cropBox.h));
+
           const out = document.createElement("canvas");
-          out.width = Math.round(cropBox.w);
-          out.height = Math.round(cropBox.h);
-          out.getContext("2d")?.drawImage(srcImg, cropBox.x, cropBox.y, cropBox.w, cropBox.h, 0, 0, out.width, out.height);
+          out.width = bw;
+          out.height = bh;
+          const outCtx = out.getContext("2d");
+          if (!outCtx) return;
+
+          const chosenFmt = cropFmtEl?.value || "png";
+          const isCircle = cropShape === "circle";
+
+          if (isCircle) {
+            outCtx.save();
+            outCtx.beginPath();
+            outCtx.ellipse(bw / 2, bh / 2, bw / 2, bh / 2, 0, 0, Math.PI * 2);
+            outCtx.clip();
+            outCtx.drawImage(srcImg, bx, by, bw, bh, 0, 0, bw, bh);
+            outCtx.restore();
+          } else {
+            outCtx.drawImage(srcImg, bx, by, bw, bh, 0, 0, bw, bh);
+          }
+
+          let mime = "image/png";
+          let ext = "png";
+          if (!isCircle) {
+            if (chosenFmt === "jpg") { mime = "image/jpeg"; ext = "jpg"; }
+            else if (chosenFmt === "webp") { mime = "image/webp"; ext = "webp"; }
+          } else if (chosenFmt === "webp") {
+            mime = "image/webp";
+            ext = "webp";
+          }
+
           out.toBlob((blob) => {
-            if (blob) downloadBlob(blob, "cropped.png");
-          }, "image/png");
+            if (blob) {
+              const filename = isCircle ? `circle-avatar.${ext}` : `cropped-image.${ext}`;
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${isCircle ? "circle avatar" : "cropped image"} (${bw}×${bh}px, ${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, mime, 0.95);
+          return;
+        }
+
+        if (mode === "bg-remove" && canvas && srcImg) {
+          const bgType = (document.getElementById("tw-bg-type") as HTMLSelectElement)?.value || "transparent";
+          const fmtSelect = (document.getElementById("tw-bg-fmt") as HTMLSelectElement)?.value || (bgType === "transparent" ? "image/png" : "image/jpeg");
+          const ext = fmtSelect === "image/jpeg" ? "jpg" : fmtSelect === "image/webp" ? "webp" : "png";
+          const prefix = bgType === "transparent" ? "transparent-cutout" : bgType === "white" ? "white-background-product" : bgType === "passport-blue" ? "passport-photo" : "background-removed";
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              downloadBlob(blob, `${prefix}.${ext}`);
+              setStatus(`Downloaded ${prefix}.${ext} (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, fmtSelect, 0.95);
+          return;
+        }
+
+        if (mode === "circle" && srcImg && circCenter.r > 2) {
+          const r = circCenter.r;
+          const diam = Math.round(r * 2);
+          const out = document.createElement("canvas");
+          out.width = diam;
+          out.height = diam;
+          const octx = out.getContext("2d");
+          if (octx) {
+            const bgChoice = circBgEl?.value || "transparent";
+            const customBg = circCustomBgEl?.value || "#ffffff";
+            const borderWidth = Number(circBorderWidthEl?.value) || 0;
+            const borderColor = circBorderColorEl?.value || "#ef4444";
+
+            if (bgChoice === "custom") {
+              octx.fillStyle = customBg;
+              octx.fillRect(0, 0, diam, diam);
+            } else if (bgChoice !== "transparent") {
+              octx.fillStyle = bgChoice;
+              octx.fillRect(0, 0, diam, diam);
+            }
+
+            octx.save();
+            octx.beginPath();
+            const drawR = Math.max(1, r - (borderWidth > 0 ? borderWidth / 2 : 0));
+            octx.arc(r, r, drawR, 0, Math.PI * 2);
+            octx.clip();
+
+            const sx = circCenter.x - r;
+            const sy = circCenter.y - r;
+            octx.drawImage(srcImg, sx, sy, diam, diam, 0, 0, diam, diam);
+            octx.restore();
+
+            if (borderWidth > 0) {
+              octx.save();
+              octx.strokeStyle = borderColor;
+              octx.lineWidth = borderWidth;
+              octx.beginPath();
+              octx.arc(r, r, drawR, 0, Math.PI * 2);
+              octx.stroke();
+              octx.restore();
+            }
+
+            out.toBlob((blob) => {
+              if (blob) {
+                downloadBlob(blob, "circle-cropped.png");
+                setStatus(`Downloaded circular image (${fmtBytes(blob.size)}).`, "ok");
+              }
+            }, "image/png");
+          }
+          return;
+        }
+
+        if (mode === "blur" && canvas && srcImg) {
+          renderBlur(false); // Render clean image without dashed guide box
+          const cvtFmt = defaultFmt || "image/png";
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
+              downloadBlob(blob, `blurred-photo.${ext}`);
+              setStatus(`Downloaded ${fmtBytes(blob.size)}.`, "ok");
+              renderBlur(true); // Restore guide after capture
+            }
+          }, cvtFmt, 0.95);
+          return;
+        }
+
+        if (mode === "collage" && canvas) {
+          canvas.toBlob((blob) => {
+            if (blob) {
+              downloadBlob(blob, "photo-collage.png");
+              setStatus(`Downloaded photo collage (${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, "image/png", 0.95);
+          return;
+        }
+
+        if (mode === "rotate" && canvas && srcImg) {
+          const cvtFmt = defaultFmt || "image/png";
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
+              const prefix = ws?.getAttribute("data-tool-slug")?.includes("flip") ? "flipped-image" : "rotated-image";
+              downloadBlob(blob, `${prefix}.${ext}`);
+              setStatus(`Downloaded ${prefix} (${fmtBytes(blob.size)}).`, "ok");
+            }
+          }, cvtFmt, 0.95);
           return;
         }
 
         if (lastBlob) {
           downloadBlob(lastBlob, "processed-image");
+          return;
+        }
+
+        if (mode === "resize" && canvas && srcImg) {
+          const cvtFmt = defaultFmt || "image/jpeg";
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const ext = cvtFmt === "image/png" ? "png" : "jpg";
+              const isIG = ws?.getAttribute("data-tool-slug")?.includes("instagram");
+              const isFB = ws?.getAttribute("data-tool-slug")?.includes("facebook");
+              const prefix = isIG ? `instagram-post-${canvas.width}x${canvas.height}` : isFB ? `facebook-${canvas.width}x${canvas.height}` : `resized-${canvas.width}x${canvas.height}`;
+              downloadBlob(blob, `${prefix}.${ext}`);
+              setStatus(`Downloaded ${prefix}.${ext} (${fmtBytes(blob.size)}). Ready to publish!`, "ok");
+            }
+          }, cvtFmt, 0.92);
           return;
         }
 
@@ -952,12 +3940,44 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         srcImg = null;
         lastBlob = null;
         cropBox = null;
+        circCenter = { x: 0, y: 0, r: 0 };
+        rotation = 0;
+        flipH = false;
+        flipV = false;
         pdfItems = [];
+        collageItems = [];
         if (input) input.value = "";
         if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (preview) preview.style.display = "none";
-        setStatus("Workspace reset. Upload an image to begin.");
+        if (mode === "html-to-image") {
+          initHtmlToImage();
+        } else if (mode === "whatsapp-dp") {
+          initWhatsAppDp();
+          if (preview) preview.style.display = "none";
+          setStatus("Workspace reset. Upload a photo or click Full Black DP.");
+        } else if (mode === "bg-remove") {
+          initBgRemove();
+          if (preview) preview.style.display = "none";
+          setStatus("Workspace reset. Upload an image to remove background.");
+        } else if (mode === "palette") {
+          currentPaletteColors = [];
+          renderPalette(false);
+          if (preview) preview.style.display = "none";
+          setStatus("Workspace reset. Upload an image to extract colors.");
+        } else {
+          if (preview) preview.style.display = "none";
+          setStatus("Workspace reset. Upload an image to begin.");
+        }
       });
+    }
+
+    if (mode === "html-to-image") {
+      initHtmlToImage();
+    } else if (mode === "whatsapp-dp") {
+      initWhatsAppDp();
+    } else if (mode === "bg-remove") {
+      initBgRemove();
+    } else if (mode === "palette") {
+      renderPalette(false);
     }
   })();
 </script>

@@ -15,6 +15,7 @@ export interface Props {
   title: string;
   description: string;
   h1: string;
+  keyword?: string;
   category: string;
   engine: "client" | "server";
   engineModule?: string;
@@ -24,11 +25,11 @@ export interface Props {
   canonicalPath: string;
 }
 const {
-  slug, title, description, h1, category, engine, engineModule,
+  slug, title, description, h1, keyword, category, engine, engineModule,
   badges, faqs, relatedTools, canonicalPath,
 } = Astro.props;
 ---
-<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} keyword={keyword}>
   <WebAppSchema name={h1} description={description} url={`https://www.imagealltools.com${canonicalPath}`} />
   <div class="wrap py-10 max-w-4xl">
     <Breadcrumbs category={category} toolTitle={h1} />

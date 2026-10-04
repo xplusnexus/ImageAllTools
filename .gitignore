@@ -1,8 +1,35 @@
+# Build output & dependencies
 node_modules/
 dist/
 dist.zip
 .astro/
+
+# Environment files & secrets
 .env
 .env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System & OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Scratch & Temporary test files
+scratch/
+scratch_*.js
+*.tmp

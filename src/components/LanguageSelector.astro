@@ -1,0 +1,493 @@
+---
+interface Props {
+  variant?: "header" | "footer" | "floating";
+  idPrefix?: string;
+}
+
+const { variant = "header", idPrefix = "global" } = Astro.props;
+
+// Comprehensive 70+ World Languages covering all continents & 133+ Google Translate support
+const popularLanguages = [
+  // Top Global & European Languages
+  { code: "en", name: "English", flag: "🇺🇸", native: "English" },
+  { code: "es", name: "Spanish", flag: "🇪🇸", native: "Español" },
+  { code: "fr", name: "French", flag: "🇫🇷", native: "Français" },
+  { code: "de", name: "German", flag: "🇩🇪", native: "Deutsch" },
+  { code: "pt", name: "Portuguese", flag: "🇧🇷", native: "Português" },
+  { code: "it", name: "Italian", flag: "🇮🇹", native: "Italiano" },
+  { code: "ru", name: "Russian", flag: "🇷🇺", native: "Русский" },
+  { code: "nl", name: "Dutch", flag: "🇳🇱", native: "Nederlands" },
+  { code: "pl", name: "Polish", flag: "🇵🇱", native: "Polski" },
+  { code: "uk", name: "Ukrainian", flag: "🇺🇦", native: "Українська" },
+  { code: "el", name: "Greek", flag: "🇬🇷", native: "Ελληνικά" },
+  { code: "cs", name: "Czech", flag: "🇨🇿", native: "Čeština" },
+  { code: "sv", name: "Swedish", flag: "🇸🇪", native: "Svenska" },
+  { code: "ro", name: "Romanian", flag: "🇷🇴", native: "Română" },
+  { code: "hu", name: "Hungarian", flag: "🇭🇺", native: "Magyar" },
+  { code: "da", name: "Danish", flag: "🇩🇰", native: "Dansk" },
+  { code: "fi", name: "Finnish", flag: "🇫🇮", native: "Suomi" },
+  { code: "no", name: "Norwegian", flag: "🇳🇴", native: "Norsk" },
+  { code: "hr", name: "Croatian", flag: "🇭🇷", native: "Hrvatski" },
+  { code: "sk", name: "Slovak", flag: "🇸🇰", native: "Slovenčina" },
+  { code: "bg", name: "Bulgarian", flag: "🇧🇬", native: "Български" },
+  { code: "sr", name: "Serbian", flag: "🇷🇸", native: "Српски" },
+  { code: "lt", name: "Lithuanian", flag: "🇱🇹", native: "Lietuvių" },
+  { code: "sl", name: "Slovenian", flag: "🇸🇮", native: "Slovenščina" },
+  { code: "lv", name: "Latvian", flag: "🇱🇻", native: "Latviešu" },
+  { code: "et", name: "Estonian", flag: "🇪🇪", native: "Eesti" },
+  { code: "ga", name: "Irish", flag: "🇮🇪", native: "Gaeilge" },
+  { code: "is", name: "Icelandic", flag: "🇮🇸", native: "Íslenska" },
+  { code: "ca", name: "Catalan", flag: "🇪🇸", native: "Català" },
+  { code: "sq", name: "Albanian", flag: "🇦🇱", native: "Shqip" },
+  { code: "mt", name: "Maltese", flag: "🇲🇹", native: "Malti" },
+
+  // East & Southeast Asian Languages
+  { code: "zh-CN", name: "Chinese (Simplified)", flag: "🇨🇳", native: "简体中文" },
+  { code: "zh-TW", name: "Chinese (Traditional)", flag: "🇹🇼", native: "繁體中文" },
+  { code: "ja", name: "Japanese", flag: "🇯🇵", native: "日本語" },
+  { code: "ko", name: "Korean", flag: "🇰🇷", native: "한국어" },
+  { code: "vi", name: "Vietnamese", flag: "🇻🇳", native: "Tiếng Việt" },
+  { code: "th", name: "Thai", flag: "🇹🇭", native: "ไทย" },
+  { code: "id", name: "Indonesian", flag: "🇮🇩", native: "Bahasa Indonesia" },
+  { code: "ms", name: "Malay", flag: "🇲🇾", native: "Bahasa Melayu" },
+  { code: "tl", name: "Filipino / Tagalog", flag: "🇵🇭", native: "Filipino" },
+  { code: "my", name: "Burmese", flag: "🇲🇲", native: "မြန်မာ" },
+  { code: "km", name: "Khmer", flag: "🇰🇭", native: "ខ្មែរ" },
+  { code: "lo", name: "Lao", flag: "🇱🇦", native: "ລາວ" },
+  { code: "mn", name: "Mongolian", flag: "🇲🇳", native: "Монгол" },
+
+  // South Asian Languages
+  { code: "hi", name: "Hindi", flag: "🇮🇳", native: "हिन्दी" },
+  { code: "bn", name: "Bengali", flag: "🇧🇩", native: "বাংলা" },
+  { code: "pa", name: "Punjabi", flag: "🇮🇳", native: "ਪੰਜਾਬੀ" },
+  { code: "mr", name: "Marathi", flag: "🇮🇳", native: "मराठी" },
+  { code: "te", name: "Telugu", flag: "🇮🇳", native: "తెలుగు" },
+  { code: "ta", name: "Tamil", flag: "🇮🇳", native: "தமிழ்" },
+  { code: "ur", name: "Urdu", flag: "🇵🇰", native: "اردو" },
+  { code: "gu", name: "Gujarati", flag: "🇮🇳", native: "ગુજરાતી" },
+  { code: "kn", name: "Kannada", flag: "🇮🇳", native: "ಕನ್ನಡ" },
+  { code: "ml", name: "Malayalam", flag: "🇮🇳", native: "മലയാളം" },
+  { code: "ne", name: "Nepali", flag: "🇳🇵", native: "नेपाली" },
+  { code: "si", name: "Sinhala", flag: "🇱🇰", native: "සිංහල" },
+
+  // Middle Eastern & Central Asian Languages
+  { code: "ar", name: "Arabic", flag: "🇸🇦", native: "العربية" },
+  { code: "tr", name: "Turkish", flag: "🇹🇷", native: "Türkçe" },
+  { code: "fa", name: "Persian (Farsi)", flag: "🇮🇷", native: "فارسی" },
+  { code: "he", name: "Hebrew", flag: "🇮🇱", native: "עברית" },
+  { code: "az", name: "Azerbaijani", flag: "🇦🇿", native: "Azərbaycan" },
+  { code: "kk", name: "Kazakh", flag: "🇰🇿", native: "Қазақ" },
+  { code: "uz", name: "Uzbek", flag: "🇺🇿", native: "Oʻzbekcha" },
+  { code: "ka", name: "Georgian", flag: "🇬🇪", native: "ქართული" },
+  { code: "hy", name: "Armenian", flag: "🇦🇲", native: "Հայերեն" },
+
+  // African Languages
+  { code: "sw", name: "Swahili", flag: "🇰🇪", native: "Kiswahili" },
+  { code: "af", name: "Afrikaans", flag: "🇿🇦", native: "Afrikaans" },
+  { code: "am", name: "Amharic", flag: "🇪🇹", native: "አማርኛ" },
+  { code: "yo", name: "Yoruba", flag: "🇳🇬", native: "Èdè Yorùbá" },
+  { code: "ig", name: "Igbo", flag: "🇳🇬", native: "Ásụ̀sụ́ Ìgbò" },
+  { code: "ha", name: "Hausa", flag: "🇳🇬", native: "Hausa" },
+  { code: "zu", name: "Zulu", flag: "🇿🇦", native: "isiZulu" },
+];
+---
+
+<div class={`lang-selector-container relative inline-block text-left ${variant === 'footer' ? 'w-full sm:w-auto' : ''}`} data-id-prefix={idPrefix}>
+  <button
+    type="button"
+    class={`lang-toggle-btn group flex items-center justify-between gap-2.5 px-4 py-2.5 rounded-xl border-2 border-cyan/60 bg-[#1c2438] hover:border-cyan hover:bg-[#25304b] text-white transition-all duration-200 text-xs font-bold cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.6),0_0_18px_rgba(38,224,255,0.22)] ${variant === 'footer' ? 'w-full sm:w-auto' : ''}`}
+    id={`${idPrefix}-lang-btn`}
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-label="Change Language Worldwide"
+  >
+    <span class="flex items-center gap-2 pointer-events-none">
+      <span class="text-lg">🌐</span>
+      <span class="current-lang-label font-sans font-bold text-white tracking-wide">English</span>
+    </span>
+    <svg class="w-4 h-4 text-cyan group-hover:text-white transition-transform duration-200 chevron-icon pointer-events-none flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <!-- High-Contrast Distinct Dropdown Menu (Solid Background & High Visibility) -->
+  <div
+    class={`lang-dropdown-menu hidden absolute ${
+      variant === 'footer'
+        ? 'bottom-full mb-3 left-0 sm:left-auto sm:right-0'
+        : variant === 'floating'
+        ? 'top-full mt-2 left-0 sm:left-auto sm:right-0'
+        : 'top-full mt-2 right-0'
+    } w-76 sm:w-92 max-h-[28rem] flex flex-col rounded-2xl border-2 border-cyan bg-[#161d2f] shadow-[0_25px_80px_rgba(0,0,0,0.98),0_0_35px_rgba(38,224,255,0.35)] ring-1 ring-cyan/40 p-3.5 z-[100]`}
+    id={`${idPrefix}-lang-menu`}
+    role="menu"
+  >
+    <!-- Header with High Contrast & Clear Title -->
+    <div class="px-3 py-2 mb-3 bg-[#0f1422] rounded-xl border border-cyan/30 flex items-center justify-between text-xs font-black text-white uppercase tracking-wider">
+      <span class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-cyan shadow-[0_0_10px_rgba(38,224,255,0.9)] animate-pulse"></span>
+        <span class="text-white font-bold">Select Language</span>
+      </span>
+      <span class="text-[11px] text-black font-extrabold px-3 py-0.5 rounded-full bg-cyan shadow-[0_0_12px_rgba(38,224,255,0.4)]">
+        133+ Worldwide
+      </span>
+    </div>
+
+    <!-- Quick Live Filter Search Box (High Contrast) -->
+    <div class="mb-3">
+      <div class="relative bg-[#0b0f1a] border-2 border-cyan/40 focus-within:border-cyan rounded-xl transition-all shadow-inner">
+        <input
+          type="text"
+          placeholder="Search 133+ languages (e.g. Hindi, Spanish, French)..."
+          class="lang-search-input w-full bg-transparent px-3.5 py-2.5 text-xs text-white font-semibold placeholder:text-slate-400 focus:outline-none"
+          aria-label="Filter languages"
+        />
+        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-cyan pointer-events-none">🔍</span>
+      </div>
+    </div>
+
+    <!-- Scrollable Language List (Distinct Card Tiles for Crystal-Clear Legibility) -->
+    <div class="lang-list-container flex-1 overflow-y-auto space-y-1.5 pr-1.5 max-h-64 custom-scrollbar" role="none">
+      {popularLanguages.map((l) => (
+        <button
+          type="button"
+          class="lang-option group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs bg-[#1f283f] hover:bg-cyan hover:border-cyan hover:text-black border border-[#2e3b5e] transition-all duration-150 text-left cursor-pointer shadow-sm"
+          data-lang={l.code}
+          data-name={l.native}
+          data-search={`${l.name} ${l.native} ${l.code}`.toLowerCase()}
+          role="menuitem"
+        >
+          <span class="flex items-center gap-3 pointer-events-none truncate">
+            <span class="text-lg flex-shrink-0">{l.flag}</span>
+            <span class="font-bold text-white group-hover:text-black truncate text-xs">{l.native}</span>
+            <span class="text-[11px] text-slate-300 group-hover:text-black/80 truncate">({l.name})</span>
+          </span>
+          <span class="check-mark hidden text-cyan group-hover:text-black text-sm font-black pointer-events-none flex-shrink-0 ml-2">✓</span>
+        </button>
+      ))}
+      <div class="no-results hidden py-8 text-center text-xs text-slate-300 font-medium bg-[#0f1422] rounded-xl border border-cyan/20">
+        No language matched your search.<br />
+        <span class="text-cyan text-[11px] mt-1 inline-block">133 languages are supported globally.</span>
+      </div>
+    </div>
+
+    <!-- High-Contrast Footer Notice -->
+    <div class="mt-3 pt-2.5 border-t border-cyan/25 px-2 flex items-center justify-between text-[11px] text-slate-200">
+      <span class="flex items-center gap-1.5 font-medium">
+        <span class="text-cyan text-sm">⚡</span> Instant Client-Side Translation
+      </span>
+      <span class="text-cyan font-bold">133 Total Languages</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Robust Worldwide Language Switcher & Google Translate Controller
+  const POPULAR_LANGS = [
+    { code: "en", name: "English", flag: "🇺🇸", native: "English" },
+    { code: "es", name: "Spanish", flag: "🇪🇸", native: "Español" },
+    { code: "fr", name: "French", flag: "🇫🇷", native: "Français" },
+    { code: "de", name: "German", flag: "🇩🇪", native: "Deutsch" },
+    { code: "pt", name: "Portuguese", flag: "🇧🇷", native: "Português" },
+    { code: "it", name: "Italian", flag: "🇮🇹", native: "Italiano" },
+    { code: "ru", name: "Russian", flag: "🇷🇺", native: "Русский" },
+    { code: "nl", name: "Dutch", flag: "🇳🇱", native: "Nederlands" },
+    { code: "pl", name: "Polish", flag: "🇵🇱", native: "Polski" },
+    { code: "uk", name: "Ukrainian", flag: "🇺🇦", native: "Українська" },
+    { code: "el", name: "Greek", flag: "🇬🇷", native: "Ελληνικά" },
+    { code: "cs", name: "Czech", flag: "🇨🇿", native: "Čeština" },
+    { code: "sv", name: "Swedish", flag: "🇸🇪", native: "Svenska" },
+    { code: "ro", name: "Romanian", flag: "🇷🇴", native: "Română" },
+    { code: "hu", name: "Hungarian", flag: "🇭🇺", native: "Magyar" },
+    { code: "da", name: "Danish", flag: "🇩🇰", native: "Dansk" },
+    { code: "fi", name: "Finnish", flag: "🇫🇮", native: "Suomi" },
+    { code: "no", name: "Norwegian", flag: "🇳🇴", native: "Norsk" },
+    { code: "hr", name: "Croatian", flag: "🇭🇷", native: "Hrvatski" },
+    { code: "sk", name: "Slovak", flag: "🇸🇰", native: "Slovenčina" },
+    { code: "bg", name: "Bulgarian", flag: "🇧🇬", native: "Български" },
+    { code: "sr", name: "Serbian", flag: "🇷🇸", native: "Српски" },
+    { code: "lt", name: "Lithuanian", flag: "🇱🇹", native: "Lietuvių" },
+    { code: "sl", name: "Slovenian", flag: "🇸🇮", native: "Slovenščina" },
+    { code: "lv", name: "Latvian", flag: "🇱🇻", native: "Latviešu" },
+    { code: "et", name: "Estonian", flag: "🇪🇪", native: "Eesti" },
+    { code: "ga", name: "Irish", flag: "🇮🇪", native: "Gaeilge" },
+    { code: "is", name: "Icelandic", flag: "🇮🇸", native: "Íslenska" },
+    { code: "ca", name: "Catalan", flag: "🇪🇸", native: "Català" },
+    { code: "sq", name: "Albanian", flag: "🇦🇱", native: "Shqip" },
+    { code: "mt", name: "Maltese", flag: "🇲🇹", native: "Malti" },
+    { code: "zh-CN", name: "Chinese (Simplified)", flag: "🇨🇳", native: "简体中文" },
+    { code: "zh-TW", name: "Chinese (Traditional)", flag: "🇹🇼", native: "繁體中文" },
+    { code: "ja", name: "Japanese", flag: "🇯🇵", native: "日本語" },
+    { code: "ko", name: "Korean", flag: "🇰🇷", native: "한국어" },
+    { code: "vi", name: "Vietnamese", flag: "🇻🇳", native: "Tiếng Việt" },
+    { code: "th", name: "Thai", flag: "🇹🇭", native: "ไทย" },
+    { code: "id", name: "Indonesian", flag: "🇮🇩", native: "Bahasa Indonesia" },
+    { code: "ms", name: "Malay", flag: "🇲🇾", native: "Bahasa Melayu" },
+    { code: "tl", name: "Filipino / Tagalog", flag: "🇵🇭", native: "Filipino" },
+    { code: "my", name: "Burmese", flag: "🇲🇲", native: "မြန်မာ" },
+    { code: "km", name: "Khmer", flag: "🇰🇭", native: "ខ្មែរ" },
+    { code: "lo", name: "Lao", flag: "🇱🇦", native: "ລາວ" },
+    { code: "mn", name: "Mongolian", flag: "🇲🇳", native: "Монгол" },
+    { code: "hi", name: "Hindi", flag: "🇮🇳", native: "हिन्दी" },
+    { code: "bn", name: "Bengali", flag: "🇧🇩", native: "বাংলা" },
+    { code: "pa", name: "Punjabi", flag: "🇮🇳", native: "ਪੰਜਾਬੀ" },
+    { code: "mr", name: "Marathi", flag: "🇮🇳", native: "मराठी" },
+    { code: "te", name: "Telugu", flag: "🇮🇳", native: "తెలుగు" },
+    { code: "ta", name: "Tamil", flag: "🇮🇳", native: "தமிழ்" },
+    { code: "ur", name: "Urdu", flag: "🇵🇰", native: "اردو" },
+    { code: "gu", name: "Gujarati", flag: "🇮🇳", native: "ગુજરાતી" },
+    { code: "kn", name: "Kannada", flag: "🇮🇳", native: "ಕನ್ನಡ" },
+    { code: "ml", name: "Malayalam", flag: "🇮🇳", native: "മലയാളം" },
+    { code: "ne", name: "Nepali", flag: "🇳🇵", native: "नेपाली" },
+    { code: "si", name: "Sinhala", flag: "🇱🇰", native: "සිංහල" },
+    { code: "ar", name: "Arabic", flag: "🇸🇦", native: "العربية" },
+    { code: "tr", name: "Turkish", flag: "🇹🇷", native: "Türkçe" },
+    { code: "fa", name: "Persian (Farsi)", flag: "🇮🇷", native: "فارسی" },
+    { code: "he", name: "Hebrew", flag: "🇮🇱", native: "עברית" },
+    { code: "az", name: "Azerbaijani", flag: "🇦🇿", native: "Azərbaycan" },
+    { code: "kk", name: "Kazakh", flag: "🇰🇿", native: "Қазақ" },
+    { code: "uz", name: "Uzbek", flag: "🇺🇿", native: "Oʻzbekcha" },
+    { code: "ka", name: "Georgian", flag: "🇬🇪", native: "ქართული" },
+    { code: "hy", name: "Armenian", flag: "🇦🇲", native: "Հայերեն" },
+    { code: "sw", name: "Swahili", flag: "🇰🇪", native: "Kiswahili" },
+    { code: "af", name: "Afrikaans", flag: "🇿🇦", native: "Afrikaans" },
+    { code: "am", name: "Amharic", flag: "🇪🇹", native: "አማርኛ" },
+    { code: "yo", name: "Yoruba", flag: "🇳🇬", native: "Èdè Yorùbá" },
+    { code: "ig", name: "Igbo", flag: "🇳🇬", native: "Ásụ̀sụ́ Ìgbò" },
+    { code: "ha", name: "Hausa", flag: "🇳🇬", native: "Hausa" },
+    { code: "zu", name: "Zulu", flag: "🇿🇦", native: "isiZulu" },
+  ];
+
+  function getCookie(name: string): string | null {
+    const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  }
+
+  function getSavedLang(): string {
+    const cookie = getCookie('googtrans');
+    if (cookie) {
+      const parts = cookie.split('/');
+      if (parts.length >= 3 && parts[2]) return parts[2];
+    }
+    return localStorage.getItem('preferred_lang') || 'en';
+  }
+
+  function updateAllUI(langCode: string) {
+    const langObj = POPULAR_LANGS.find(l => l.code === langCode);
+    const labelText = langObj ? langObj.native : (langCode === 'en' ? 'English' : langCode);
+
+    document.querySelectorAll('.current-lang-label').forEach((label) => {
+      label.textContent = labelText;
+    });
+
+    document.querySelectorAll('.lang-option').forEach((opt) => {
+      const code = opt.getAttribute('data-lang');
+      const check = opt.querySelector('.check-mark');
+      if (code === langCode) {
+        if (check) check.classList.remove('hidden');
+        opt.classList.add('bg-cyan', 'text-black', 'border-cyan', 'font-black', 'shadow-[0_0_18px_rgba(38,224,255,0.5)]');
+        opt.classList.remove('bg-[#1f283f]', 'text-white', 'border-[#2e3b5e]');
+      } else {
+        if (check) check.classList.add('hidden');
+        opt.classList.remove('bg-cyan', 'text-black', 'border-cyan', 'font-black', 'shadow-[0_0_18px_rgba(38,224,255,0.5)]');
+        opt.classList.add('bg-[#1f283f]', 'text-white', 'border-[#2e3b5e]');
+      }
+    });
+  }
+
+  function setGoogleTranslateCookie(langCode: string) {
+    const host = window.location.hostname;
+    if (!langCode || langCode === 'en') {
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      if (host.includes('.')) {
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + host + ";";
+      }
+      localStorage.removeItem('preferred_lang');
+    } else {
+      const val = '/en/' + langCode;
+      document.cookie = "googtrans=" + val + "; path=/;";
+      if (host.includes('.')) {
+        document.cookie = "googtrans=" + val + "; path=/; domain=." + host + ";";
+      }
+      localStorage.setItem('preferred_lang', langCode);
+    }
+  }
+
+  function applyTranslation(langCode: string) {
+    setGoogleTranslateCookie(langCode);
+    updateAllUI(langCode);
+
+    // 1. Try to set via the hidden Google Translate combo box directly
+    const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    if (combo) {
+      combo.value = langCode;
+      combo.dispatchEvent(new Event('change'));
+      if (langCode === 'en') {
+        setTimeout(() => location.reload(), 200);
+      }
+      return;
+    }
+
+    // 2. If combo box isn't ready yet, poll for it
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      const s = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+      if (s) {
+        s.value = langCode;
+        s.dispatchEvent(new Event('change'));
+        clearInterval(interval);
+        if (langCode === 'en') {
+          setTimeout(() => location.reload(), 200);
+        }
+      } else if (attempts >= 25) {
+        clearInterval(interval);
+        location.reload();
+      }
+    }, 80);
+  }
+
+  function closeAllMenus() {
+    document.querySelectorAll('.lang-dropdown-menu').forEach((m) => m.classList.add('hidden'));
+    document.querySelectorAll('.chevron-icon').forEach((c) => c.classList.remove('rotate-180'));
+    document.querySelectorAll('.lang-toggle-btn').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+  }
+
+  // Global event delegation
+  if (!(window as any).__langSelectorDelegated) {
+    (window as any).__langSelectorDelegated = true;
+
+    // Click handling
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      // Handle dropdown button toggle
+      const btn = target.closest('.lang-toggle-btn') as HTMLButtonElement | null;
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const container = btn.closest('.lang-selector-container');
+        const menu = container ? container.querySelector('.lang-dropdown-menu') : null;
+        const chevron = btn.querySelector('.chevron-icon');
+
+        if (!menu) return;
+
+        const isCurrentlyOpen = !menu.classList.contains('hidden');
+        closeAllMenus();
+
+        if (!isCurrentlyOpen) {
+          menu.classList.remove('hidden');
+          if (chevron) chevron.classList.add('rotate-180');
+          btn.setAttribute('aria-expanded', 'true');
+          // Focus search input
+          const input = menu.querySelector('.lang-search-input') as HTMLInputElement | null;
+          if (input) {
+            setTimeout(() => input.focus(), 50);
+          }
+        }
+        return;
+      }
+
+      // Handle language option click
+      const option = target.closest('.lang-option') as HTMLButtonElement | null;
+      if (option) {
+        e.preventDefault();
+        e.stopPropagation();
+        const lang = option.getAttribute('data-lang');
+        if (lang) {
+          applyTranslation(lang);
+        }
+        closeAllMenus();
+        return;
+      }
+
+      // Handle click outside
+      if (!target.closest('.lang-selector-container')) {
+        closeAllMenus();
+      }
+    });
+
+    // Real-time language live search filter
+    document.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement | null;
+      if (!target || !target.classList.contains('lang-search-input')) return;
+
+      const query = target.value.trim().toLowerCase();
+      const menu = target.closest('.lang-dropdown-menu');
+      if (!menu) return;
+
+      const options = menu.querySelectorAll('.lang-option') as NodeListOf<HTMLElement>;
+      let visibleCount = 0;
+
+      options.forEach((opt) => {
+        const text = opt.getAttribute('data-search') || '';
+        if (!query || text.includes(query)) {
+          opt.style.display = 'flex';
+          visibleCount++;
+        } else {
+          opt.style.display = 'none';
+        }
+      });
+
+      const noResults = menu.querySelector('.no-results') as HTMLElement | null;
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+        } else {
+          noResults.classList.add('hidden');
+        }
+      }
+    });
+
+    // Handle Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllMenus();
+      }
+    });
+
+    // Google Translate Callback
+    (window as any).googleTranslateElementInit = function() {
+      const w = window as any;
+      if (w.google && w.google.translate) {
+        new w.google.translate.TranslateElement({
+          pageLanguage: 'en',
+          layout: w.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        }, 'google_translate_element');
+
+        const saved = getSavedLang();
+        if (saved && saved !== 'en') {
+          let attempts = 0;
+          const poll = setInterval(() => {
+            attempts++;
+            const s = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+            if (s) {
+              s.value = saved;
+              s.dispatchEvent(new Event('change'));
+              clearInterval(poll);
+            } else if (attempts >= 30) {
+              clearInterval(poll);
+            }
+          }, 80);
+        }
+      }
+    };
+
+    // Load Google Translate script once
+    if (!document.getElementById('google-translate-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    // Sync initial UI
+    const initialLang = getSavedLang();
+    if (initialLang) {
+      updateAllUI(initialLang);
+    }
+  }
+</script>

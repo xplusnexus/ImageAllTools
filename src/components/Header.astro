@@ -1,4 +1,6 @@
 ---
+import LanguageSelector from "./LanguageSelector.astro";
+
 const navLinks = [
   { label: "Compress", href: "/#compress" },
   { label: "Resize", href: "/#resize" },
@@ -7,14 +9,14 @@ const navLinks = [
   { label: "Remove BG", href: "/#bg-remove" },
   { label: "Watermark", href: "/#watermark" },
   { label: "To PDF", href: "/#to-pdf" },
-  { label: "All 47 Tools", href: "/#catalog" },
+  { label: "All 45 Tools", href: "/#catalog" },
 ];
 ---
 <header class="border-b border-border sticky top-0 z-40 bg-[#0a0b0f]/85 backdrop-blur-md">
-  <div class="wrap py-3.5 flex items-center justify-between gap-4">
-    <a href="/" class="brand flex items-center gap-3 font-display font-bold text-lg text-ink hover:opacity-90 transition">
-      <img src="/logo.png" alt="XPlus Nexus Logo" class="w-9 h-9 rounded-xl object-cover border border-cyan/40 shadow-[0_0_15px_rgba(38,224,255,0.25)]" />
-      <span>ImageAll <span class="text-xs font-normal text-ink-muted hidden sm:inline">by XPlus Nexus</span></span>
+  <div class="wrap py-3 flex items-center justify-between gap-3 sm:gap-4">
+    <a href="/" class="brand flex items-center gap-2.5 sm:gap-3 font-display font-bold text-base sm:text-lg text-ink hover:opacity-90 transition">
+      <img src="/logo.png" alt="XPlus Nexus Logo" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover border border-cyan/40 shadow-[0_0_15px_rgba(38,224,255,0.25)] flex-shrink-0" />
+      <span class="truncate">ImageAll <span class="text-xs font-normal text-ink-muted hidden md:inline">by XPlus Nexus</span></span>
     </a>
     
     <nav class="hidden lg:flex items-center gap-1 text-sm" aria-label="Quick Tools Navigation">
@@ -28,12 +30,15 @@ const navLinks = [
       ))}
     </nav>
     
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Worldwide Language Selector -->
+      <LanguageSelector variant="header" idPrefix="header" />
+
       <a
         href="/#catalog"
-        class="text-xs sm:text-sm px-3.5 py-1.5 rounded-lg border border-border bg-surface-2 text-ink hover:border-cyan hover:text-cyan transition-colors font-medium"
+        class="hidden sm:inline-flex text-xs px-3 py-1.5 rounded-xl border border-border bg-surface-2 text-ink hover:border-cyan hover:text-cyan transition-colors font-medium whitespace-nowrap"
       >
-        Browse Tools (47)
+        Browse Tools (45)
       </a>
     </div>
   </div>

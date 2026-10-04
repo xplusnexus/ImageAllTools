@@ -3,7 +3,7 @@ title: "Image Pixelator — Pixelate Faces & Sensitive Areas"
 description: "Pixelate faces, objects, or sensitive information in photos. A mosaic-style alternative to blurring, fully client-side."
 h1: "Image Pixelator"
 keyword: "pixelate image online"
-category: "edit"
+category: "security"
 engine: "client"
 status: "complete"
 badges:
@@ -13,9 +13,9 @@ badges:
   - "Instant On-Device Speed"
   - "Works on Mobile"
 relatedTools:
+  - "blur-face"
   - "blur-image"
   - "watermark-remover"
-  - "remove-image-metadata"
   - "photo-editor"
 faqs:
   - q: "What is Image Pixelator and how does it work?"
