@@ -36,10 +36,10 @@ if (!is_dir($storageDir)) {
 }
 $dataFile = $storageDir . '/stats.json';
 
-// Seed Baseline: Guarantees your counter never starts from 0 even on a fresh server
+// Seed Baseline: Starts clean from 0 for fresh site launch
 $defaultStats = [
-    'images_processed' => 148520,
-    'total_visitors'   => 36140,
+    'images_processed' => 0,
+    'total_visitors'   => 0,
     'sessions'         => [], // [ "token_hash" => unix_timestamp ]
     'updated_at'       => time()
 ];
@@ -101,7 +101,7 @@ function saveStats(string $filePath, array $data): bool {
 
 // 1. Bot check: If crawler, serve cached read-only stats with 0 disk writes
 $isBot = isBotRequest();
-$action = $_GET['action'] ?? $_POST['action'] ?? 'get';
+$action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 // Read JSON input if sent via POST
 $input = [];
@@ -113,6 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($action) && isset($input['action'])) {
         $action = $input['action'];
     }
+}
+if (empty($action)) {
+    $action = 'get';
 }
 
 // Current Unix timestamp
@@ -131,14 +134,14 @@ if ($isBot || ($action === 'get' && $_SERVER['REQUEST_METHOD'] === 'GET')) {
             }
         }
     }
-    // Baseline realistic minimum online indicator (so stats look active worldwide)
-    $displayOnline = max(12, $activeCount);
+    // Genuine live active users count (seen in last 45s, min 1 for current visitor)
+    $displayOnline = max(1, $activeCount);
 
     echo json_encode([
         'status'           => 'success',
         'online_users'     => $displayOnline,
-        'images_processed' => (int)($stats['images_processed'] ?? $defaultStats['images_processed']),
-        'total_visitors'   => (int)($stats['total_visitors'] ?? $defaultStats['total_visitors']),
+        'images_processed' => (int)($stats['images_processed'] ?? 0),
+        'total_visitors'   => (int)($stats['total_visitors'] ?? 0),
         'timestamp'        => $now
     ]);
     exit;
@@ -152,7 +155,8 @@ if (!$fp) {
 }
 
 if (flock($fp, LOCK_EX)) {
-    $filesize = filesize($dataFile);
+    $stat = fstat($fp);
+    $filesize = $stat['size'] ?? 0;
     $raw = $filesize > 0 ? fread($fp, $filesize) : '';
     $stats = $raw ? @json_decode($raw, true) : null;
     if (!is_array($stats)) {
@@ -209,9 +213,9 @@ if (flock($fp, LOCK_EX)) {
 
     $stats['updated_at'] = $now;
 
-    // Calculate active user count
+    // Calculate active user count (genuine live users, min 1 for current user)
     $activeCount = count($stats['sessions'] ?? []);
-    $displayOnline = max(12, $activeCount);
+    $displayOnline = max(1, $activeCount);
 
     // Commit atomic write back to disk
     $json = json_encode($stats, JSON_UNESCAPED_SLASHES);

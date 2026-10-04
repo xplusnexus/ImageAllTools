@@ -24,16 +24,17 @@
       }
     } catch (e) {}
 
-    // In-memory counter state
-    let onlineUsers = 14;
-    let imagesProcessed = 148520;
-    let totalVisitors = 36140;
+    // In-memory counter state (starts from zero for clean launch)
+    let onlineUsers = 1;
+    let imagesProcessed = 0;
+    let totalVisitors = 1;
     let heartbeatTimer: any = null;
     let isRequestPending = false;
+    let lastUploadTriggerTime = 0;
 
-    // Helper: Format number with commas (e.g. 148,520)
+    // Helper: Format number with commas
     function formatNumber(num: number): string {
-      return num.toLocaleString();
+      return (Number(num) || 0).toLocaleString();
     }
 
     // Update all matching DOM elements across the page
@@ -49,10 +50,10 @@
       processedElements.forEach((el) => {
         el.textContent = formatNumber(imagesProcessed);
         if (animate) {
-          el.classList.add('text-white', 'scale-110');
+          el.classList.add('text-cyan', 'scale-110');
           setTimeout(() => {
-            el.classList.remove('text-white', 'scale-110');
-          }, 400);
+            el.classList.remove('text-cyan', 'scale-110');
+          }, 350);
         }
       });
 
@@ -92,7 +93,7 @@
           }
         }
       } catch (err) {
-        // Silently keep current baseline on network hiccup
+        // Keep current state on network error
       } finally {
         isRequestPending = false;
       }
@@ -109,19 +110,40 @@
       sendPing('increment_processed', add);
     };
 
-    // Auto-detect ANY image file selection anywhere on the page
-    document.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement;
-      if (target && target.type === 'file' && target.files && target.files.length > 0) {
-        (window as any).trackImageProcessed(target.files.length);
+    function triggerUploadIncrement(amount: number = 1) {
+      const now = Date.now();
+      // Debounce to prevent double-counting when clicking button then picking file
+      if (now - lastUploadTriggerTime < 800) {
+        return;
+      }
+      lastUploadTriggerTime = now;
+      (window as any).trackImageProcessed(amount);
+    }
+
+    // 1. Trigger when user clicks the "Click to Upload Image" button or dropzone
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target) {
+        const isUploadTrigger = target.closest('.dropzone-cta-btn, .dropzone, #tw-drop, [data-upload-trigger]');
+        if (isUploadTrigger) {
+          triggerUploadIncrement(1);
+        }
       }
     }, true);
 
-    // Auto-detect ANY drag and drop onto a dropzone
+    // 2. Trigger when file is selected from file picker dialog
+    document.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target && target.type === 'file' && target.files && target.files.length > 0) {
+        triggerUploadIncrement(target.files.length);
+      }
+    }, true);
+
+    // 3. Trigger when file is dragged and dropped onto any dropzone
     document.addEventListener('drop', (e) => {
       const target = e.target as HTMLElement;
       if (target && target.closest('.dropzone') && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        (window as any).trackImageProcessed(e.dataTransfer.files.length);
+        triggerUploadIncrement(e.dataTransfer.files.length);
       }
     }, true);
 
