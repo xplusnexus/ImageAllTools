@@ -16,11 +16,19 @@ const schema = {
   ],
 };
 ---
-<nav class="text-xs sm:text-sm text-slate-200 mb-3.5 flex items-center gap-2 flex-wrap font-medium" aria-label="Breadcrumb">
-  <a href="/" class="hover:text-cyan text-slate-200 transition-colors">Home</a>
-  <span class="text-cyan/60 font-bold">/</span>
-  <a href={`/#${category}`} class="hover:text-cyan text-slate-200 transition-colors">{categoryLabel}</a>
-  <span class="text-cyan/60 font-bold">/</span>
-  <span class="text-white font-bold" aria-current="page">{toolTitle}</span>
+<nav class="text-xs sm:text-sm text-slate-200 mb-3.5 font-medium" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-2 flex-wrap list-none p-0 m-0">
+    <li class="inline-flex items-center gap-2">
+      <a href="/" class="hover:text-cyan text-slate-200 transition-colors">Home</a>
+      <span class="text-cyan/60 font-bold select-none" aria-hidden="true">/</span>
+    </li>
+    <li class="inline-flex items-center gap-2">
+      <a href={`/#${category}`} class="hover:text-cyan text-slate-200 transition-colors">{categoryLabel}</a>
+      <span class="text-cyan/60 font-bold select-none" aria-hidden="true">/</span>
+    </li>
+    <li class="inline-flex items-center">
+      <span class="text-white font-bold" aria-current="page">{toolTitle}</span>
+    </li>
+  </ol>
 </nav>
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />

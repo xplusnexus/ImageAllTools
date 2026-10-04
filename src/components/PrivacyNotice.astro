@@ -5,14 +5,20 @@ export interface Props {
 const { engine } = Astro.props;
 ---
 {engine === "client" ? (
-  <div class="rounded-2xl bg-surface-2 border border-cyan/50 p-4 sm:p-5 text-sm sm:text-base text-slate-100 my-6 shadow-sm leading-relaxed font-normal">
-    <strong class="text-cyan font-bold">Your data is safe.</strong> We do not save, upload, or store your
-    images anywhere. All processing happens 100% locally in your browser using client-side APIs —
-    your files never leave your device.
-  </div>
+  <aside class="rounded-2xl bg-surface-2 border border-cyan/50 p-4 sm:p-5 text-sm sm:text-base text-slate-100 my-6 shadow-sm leading-relaxed font-normal flex items-start gap-3" role="note" aria-label="Client-Side Privacy Guarantee">
+    <span class="text-xl flex-shrink-0 mt-0.5 select-none" aria-hidden="true">🛡️</span>
+    <div>
+      <strong class="text-cyan font-bold">Your data is safe.</strong> We do not save, upload, or store your
+      images anywhere. All processing happens 100% locally in your browser using client-side Web APIs —
+      your files never leave your device.
+    </div>
+  </aside>
 ) : (
-  <div class="rounded-2xl bg-surface-2 border border-purple/50 p-4 sm:p-5 text-sm sm:text-base text-slate-100 my-6 shadow-sm leading-relaxed font-normal">
-    <strong class="text-purple font-bold">Your data is safe.</strong> This operation executes in an isolated transient
-    sandbox and automatically purges your image immediately upon completion — we never store, log, or share your files.
-  </div>
+  <aside class="rounded-2xl bg-surface-2 border border-purple/50 p-4 sm:p-5 text-sm sm:text-base text-slate-100 my-6 shadow-sm leading-relaxed font-normal flex items-start gap-3" role="note" aria-label="Zero-Retention Privacy Guarantee">
+    <span class="text-xl flex-shrink-0 mt-0.5 select-none" aria-hidden="true">🔒</span>
+    <div>
+      <strong class="text-purple font-bold">Your data is safe.</strong> This operation executes in an isolated transient
+      sandbox and automatically purges your image immediately upon completion — we never store, log, or share your files.
+    </div>
+  </aside>
 )}

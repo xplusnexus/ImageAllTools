@@ -859,8 +859,23 @@ const faqPageSchema = {
         </p>
         
         <div class="workspace">
-          <div class="dropzone" id="compress-drop" tabindex="0" role="button" aria-label="Upload an image to compress">
-            <strong>Click to upload</strong> or drag an image here. Supports JPG, PNG, WEBP, GIF, BMP, TIFF, SVG, AVIF.
+          <div class="dropzone group" id="compress-drop" tabindex="0" role="button" aria-label="Upload an image to compress">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to compress with instant target size calculation</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Supports JPG, PNG, WEBP, GIF, SVG, AVIF</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="compress-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" hidden />
           
@@ -934,8 +949,23 @@ const faqPageSchema = {
           Type exact width or height, drag the percentage slider, or choose presets for YouTube, Instagram, or Facebook without distorting aspect ratios.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="resize-drop" tabindex="0" role="button" aria-label="Upload an image to resize">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="resize-drop" tabindex="0" role="button" aria-label="Upload an image to resize">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to resize by dimensions, percent, or social presets</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Supports JPG, PNG, WEBP, AVIF</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="resize-input" accept="image/*" hidden />
           <div class="preview-row" id="resize-preview" style="display:none;">
@@ -972,8 +1002,23 @@ const faqPageSchema = {
           Switch files between JPG, PNG, and WEBP formats instantly with preserved transparency and lossless quality.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="convert-drop" tabindex="0" role="button" aria-label="Upload an image to convert">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="convert-drop" tabindex="0" role="button" aria-label="Upload an image to convert">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to switch formats (JPG, PNG, WEBP, AVIF)</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Lossless & Transparent</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> Zero Server Upload</span>
+            </div>
           </div>
           <input type="file" id="convert-input" accept="image/*" hidden />
           <div class="preview-row" id="convert-preview" style="display:none;">
@@ -1013,8 +1058,23 @@ const faqPageSchema = {
           Draw a selection box directly on the image, or tap a ratio preset for a centered crop, then apply.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="crop-drop" tabindex="0" role="button" aria-label="Upload an image to crop">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="crop-drop" tabindex="0" role="button" aria-label="Upload an image to crop">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to crop with custom or preset aspect ratios</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ 1:1, 4:5, 16:9, Freeform</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="crop-input" accept="image/*" hidden />
           <div class="preview-row" id="crop-preview" style="display:none;">
@@ -1055,8 +1115,23 @@ const faqPageSchema = {
           Uses an on-device AI model to cut subjects out automatically. Your images stay 100% on your device.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="bg-drop" tabindex="0" role="button" aria-label="Upload an image to remove background">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="bg-drop" tabindex="0" role="button" aria-label="Upload an image to remove background">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your portrait or product photo here for instant AI background cutout</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Transparent PNG Export</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> In-Browser AI</span>
+            </div>
           </div>
           <input type="file" id="bg-input" accept="image/*" hidden />
           <div class="preview-row" id="bg-preview" style="display:none;">
@@ -1087,8 +1162,23 @@ const faqPageSchema = {
           Fix a sideways photo or mirror it — each action redraws instantly with no re-compression loss.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="rotate-drop" tabindex="0" role="button" aria-label="Upload an image to rotate or flip">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="rotate-drop" tabindex="0" role="button" aria-label="Upload an image to rotate or flip">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to rotate 90°/180°/270° or mirror horizontally/vertically</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Lossless Redraw</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="rotate-input" accept="image/*" hidden />
           <div class="preview-row" id="rotate-preview" style="display:none;">
@@ -1122,8 +1212,23 @@ const faqPageSchema = {
           Stamp text across a photo before sharing — control the wording, color, size, opacity, and positioning.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="wm-drop" tabindex="0" role="button" aria-label="Upload an image to watermark">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="wm-drop" tabindex="0" role="button" aria-label="Upload an image to watermark">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo here to stamp custom copyright text or watermarks</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Custom Fonts & Opacity</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="wm-input" accept="image/*" hidden />
           <div class="preview-row" id="wm-preview" style="display:none;">
@@ -1169,8 +1274,23 @@ const faqPageSchema = {
           Combine multiple images into a PDF with full control over page size, orientation, DPI, and output quality.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="pdf-drop" tabindex="0" role="button" aria-label="Upload images for PDF">
-            <strong>Click to upload</strong> or drag one or more images here
+          <div class="dropzone group" id="pdf-drop" tabindex="0" role="button" aria-label="Upload images for PDF">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Images</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop multiple JPG, PNG, WEBP images here to merge into a clean PDF</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ Multi-Page & A4/Letter</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="pdf-input" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple hidden />
           <div id="pdf-list" class="pdf-list"></div>
@@ -1212,8 +1332,23 @@ const faqPageSchema = {
           Extract dominant colors from an image as ready-to-use hex codes, and test the contrast ratio between any two colors.
         </p>
         <div class="workspace">
-          <div class="dropzone" id="palette-drop" tabindex="0" role="button" aria-label="Upload an image to extract colors">
-            <strong>Click to upload</strong> or drag an image here
+          <div class="dropzone group" id="palette-drop" tabindex="0" role="button" aria-label="Upload an image to extract colors">
+            <div class="dropzone-icon-box">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <div class="dropzone-cta-btn">
+              <svg class="w-5 h-5 text-[#04141a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Click to Upload Image</span>
+            </div>
+            <p class="dropzone-desc">or drag and drop your photo or artwork here to extract hex color palettes</p>
+            <div class="dropzone-badges">
+              <span class="dropzone-badge-format">⚡ HEX & Contrast Ratios</span>
+              <span class="dropzone-badge-privacy"><span class="w-1.5 h-1.5 rounded-full bg-[#00D084] inline-block"></span> 100% On-Device</span>
+            </div>
           </div>
           <input type="file" id="palette-input" accept="image/*" hidden />
           <div class="preview-row" id="palette-preview" style="display:none;">
@@ -1315,6 +1450,20 @@ const faqPageSchema = {
         </div>
       </div>
 
+      <!-- Modern HTML5.2 Semantic Search for AEO, SEO & Instant Tool Discovery -->
+      <search role="search" class="mb-6">
+        <label for="catalog-search-input" class="sr-only">Search all 45 image tools</label>
+        <div class="relative max-w-lg">
+          <input
+            type="search"
+            id="catalog-search-input"
+            placeholder="Search 45 tools by name or keyword (e.g. compress, passport, whatsapp, background)..."
+            class="w-full bg-[#192238] border-1.5 border-[#3b4e78] rounded-xl px-4 py-2.5 pl-10 text-white text-sm font-semibold placeholder:text-slate-300 focus:outline-none focus:border-cyan focus:ring-2 focus:ring-cyan/30 transition-all shadow-inner"
+          />
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan text-sm pointer-events-none">🔍</span>
+        </div>
+      </search>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="tools-grid">
         {allTools.map((t: CollectionEntry<"tools">) => (
           <div data-category={t.data.category} class="tool-card-item">
@@ -1402,6 +1551,23 @@ const faqPageSchema = {
           });
         });
       });
+
+      // Real-time catalog search filter
+      const searchInput = document.getElementById("catalog-search-input") as HTMLInputElement;
+      if (searchInput) {
+        searchInput.addEventListener("input", () => {
+          const q = searchInput.value.toLowerCase().trim();
+          items.forEach((item) => {
+            const el = item as HTMLElement;
+            const text = el.textContent?.toLowerCase() || "";
+            if (!q || text.includes(q)) {
+              el.style.display = "block";
+            } else {
+              el.style.display = "none";
+            }
+          });
+        });
+      }
 
       // Sticky Navigation Scroll-Spy & Smooth Navigation
       const jumpPills = document.querySelectorAll(".jump-pill");

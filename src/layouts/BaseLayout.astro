@@ -29,6 +29,17 @@ const metaKeywords = keyword ? `${keyword}, ${defaultKeywords}` : defaultKeyword
     <link rel="canonical" href={fullCanonical} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="theme-color" content="#0f1422" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ImageAll" />
+
+    <!-- AEO (Answer Engine Optimization) & Semantic AI Search Crawlers -->
+    <meta name="ai:content_type" content="utility-tool" />
+    <meta name="ai:application_category" content="MultimediaApplication" />
+    <meta name="ai:developer" content="XPlus Nexus" />
+    <meta name="ai:privacy" content="100% Client-Side In-Browser Processing. Zero remote storage." />
 
     <!-- Worldwide Audience, Distribution & International Geo Targeting -->
     <meta name="distribution" content="global" />
@@ -37,6 +48,9 @@ const metaKeywords = keyword ? `${keyword}, ${defaultKeywords}` : defaultKeyword
     <meta name="target" content="all" />
     <meta name="audience" content="all" />
     <meta name="geo.region" content="US, GB, IN, CA, AU, DE, FR, JP, BR, Worldwide" />
+    <meta name="geo.placename" content="Global" />
+    <meta name="geo.position" content="0;0" />
+    <meta name="ICBM" content="0, 0" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
     <!-- Worldwide Multilingual hreflang Alternative Links for Search Crawlers -->
@@ -92,8 +106,19 @@ const metaKeywords = keyword ? `${keyword}, ${defaultKeywords}` : defaultKeyword
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "ImageAll",
+      alternateName: ["ImageAll Tools", "ImageAll by XPlus Nexus"],
       url: "https://www.imagealltools.com",
       logo: "https://www.imagealltools.com/logo.png",
+      areaServed: "Worldwide",
+      knowsAbout: [
+        "Image Compression",
+        "Image Resizing",
+        "Image Cropping",
+        "Color Palette Generation",
+        "Client-Side Web Processing",
+        "Lossless WebP Conversion",
+        "Vector SVG Conversion"
+      ],
       parentOrganization: {
         "@type": "Organization",
         name: "XPlus Nexus",

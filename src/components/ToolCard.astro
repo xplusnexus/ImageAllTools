@@ -8,22 +8,35 @@ export interface Props {
 }
 const { slug, h1, description, category, isNew = false } = Astro.props;
 ---
-<a
-  href={`/${slug}`}
-  class="group relative block p-5 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan hover:shadow-[0_4px_24px_rgba(38,224,255,0.15)] transition-all duration-200"
->
-  <div class="flex items-center justify-between mb-2">
-    <span class="text-xs uppercase font-bold tracking-wider text-cyan">{category || "Tool"}</span>
-    {isNew && (
-      <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan to-purple text-[#04141a]">
-        New
-      </span>
-    )}
-  </div>
-  <div class="font-display font-bold text-white group-hover:text-cyan transition-colors text-sm sm:text-base mb-1.5 leading-snug">
-    {h1}
-  </div>
-  <p class="text-xs sm:text-sm text-slate-100 line-clamp-2 leading-relaxed font-normal">
-    {description}
-  </p>
-</a>
+<article class="tool-card h-full" itemscope itemtype="https://schema.org/SoftwareApplication">
+  <meta itemprop="applicationCategory" content="MultimediaApplication" />
+  <meta itemprop="operatingSystem" content="Any" />
+  <a
+    href={`/${slug}`}
+    itemprop="url"
+    class="group relative flex flex-col justify-between h-full p-5 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan hover:shadow-[0_4px_24px_rgba(38,224,255,0.15)] transition-all duration-200"
+  >
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs uppercase font-bold tracking-wider text-cyan">{category || "Tool"}</span>
+        {isNew && (
+          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan to-purple text-[#04141a]">
+            New
+          </span>
+        )}
+      </div>
+      <h3 itemprop="name" class="font-display font-bold text-white group-hover:text-cyan transition-colors text-sm sm:text-base mb-1.5 leading-snug">
+        {h1}
+      </h3>
+      <p itemprop="description" class="text-xs sm:text-sm text-slate-100 line-clamp-2 leading-relaxed font-normal">
+        {description}
+      </p>
+    </div>
+    <div class="mt-3.5 pt-3 border-t border-[#253556] flex items-center justify-between text-xs text-cyan font-bold group-hover:translate-x-0.5 transition-transform">
+      <span>Open Tool</span>
+      <svg class="w-3.5 h-3.5 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </div>
+  </a>
+</article>
