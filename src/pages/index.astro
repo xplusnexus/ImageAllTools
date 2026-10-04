@@ -447,57 +447,57 @@ const faqPageSchema = {
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-5 text-center">
           <!-- Stat 1: Images Processed -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border/80 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_30px_rgba(38,224,255,0.22)] transition-all duration-300 flex flex-col justify-between">
+          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_30px_rgba(38,224,255,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
               <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-cyan tracking-tight" id="stat-images-count">100K+</div>
-              <div class="text-xs sm:text-sm text-slate-200 mt-1 uppercase tracking-wider font-extrabold">Images Processed</div>
+              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Images Processed</div>
             </div>
-            <div class="mt-3 pt-2.5 border-t border-cyan/20">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan/15 border border-cyan/40 text-xs font-semibold text-white">
+            <div class="mt-3 pt-2.5 border-t border-cyan/30">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan/20 border border-cyan/50 text-xs font-bold text-white">
                 🎯 You: <strong class="text-cyan font-black text-sm" id="user-local-processed">0</strong> processed
               </span>
-              <div class="text-[10px] text-cyan/70 mt-1 font-medium">Updates live upon download</div>
+              <div class="text-xs text-cyan font-bold mt-1.5">Updates live upon download</div>
             </div>
           </div>
 
           <!-- Stat 2: Active Users -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border/80 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_30px_rgba(179,102,255,0.22)] transition-all duration-300 flex flex-col justify-between">
+          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_30px_rgba(179,102,255,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
               <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-purple tracking-tight" id="stat-users-count">10K+</div>
-              <div class="text-xs sm:text-sm text-slate-200 mt-1 uppercase tracking-wider font-extrabold">Active Users</div>
+              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Active Users</div>
             </div>
-            <div class="mt-3 pt-2.5 border-t border-purple/20">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple/15 border border-purple/40 text-xs font-semibold text-white">
+            <div class="mt-3 pt-2.5 border-t border-purple/30">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple/20 border border-purple/50 text-xs font-bold text-white">
                 👤 <span id="user-session-badge">Active Session #1</span>
               </span>
-              <div class="text-[10px] text-slate-300 mt-1 flex items-center justify-center gap-1.5 font-medium">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span><strong class="text-white font-bold" id="stat-active-online">1,248</strong> online now</span>
+              <div class="text-xs text-slate-100 mt-1.5 flex items-center justify-center gap-1.5 font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span><strong class="text-white font-extrabold" id="stat-active-online">1,248</strong> online now</span>
               </div>
             </div>
           </div>
 
           <!-- Stat 3: Free & In-Browser -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border/80 bg-surface/90 hover:border-emerald-400 hover:bg-[#0a1e16] hover:shadow-[0_0_30px_rgba(52,211,153,0.22)] transition-all duration-300 flex flex-col justify-between">
+          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-emerald-400 hover:bg-[#0a1e16] hover:shadow-[0_0_30px_rgba(52,211,153,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
               <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-emerald-400 tracking-tight">100%</div>
-              <div class="text-xs sm:text-sm text-slate-200 mt-1 uppercase tracking-wider font-extrabold">Free & In-Browser</div>
+              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Free & In-Browser</div>
             </div>
-            <div class="mt-3 pt-2.5 border-t border-emerald-500/20">
-              <div class="text-xs text-emerald-300 font-bold">Zero Subscriptions</div>
-              <div class="text-[10px] text-slate-400 mt-1 font-medium">Unlimited edits & downloads</div>
+            <div class="mt-3 pt-2.5 border-t border-emerald-500/30">
+              <div class="text-xs text-emerald-300 font-extrabold">Zero Subscriptions</div>
+              <div class="text-xs text-slate-100 mt-1 font-semibold">Unlimited edits &amp; downloads</div>
             </div>
           </div>
 
           <!-- Stat 4: Server Upload Delay -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border/80 bg-surface/90 hover:border-[#FFB800] hover:bg-[#1f190a] hover:shadow-[0_0_30px_rgba(255,184,0,0.22)] transition-all duration-300 flex flex-col justify-between">
+          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-[#FFB800] hover:bg-[#1f190a] hover:shadow-[0_0_30px_rgba(255,184,0,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
               <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-[#FFB800] tracking-tight">0 ms</div>
-              <div class="text-xs sm:text-sm text-slate-200 mt-1 uppercase tracking-wider font-extrabold">Server Upload Delay</div>
+              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Server Upload Delay</div>
             </div>
-            <div class="mt-3 pt-2.5 border-t border-[#FFB800]/20">
-              <div class="text-xs text-[#FFB800] font-bold">Pure Client WASM</div>
-              <div class="text-[10px] text-slate-400 mt-1 font-medium">100% private on your device</div>
+            <div class="mt-3 pt-2.5 border-t border-[#FFB800]/30">
+              <div class="text-xs text-[#FFB800] font-extrabold">Pure Client WASM</div>
+              <div class="text-xs text-slate-100 mt-1 font-semibold">100% private on your device</div>
             </div>
           </div>
         </div>
@@ -525,51 +525,51 @@ const faqPageSchema = {
           <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight leading-tight mb-3">
             Available in <span class="accent">190+ Countries</span> with Instant Real-Time Translation
           </h2>
-          <p class="text-sm sm:text-base text-ink-muted leading-relaxed max-w-2xl mb-8">
-            Whether you are in <strong class="text-white">Tokyo, London, São Paulo, Mumbai, or New York</strong> — ImageAll speaks your native tongue.
-            Enjoy 45+ free, high-speed image processing tools with zero sign-up, 100% on-device privacy, and instant translation across <strong class="text-cyan font-semibold">133+ languages</strong> worldwide.
+          <p class="text-sm sm:text-base text-slate-100 font-normal leading-relaxed max-w-2xl mb-8">
+            Whether you are in <strong class="text-white font-bold">Tokyo, London, São Paulo, Mumbai, or New York</strong> — ImageAll speaks your native tongue.
+            Enjoy 45+ free, high-speed image processing tools with zero sign-up, 100% on-device privacy, and instant translation across <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
           </p>
 
           <!-- 💎 BIG & ATTRACTIVE TRUST METRIC FEATURE CARDS -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
             <!-- Card 1: 190+ Countries -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-cyan/30 bg-surface/80 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_25px_rgba(38,224,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-cyan/10 border border-cyan/30 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-4 sm:p-5 rounded-2xl border border-cyan/40 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_25px_rgba(38,224,255,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-cyan/15 border border-cyan/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
                 🌐
               </div>
               <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">190+</div>
-              <div class="text-xs sm:text-sm font-semibold text-cyan mt-0.5">Countries</div>
-              <p class="text-[11px] text-ink-muted mt-1 leading-snug hidden sm:block">Universal worldwide access with zero borders</p>
+              <div class="text-xs sm:text-sm font-bold text-cyan mt-0.5">Countries</div>
+              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Universal worldwide access with zero borders</p>
             </div>
 
             <!-- Card 2: 133+ Languages -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-purple/30 bg-surface/80 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_25px_rgba(179,102,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-purple/10 border border-purple/30 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-4 sm:p-5 rounded-2xl border border-purple/40 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_25px_rgba(179,102,255,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-purple/15 border border-purple/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
                 🗣️
               </div>
               <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">133+</div>
-              <div class="text-xs sm:text-sm font-semibold text-purple mt-0.5">Languages</div>
-              <p class="text-[11px] text-ink-muted mt-1 leading-snug hidden sm:block">Full native translations with instant live search</p>
+              <div class="text-xs sm:text-sm font-bold text-purple mt-0.5">Languages</div>
+              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Full native translations with instant live search</p>
             </div>
 
             <!-- Card 3: Instant Translation -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#00D084]/30 bg-surface/80 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_25px_rgba(0,208,132,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#00D084]/10 border border-[#00D084]/30 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-4 sm:p-5 rounded-2xl border border-[#00D084]/40 bg-surface/90 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_25px_rgba(0,208,132,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-[#00D084]/15 border border-[#00D084]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
                 ⚡
               </div>
               <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">&lt; 50ms</div>
-              <div class="text-xs sm:text-sm font-semibold text-[#00D084] mt-0.5">Instant Translation</div>
-              <p class="text-[11px] text-ink-muted mt-1 leading-snug hidden sm:block">Live client-side translation without page reload</p>
+              <div class="text-xs sm:text-sm font-bold text-[#00D084] mt-0.5">Instant Translation</div>
+              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Live client-side translation without page reload</p>
             </div>
 
             <!-- Card 4: Zero Data Collection -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#FF6B6B]/30 bg-surface/80 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_25px_rgba(255,107,107,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#FF6B6B]/10 border border-[#FF6B6B]/30 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-4 sm:p-5 rounded-2xl border border-[#FF6B6B]/40 bg-surface/90 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_25px_rgba(255,107,107,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-[#FF6B6B]/15 border border-[#FF6B6B]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
                 🔒
               </div>
               <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">100%</div>
-              <div class="text-xs sm:text-sm font-semibold text-[#FF6B6B] mt-0.5">Zero Data Collection</div>
-              <p class="text-[11px] text-ink-muted mt-1 leading-snug hidden sm:block">100% private in-browser on-device execution</p>
+              <div class="text-xs sm:text-sm font-bold text-[#FF6B6B] mt-0.5">Zero Data Collection</div>
+              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">100% private in-browser on-device execution</p>
             </div>
           </div>
         </div>
@@ -581,11 +581,11 @@ const faqPageSchema = {
               <p class="text-xs font-bold text-cyan uppercase tracking-wider flex items-center gap-1.5">
                 <span class="text-sm">🌐</span> Choose Your Language
               </p>
-              <span class="text-[10px] font-semibold text-ink-muted px-2 py-0.5 rounded-full bg-surface border border-border">133 Total</span>
+              <span class="text-xs font-bold text-white px-2 py-0.5 rounded-full bg-surface border border-[#334468]">133 Total</span>
             </div>
             <LanguageSelector variant="floating" idPrefix="hero" />
-            <p class="text-[11px] text-ink-muted mt-3 text-center sm:text-left leading-relaxed">
-              Select from <strong class="text-white font-medium">70+ quick-pick languages</strong> with instant search, or translate seamlessly into <strong class="text-cyan font-medium">133+ languages</strong> worldwide.
+            <p class="text-xs text-slate-100 font-normal mt-3 text-center sm:text-left leading-relaxed">
+              Select from <strong class="text-white font-bold">70+ quick-pick languages</strong> with instant search, or translate seamlessly into <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
             </p>
           </div>
         </div>
@@ -601,13 +601,13 @@ const faqPageSchema = {
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan/10 border border-cyan/30 text-cyan text-xs font-bold uppercase tracking-wider mb-2">
             <span class="animate-pulse">🔥</span> Hot &amp; Most Used Tools
           </div>
-          <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink">Direct Access Quick Launch</h2>
-          <p class="text-xs sm:text-sm text-ink-muted mt-1 max-w-2xl leading-relaxed">
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">Direct Access Quick Launch</h2>
+          <p class="text-xs sm:text-sm text-slate-100 font-normal mt-1 max-w-2xl leading-relaxed">
             Instant, one-click access to our highest-traffic tools: WhatsApp full DP maker, Instagram &amp; Facebook resizers, target KB compressor, multi-page PDF builder, and universal format converter.
           </p>
         </div>
         <div class="flex items-center gap-2">
-          <a href="#catalog" class="btn btn-ghost text-xs px-3.5 py-2 rounded-xl whitespace-nowrap">
+          <a href="#catalog" class="btn btn-ghost text-xs px-3.5 py-2 rounded-xl whitespace-nowrap text-white font-bold border border-[#334468]">
             View All 47 Tools →
           </a>
         </div>
@@ -615,97 +615,97 @@ const faqPageSchema = {
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         <!-- 1. WhatsApp DP Maker -->
-        <a href="/whatsapp-dp-maker" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-[#25D366]/70 hover:bg-[#101b14]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="/whatsapp-dp-maker" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-[#25D366]/70 hover:bg-[#101b14]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">💬</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30">WhatsApp Hot</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-[#25D366] transition-colors">WhatsApp Full DP Maker</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Fit any portrait or landscape photo into a 640×640 square profile picture with smooth blurred or gradient margins. Zero cropping!</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-[#25D366] transition-colors">WhatsApp Full DP Maker</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Fit any portrait or landscape photo into a 640×640 square profile picture with smooth blurred or gradient margins. Zero cropping!</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">640×640 HD · No Crop Blur</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">640×640 HD · No Crop Blur</span>
             <span class="text-[#25D366] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Launch Tool →</span>
           </div>
         </a>
 
         <!-- 2. Instagram Resizer -->
-        <a href="/resize-image-for-instagram" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-[#E1306C]/70 hover:bg-[#1e111a]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="/resize-image-for-instagram" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-[#E1306C]/70 hover:bg-[#1e111a]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-[#E1306C]/15 border border-[#E1306C]/30 text-[#E1306C] flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">📸</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#E1306C]/10 text-[#E1306C] border border-[#E1306C]/30">Instagram Hot</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-[#E1306C] transition-colors">Instagram Photo Resizer</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Resize for 1080×1080 Square, 1080×1350 Portrait, and 1080×1920 Story/Reels. Prevent Instagram compression &amp; clipping.</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-[#E1306C] transition-colors">Instagram Photo Resizer</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Resize for 1080×1080 Square, 1080×1350 Portrait, and 1080×1920 Story/Reels. Prevent Instagram compression &amp; clipping.</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">1:1 Square · 4:5 Portrait</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">1:1 Square · 4:5 Portrait</span>
             <span class="text-[#E1306C] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Launch Tool →</span>
           </div>
         </a>
 
         <!-- 3. Compress Image (Target KB) -->
-        <a href="#compress" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-cyan/70 hover:bg-[#0b171f]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="#compress" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-cyan/70 hover:bg-[#0b171f]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-cyan/15 border border-cyan/30 text-cyan flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">🗜️</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-cyan/10 text-cyan border border-cyan/30">Target KB</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-cyan transition-colors">Compress Image to KB</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Reduce photo file size by 50–80% with live target size calculation (20KB, 50KB, 100KB, 200KB) for strict web &amp; government form limits.</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-cyan transition-colors">Compress Image to KB</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Reduce photo file size by 50–80% with live target size calculation (20KB, 50KB, 100KB, 200KB) for strict web &amp; government form limits.</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">JPG · PNG · WebP</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">JPG · PNG · WebP</span>
             <span class="text-cyan font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Compress Now ↓</span>
           </div>
         </a>
 
         <!-- 4. Image to PDF Converter -->
-        <a href="#to-pdf" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-purple/70 hover:bg-[#181124]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="#to-pdf" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-purple/70 hover:bg-[#181124]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-purple/15 border border-purple/30 text-purple flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">📄</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple/10 text-purple border border-purple/30">Multi-Page PDF</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-purple transition-colors">Image to PDF Converter</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Combine multiple JPG, PNG, and WebP images into a single clean PDF document. Reorder pages, set A4/Letter size and custom DPI.</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-purple transition-colors">Image to PDF Converter</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Combine multiple JPG, PNG, and WebP images into a single clean PDF document. Reorder pages, set A4/Letter size and custom DPI.</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">A4 · Letter · High DPI</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">A4 · Letter · High DPI</span>
             <span class="text-purple font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Create PDF ↓</span>
           </div>
         </a>
 
         <!-- 5. Facebook Resizer -->
-        <a href="/resize-image-for-facebook-post" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-[#1877F2]/70 hover:bg-[#0f1727]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="/resize-image-for-facebook-post" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-[#1877F2]/70 hover:bg-[#0f1727]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-[#1877F2]/15 border border-[#1877F2]/30 text-[#1877F2] flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">👥</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#1877F2]/10 text-[#1877F2] border border-[#1877F2]/30">Facebook Hot</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-[#1877F2] transition-colors">Facebook Post &amp; Cover Resizer</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Resize images to exact 1200×630 feed link previews, 820×312 cover headers, and profile photos with zero compression blur.</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-[#1877F2] transition-colors">Facebook Post &amp; Cover Resizer</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Resize images to exact 1200×630 feed link previews, 820×312 cover headers, and profile photos with zero compression blur.</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">1200×630 · 820×312 Headers</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">1200×630 · 820×312 Headers</span>
             <span class="text-[#1877F2] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Launch Tool →</span>
           </div>
         </a>
 
         <!-- 6. All Document & Format Converter -->
-        <a href="#convert" class="group relative p-6 rounded-2xl border border-border bg-surface hover:border-[#00D084]/70 hover:bg-[#0c1a14]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
+        <a href="#convert" class="group relative p-6 rounded-2xl border border-[#334468] bg-surface-2 hover:border-[#00D084]/70 hover:bg-[#0c1a14]/80 transition-all duration-200 shadow-sm flex flex-col justify-between hover:-translate-y-1">
           <div>
             <div class="flex items-center justify-between gap-3 mb-3.5">
               <span class="w-12 h-12 rounded-xl bg-[#00D084]/15 border border-[#00D084]/30 text-[#00D084] flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition-transform">🔄</span>
               <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#00D084]/10 text-[#00D084] border border-[#00D084]/30">All Formats</span>
             </div>
-            <h3 class="text-lg font-display font-bold text-ink group-hover:text-[#00D084] transition-colors">All Document &amp; Format Converter</h3>
-            <p class="text-xs sm:text-sm text-ink-muted mt-2 leading-relaxed">Convert between PDF, HEIC (iPhone), PNG, JPG, WebP, AVIF, TIFF, and SVG. 100% private, instant in-browser conversion with zero quality loss.</p>
+            <h3 class="text-lg font-display font-bold text-white group-hover:text-[#00D084] transition-colors">All Document &amp; Format Converter</h3>
+            <p class="text-xs sm:text-sm text-slate-100 font-normal mt-2 leading-relaxed">Convert between PDF, HEIC (iPhone), PNG, JPG, WebP, AVIF, TIFF, and SVG. 100% private, instant in-browser conversion with zero quality loss.</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs">
-            <span class="text-ink-muted font-medium">PDF · HEIC · WebP · PNG</span>
+          <div class="mt-5 pt-3.5 border-t border-[#334468]/60 flex items-center justify-between text-xs">
+            <span class="text-slate-100 font-semibold">PDF · HEIC · WebP · PNG</span>
             <span class="text-[#00D084] font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Convert Files ↓</span>
           </div>
         </a>
@@ -723,21 +723,21 @@ const faqPageSchema = {
       <div class="flex items-center gap-3 overflow-x-auto py-1.5 no-scrollbar scroll-smooth" id="jump-scroll-container">
         <a
           href="/whatsapp-dp-maker"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#25D366]/40 bg-surface text-ink text-sm sm:text-base font-semibold hover:border-[#25D366] hover:bg-[#101b14] hover:text-[#25D366] transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#25D366]/40 bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-[#25D366] hover:bg-[#101b14] hover:text-[#25D366] transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-[#25D366] group-hover:scale-110 transition-transform">💬</span>
           <span>WhatsApp DP</span>
         </a>
         <a
           href="/resize-image-for-instagram"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#E1306C]/40 bg-surface text-ink text-sm sm:text-base font-semibold hover:border-[#E1306C] hover:bg-[#1e111a] hover:text-[#E1306C] transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#E1306C]/40 bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-[#E1306C] hover:bg-[#1e111a] hover:text-[#E1306C] transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-[#E1306C] group-hover:scale-110 transition-transform">📸</span>
           <span>Instagram</span>
         </a>
         <a
           href="/resize-image-for-facebook-post"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#1877F2]/40 bg-surface text-ink text-sm sm:text-base font-semibold hover:border-[#1877F2] hover:bg-[#0f1727] hover:text-[#1877F2] transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#1877F2]/40 bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-[#1877F2] hover:bg-[#0f1727] hover:text-[#1877F2] transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-[#1877F2] group-hover:scale-110 transition-transform">👥</span>
           <span>Facebook</span>
@@ -745,7 +745,7 @@ const faqPageSchema = {
         <a
           href="#compress"
           data-jump="compress"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">🗜️</span>
           <span>Compress</span>
@@ -753,7 +753,7 @@ const faqPageSchema = {
         <a
           href="#resize"
           data-jump="resize"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">⤢</span>
           <span>Resize</span>
@@ -761,7 +761,7 @@ const faqPageSchema = {
         <a
           href="#convert"
           data-jump="convert"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">⇄</span>
           <span>Convert</span>
@@ -769,7 +769,7 @@ const faqPageSchema = {
         <a
           href="#crop"
           data-jump="crop"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">⛶</span>
           <span>Crop</span>
@@ -777,7 +777,7 @@ const faqPageSchema = {
         <a
           href="#bg-remove"
           data-jump="bg-remove"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">✂️</span>
           <span>Remove BG</span>
@@ -785,7 +785,7 @@ const faqPageSchema = {
         <a
           href="#rotate"
           data-jump="rotate"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">⟳</span>
           <span>Rotate & Flip</span>
@@ -793,7 +793,7 @@ const faqPageSchema = {
         <a
           href="#watermark"
           data-jump="watermark"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">◈</span>
           <span>Watermark</span>
@@ -801,7 +801,7 @@ const faqPageSchema = {
         <a
           href="#to-pdf"
           data-jump="to-pdf"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">📄</span>
           <span>Image to PDF</span>
@@ -809,7 +809,7 @@ const faqPageSchema = {
         <a
           href="#palette"
           data-jump="palette"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-cyan group-hover:scale-110 transition-transform">◐</span>
           <span>Color Palette</span>
@@ -825,7 +825,7 @@ const faqPageSchema = {
         <a
           href="#faq"
           data-jump="faq"
-          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-sm sm:text-base font-semibold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
+          class="jump-pill group flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-[#334468] bg-surface-2 text-white text-sm sm:text-base font-bold hover:border-cyan hover:bg-surface-2 hover:text-cyan transition-all duration-200 whitespace-nowrap shadow-sm"
         >
           <span class="text-base text-purple group-hover:scale-110 transition-transform">💬</span>
           <span>FAQ</span>
@@ -838,23 +838,23 @@ const faqPageSchema = {
   <section class="tools py-12">
     <div class="wrap">
       <div class="section-head max-w-2xl mb-10">
-        <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink">The ImageAll Interactive Toolkit</h2>
-        <p class="text-sm text-ink-muted mt-2">Every operation runs locally in your browser with zero latency. No sign-up, no queues, no watermarks.</p>
+        <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">The ImageAll Interactive Toolkit</h2>
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-2">Every operation runs locally in your browser with zero latency. No sign-up, no queues, no watermarks.</p>
       </div>
 
       <!-- 1. COMPRESS -->
       <article class="tool-card-box" id="compress">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">↓</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">↓</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Image Compressor</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Live size · Target size search · Instant download</div>
+              <h2 class="text-xl font-display font-bold text-white">Image Compressor</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Live size · Target size search · Instant download</div>
             </div>
           </div>
-          <a href="/image-compressor" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/image-compressor" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Reduce image file size while keeping the best practical visual quality. Move the quality slider or choose a target size (20KB, 50KB, 100KB, etc.) for instant calculation.
         </p>
         
@@ -886,7 +886,7 @@ const faqPageSchema = {
                 <label for="compress-quality">Quality (<span id="compress-quality-val">80</span>%)</label>
                 <input type="range" id="compress-quality" min="10" max="100" value="80" />
               </div>
-              <div class="field" id="target-field" style="opacity: 0.55;">
+              <div class="field" id="target-field">
                 <label for="compress-target">Target file size</label>
                 <div class="target-inline">
                   <input type="number" id="compress-target" min="1" value="100" disabled />
@@ -908,7 +908,7 @@ const faqPageSchema = {
               <div class="metric"><div class="metric-label">New size</div><div class="metric-value" id="compress-new-size">—</div></div>
               <div class="metric"><div class="metric-label">Reduction</div><div class="metric-value" id="compress-reduction">—</div></div>
             </div>
-            <p class="helper text-xs text-ink-muted mt-2" id="compress-target-note">Calculated in real-time inside your browser Canvas.</p>
+            <p class="helper text-xs text-slate-100 font-medium mt-2" id="compress-target-note">Calculated in real-time inside your browser Canvas.</p>
             <div class="row-actions mt-4 flex gap-3 flex-wrap">
               <button class="btn btn-primary" id="compress-download" type="button">Download compressed image</button>
               <button class="btn btn-ghost" id="compress-reset" type="button">Reset</button>
@@ -922,15 +922,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="resize">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⤢</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">⤢</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Image Resizer</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Custom pixels · Aspect lock · Social presets</div>
+              <h2 class="text-xl font-display font-bold text-white">Image Resizer</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Custom pixels · Aspect lock · Social presets</div>
             </div>
           </div>
-          <a href="/image-resizer" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/image-resizer" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Type exact width or height, drag the percentage slider, or choose presets for YouTube, Instagram, or Facebook without distorting aspect ratios.
         </p>
         <div class="workspace">
@@ -943,7 +943,7 @@ const faqPageSchema = {
             <div class="controls">
               <div class="field"><label for="resize-w">Width (px)</label><input type="number" id="resize-w" min="1" /></div>
               <div class="field"><label for="resize-h">Height (px)</label><input type="number" id="resize-h" min="1" /></div>
-              <div class="field"><label for="resize-lock" class="flex items-center gap-2 cursor-pointer pt-3"><input type="checkbox" id="resize-lock" checked /> <span class="text-xs text-ink">Lock aspect ratio</span></label></div>
+              <div class="field"><label for="resize-lock" class="flex items-center gap-2 cursor-pointer pt-3"><input type="checkbox" id="resize-lock" checked /> <span class="text-xs text-white font-medium">Lock aspect ratio</span></label></div>
               <div class="field"><label for="resize-pct">Scale (<span id="resize-pct-val">100</span>%)</label><input type="range" id="resize-pct" min="5" max="200" value="100" /></div>
             </div>
             <div class="row-actions mt-4 flex gap-3 flex-wrap">
@@ -960,15 +960,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="convert">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⇄</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">⇄</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Image Converter</h2>
-              <div class="text-xs text-ink-muted mt-0.5">JPG · PNG · WEBP</div>
+              <h2 class="text-xl font-display font-bold text-white">Image Converter</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">JPG · PNG · WEBP</div>
             </div>
           </div>
-          <a href="/jpg-to-png" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Converters →</a>
+          <a href="/jpg-to-png" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Converters →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Switch files between JPG, PNG, and WEBP formats instantly with preserved transparency and lossless quality.
         </p>
         <div class="workspace">
@@ -1001,15 +1001,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="crop">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⛶</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">⛶</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Image Cropper</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Drag to crop · 1:1 · 9:16 Story · 16:9</div>
+              <h2 class="text-xl font-display font-bold text-white">Image Cropper</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Drag to crop · 1:1 · 9:16 Story · 16:9</div>
             </div>
           </div>
-          <a href="/image-cropper" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/image-cropper" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Draw a selection box directly on the image, or tap a ratio preset for a centered crop, then apply.
         </p>
         <div class="workspace">
@@ -1043,15 +1043,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="bg-remove">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">✂</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">✂</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Background Remover</h2>
-              <div class="text-xs text-ink-muted mt-0.5">On-device AI model · Zero server upload</div>
+              <h2 class="text-xl font-display font-bold text-white">Background Remover</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">On-device AI model · Zero server upload</div>
             </div>
           </div>
-          <a href="/background-remover" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/background-remover" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Uses an on-device AI model to cut subjects out automatically. Your images stay 100% on your device.
         </p>
         <div class="workspace">
@@ -1075,15 +1075,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="rotate">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">⟳</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">⟳</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Rotate & Flip</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Lossless · 90° steps · Horizontal & vertical mirroring</div>
+              <h2 class="text-xl font-display font-bold text-white">Rotate & Flip</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Lossless · 90° steps · Horizontal & vertical mirroring</div>
             </div>
           </div>
-          <a href="/rotate-image" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/rotate-image" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Fix a sideways photo or mirror it — each action redraws instantly with no re-compression loss.
         </p>
         <div class="workspace">
@@ -1110,15 +1110,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="watermark">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">◈</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">◈</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Watermark Adder</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Text watermark · Opacity · Tiled or corner positions</div>
+              <h2 class="text-xl font-display font-bold text-white">Watermark Adder</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Text watermark · Opacity · Tiled or corner positions</div>
             </div>
           </div>
-          <a href="/add-watermark" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/add-watermark" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Stamp text across a photo before sharing — control the wording, color, size, opacity, and positioning.
         </p>
         <div class="workspace">
@@ -1157,15 +1157,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="to-pdf">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">▤</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">▤</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Image to PDF</h2>
-              <div class="text-xs text-ink-muted mt-0.5">Multi-page · Reorder · DPI · Target size</div>
+              <h2 class="text-xl font-display font-bold text-white">Image to PDF</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">Multi-page · Reorder · DPI · Target size</div>
             </div>
           </div>
-          <a href="/image-to-pdf" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/image-to-pdf" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Combine multiple images into a PDF with full control over page size, orientation, DPI, and output quality.
         </p>
         <div class="workspace">
@@ -1200,15 +1200,15 @@ const faqPageSchema = {
       <article class="tool-card-box" id="palette">
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-border text-cyan text-xl font-bold">◐</span>
+            <span class="w-11 h-11 rounded-xl flex items-center justify-center bg-surface-2 border border-[#334468] text-cyan text-xl font-bold">◐</span>
             <div>
-              <h2 class="text-xl font-display font-bold text-ink">Color Palette Extractor</h2>
-              <div class="text-xs text-ink-muted mt-0.5">HEX codes · WCAG AA contrast testing</div>
+              <h2 class="text-xl font-display font-bold text-white">Color Palette Extractor</h2>
+              <div class="text-xs text-cyan font-semibold mt-0.5">HEX codes · WCAG AA contrast testing</div>
             </div>
           </div>
-          <a href="/color-palette" class="text-xs px-3 py-1.5 rounded-lg border border-border bg-surface-2 text-ink-muted hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
+          <a href="/color-palette" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#334468] bg-surface-2 text-white hover:text-cyan hover:border-cyan transition">Standalone Page →</a>
         </div>
-        <p class="text-xs sm:text-sm text-ink-muted mt-3 max-w-3xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 max-w-3xl leading-relaxed">
           Extract dominant colors from an image as ready-to-use hex codes, and test the contrast ratio between any two colors.
         </p>
         <div class="workspace">
@@ -1238,25 +1238,25 @@ const faqPageSchema = {
     <div class="wrap max-w-5xl">
       <div class="max-w-3xl mb-12">
         <span class="text-xs font-semibold uppercase tracking-wider text-cyan">Next-Generation Image Suite</span>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-ink mt-1.5 leading-tight">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mt-1.5 leading-tight">
           Why Choose ImageAll for Your Image Editing &amp; Optimization Needs?
         </h2>
-        <p class="text-sm sm:text-base text-ink-muted mt-3 leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-3 leading-relaxed">
           ImageAll is engineered from the ground up to redefine browser-based creative tooling. Unlike legacy online editors that upload your files to remote servers, our platform executes 100% of pixel operations right inside your device memory using modern HTML5 Canvas, WebAssembly, and local vector routines.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Feature 1: Built for Professionals -->
-        <div class="p-7 rounded-2xl border border-border bg-surface-2/60 hover:border-cyan/50 transition-all duration-200">
+        <div class="p-7 rounded-2xl border border-[#334468] bg-surface-2 hover:border-cyan/50 transition-all duration-200">
           <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 text-cyan flex items-center justify-center text-xl mb-4 font-bold">
             ⚡
           </div>
-          <h3 class="text-lg font-display font-bold text-ink">Built for High-Velocity Professionals</h3>
-          <p class="text-sm text-ink-muted mt-2.5 leading-relaxed">
+          <h3 class="text-lg font-display font-bold text-white">Built for High-Velocity Professionals</h3>
+          <p class="text-sm text-slate-100 font-normal mt-2.5 leading-relaxed">
             Content creators, photographers, frontend developers, and digital marketers depend on ImageAll to streamline daily creative operations. Resize assets to pixel-perfect social specifications (YouTube covers, Instagram 1:1, Open Graph banners), compress images to exact target KB ceilings for Core Web Vitals optimization, and convert formats with uncompromising visual fidelity.
           </p>
-          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-ink/80">
+          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-slate-100 font-medium">
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Lossless and near-lossless compression math</li>
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Instant social media dimension presets</li>
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan"></span> Real-time side-by-side metric readouts</li>
@@ -1264,15 +1264,15 @@ const faqPageSchema = {
         </div>
 
         <!-- Feature 2: Effortless Simplicity -->
-        <div class="p-7 rounded-2xl border border-border bg-surface-2/60 hover:border-purple/50 transition-all duration-200">
+        <div class="p-7 rounded-2xl border border-[#334468] bg-surface-2 hover:border-purple/50 transition-all duration-200">
           <div class="w-12 h-12 rounded-xl bg-purple/10 border border-purple/30 text-purple flex items-center justify-center text-xl mb-4 font-bold">
             ✨
           </div>
-          <h3 class="text-lg font-display font-bold text-ink">Zero Learning Curve for Everyone</h3>
-          <p class="text-sm text-ink-muted mt-2.5 leading-relaxed">
+          <h3 class="text-lg font-display font-bold text-white">Zero Learning Curve for Everyone</h3>
+          <p class="text-sm text-slate-100 font-normal mt-2.5 leading-relaxed">
             No bulky desktop software, expensive monthly subscriptions, or complex toolbars. Our clean, distraction-free interface gives anyone immediate creative control. Simply drag and drop your media, fine-tune intuitive sliders or quick presets with live canvas feedback, and save your finished artwork in seconds.
           </p>
-          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-ink/80">
+          <ul class="mt-4 space-y-2 text-xs sm:text-sm text-slate-100 font-medium">
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Zero registration or email verification required</li>
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Works flawlessly across mobile, tablet &amp; desktop</li>
             <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple"></span> Clean exports with zero watermarks or ads</li>
@@ -1281,10 +1281,10 @@ const faqPageSchema = {
       </div>
 
       <!-- Feature 3: Complete Suite Banner -->
-      <div class="mt-8 p-7 rounded-2xl border border-cyan/30 bg-gradient-to-r from-surface to-surface-2 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div class="mt-8 p-7 rounded-2xl border border-cyan/40 bg-gradient-to-r from-surface to-surface-2 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
         <div>
-          <h3 class="text-lg font-display font-bold text-ink">Explore Our Complete Suite of 45 Dedicated Tools</h3>
-          <p class="text-sm text-ink-muted mt-1 leading-relaxed max-w-2xl">
+          <h3 class="text-lg font-display font-bold text-white">Explore Our Complete Suite of 45 Dedicated Tools</h3>
+          <p class="text-sm text-slate-100 font-normal mt-1 leading-relaxed max-w-2xl">
             From exact dimension crop utilities to smart background removers, OCR extractors, and privacy censors — explore our organized directory below to find the exact tool built for your goal.
           </p>
         </div>
@@ -1304,8 +1304,8 @@ const faqPageSchema = {
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <span class="text-xs font-semibold uppercase tracking-wider text-cyan">Complete Directory</span>
-          <h2 class="text-2xl sm:text-3xl font-display font-bold text-ink mt-1">All 45 Image Tools</h2>
-          <p class="text-sm text-ink-muted mt-1">Dedicated, SEO-optimized tools with comprehensive tutorials and instant on-device processing.</p>
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-1">All 45 Image Tools</h2>
+          <p class="text-sm text-slate-100 font-normal mt-1">Dedicated, SEO-optimized tools with comprehensive tutorials and instant on-device processing.</p>
         </div>
         <div class="flex gap-2 flex-wrap" id="category-tabs">
           <button class="preset active" data-filter="all">All (45)</button>
@@ -1335,35 +1335,35 @@ const faqPageSchema = {
     <div class="wrap max-w-5xl">
       <div class="section-head mb-12 text-center max-w-2xl mx-auto">
         <span class="text-xs font-semibold uppercase tracking-wider text-purple px-3 py-1 rounded-full border border-purple/30 bg-purple/10">Help &amp; Knowledge Base</span>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-ink mt-3">Frequently Asked Questions</h2>
-        <p class="text-sm sm:text-base text-ink-muted mt-2 leading-relaxed">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mt-3">Frequently Asked Questions</h2>
+        <p class="text-sm sm:text-base text-slate-100 font-normal mt-2 leading-relaxed">
           Everything you need to know about processing images safely, privately, and at maximum quality with ImageAll.
         </p>
       </div>
 
       <div class="space-y-10">
         {faqCategories.map((group) => (
-          <div class="faq-group rounded-2xl border border-border bg-surface-2/40 p-5 sm:p-7 shadow-sm">
-            <div class="flex items-center justify-between gap-3 mb-5 border-b border-border/60 pb-3.5">
+          <div class="faq-group rounded-2xl border border-[#334468] bg-surface-2 p-5 sm:p-7 shadow-sm">
+            <div class="flex items-center justify-between gap-3 mb-5 border-b border-[#334468]/60 pb-3.5">
               <div class="flex items-center gap-2.5">
                 <span class="text-2xl flex-shrink-0" aria-hidden="true">{group.icon}</span>
-                <h3 class="text-lg sm:text-xl font-display font-bold text-ink">{group.category}</h3>
+                <h3 class="text-lg sm:text-xl font-display font-bold text-white">{group.category}</h3>
               </div>
-              <span class="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-surface border border-border text-cyan">
+              <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-surface border border-[#334468] text-cyan">
                 {group.badge}
               </span>
             </div>
 
             <div class="grid grid-cols-1 gap-3.5">
               {group.items.map((item) => (
-                <details class="faq-item group rounded-xl border border-border bg-surface/90 p-4 transition-all duration-200 hover:border-cyan/50 [&::-webkit-details-marker]:hidden">
-                  <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm sm:text-base font-medium text-ink transition-colors hover:text-cyan list-none">
+                <details class="faq-item group rounded-xl border border-[#334468] bg-surface/90 p-4 transition-all duration-200 hover:border-cyan/50 [&::-webkit-details-marker]:hidden">
+                  <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm sm:text-base font-bold text-white transition-colors hover:text-cyan list-none">
                     <span>{item.q}</span>
                     <span class="text-purple group-open:rotate-45 group-open:text-cyan transition-transform text-2xl leading-none flex-shrink-0 font-bold" aria-hidden="true">
                       +
                     </span>
                   </summary>
-                  <p class="mt-3 text-xs sm:text-sm text-ink-muted leading-relaxed border-t border-border/40 pt-3">
+                  <p class="mt-3 text-sm text-slate-100 font-normal leading-relaxed border-t border-[#334468]/40 pt-3">
                     {item.a}
                   </p>
                 </details>
@@ -1677,7 +1677,7 @@ const faqPageSchema = {
           if (targetEl) targetEl.disabled = true;
           const qF = $("quality-field"), tF = $("target-field");
           if (qF) qF.style.opacity = "1";
-          if (tF) tF.style.opacity = "0.55";
+          if (tF) tF.style.opacity = "1";
           refresh();
         });
         targetModeBtn?.addEventListener("click", () => {
@@ -1687,7 +1687,7 @@ const faqPageSchema = {
           if (qEl) qEl.disabled = true;
           if (targetEl) targetEl.disabled = false;
           const qF = $("quality-field"), tF = $("target-field");
-          if (qF) qF.style.opacity = "0.55";
+          if (qF) qF.style.opacity = "1";
           if (tF) tF.style.opacity = "1";
           refresh();
         });

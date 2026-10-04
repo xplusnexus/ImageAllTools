@@ -13,15 +13,15 @@ const related = slugs
 ---
 {related.length > 0 && (
   <section class="mt-12 pt-8 border-t border-border">
-    <h2 class="text-lg font-semibold font-display text-ink mb-4">Related tools</h2>
+    <h2 class="text-lg font-bold font-display text-white mb-4">Related tools</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {related.map((t) => (
         <a
           href={`/${t.slug}`}
-          class="group block p-4 rounded-xl border border-border bg-gradient-to-b from-surface to-surface-2 hover:border-cyan hover:shadow-[0_4px_20px_rgba(38,224,255,0.08)] transition duration-150"
+          class="group block p-4 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan hover:shadow-[0_4px_20px_rgba(38,224,255,0.15)] transition-all duration-150"
         >
-          <div class="font-medium text-sm text-ink group-hover:text-cyan transition-colors">{t.data.h1}</div>
-          <div class="text-xs text-ink-muted mt-1 line-clamp-2 leading-relaxed">{t.data.description}</div>
+          <div class="font-bold text-sm sm:text-base text-white group-hover:text-cyan transition-colors">{t.data.h1}</div>
+          <div class="text-xs sm:text-sm text-slate-100 mt-1.5 line-clamp-2 leading-relaxed font-normal">{t.data.description}</div>
         </a>
       ))}
     </div>

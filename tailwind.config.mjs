@@ -20,11 +20,11 @@ export default {
         },
         text: {
           DEFAULT: "#ffffff",
-          muted: "#cbd5e1",
+          muted: "#f1f5f9",
         },
         ink: {
           DEFAULT: "#ffffff",
-          muted: "#cbd5e1",
+          muted: "#f1f5f9",
         },
         brand: {
           50: "rgba(38, 224, 255, 0.12)",

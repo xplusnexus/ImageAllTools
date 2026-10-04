@@ -74,7 +74,7 @@ const socials = [
   }
 ];
 ---
-<footer class="relative mt-20 border-t border-border/80 bg-gradient-to-b from-[#0f1422] via-[#121827] to-[#151c2e] text-ink overflow-hidden" role="contentinfo">
+<footer class="relative mt-20 border-t border-border/80 bg-gradient-to-b from-[#0f1422] via-[#121827] to-[#151c2e] text-white overflow-hidden" role="contentinfo">
   <!-- Glowing top border accent -->
   <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan/60 via-purple/50 to-transparent" aria-hidden="true"></div>
 
@@ -90,7 +90,7 @@ const socials = [
         <div>
           <!-- Interactive Brand Anchor -->
           <a
-            class="brand group inline-flex items-center gap-3.5 font-display font-bold text-xl text-ink hover:opacity-95 transition"
+            class="brand group inline-flex items-center gap-3.5 font-display font-bold text-xl text-white hover:opacity-95 transition"
             href="https://www.xplusnexus.com"
             target="_blank"
             rel="noopener"
@@ -110,19 +110,19 @@ const socials = [
             </div>
           </a>
 
-          <p class="text-xs sm:text-sm text-ink-muted mt-3.5 leading-relaxed max-w-sm">
-            <strong class="text-ink">ImageAll</strong> is part of the XPlus Nexus product family. High-speed, privacy-first creative utilities engineered to run 100% locally in your browser with zero cloud file storage.
+          <p class="text-xs sm:text-sm text-slate-100 mt-3.5 leading-relaxed max-w-sm font-normal">
+            <strong class="text-white font-bold">ImageAll</strong> is part of the XPlus Nexus product family. High-speed, privacy-first creative utilities engineered to run 100% locally in your browser with zero cloud file storage.
           </p>
 
           <!-- Security trust indicator badge -->
-          <div class="mt-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border/80 bg-surface/80 text-[11px] font-medium text-ink-muted shadow-sm">
+          <div class="mt-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-cyan/40 bg-surface/90 text-xs font-semibold text-slate-100 shadow-sm">
             <span class="w-2 h-2 rounded-full bg-[#00D084] animate-pulse"></span>
             <span>Zero-Knowledge Engine · 0 ms Server Lag</span>
           </div>
         </div>
 
         <!-- 🔥 Interactive "Connect With XPlus Nexus" Hub -->
-        <div class="mt-6 p-4 rounded-2xl border border-cyan/20 bg-gradient-to-br from-surface to-surface-2/60 shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <div class="mt-6 p-4 rounded-2xl border border-cyan/30 bg-gradient-to-br from-surface to-surface-2/80 shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
           <div class="flex items-center justify-between gap-2 mb-2.5">
             <div class="flex items-center gap-2">
               <span class="text-xs">🌐</span>
@@ -130,12 +130,12 @@ const socials = [
                 Connect With XPlus Nexus
               </span>
             </div>
-            <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-cyan/10 text-cyan border border-cyan/25 animate-pulse">
+            <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-cyan/15 text-cyan border border-cyan/30 animate-pulse">
               Official
             </span>
           </div>
 
-          <p class="text-[11px] text-ink-muted mb-3 leading-relaxed">
+          <p class="text-xs text-slate-100 mb-3 leading-relaxed font-normal">
             Follow our official product channels for feature drops, tutorials, and community releases:
           </p>
 
@@ -146,7 +146,7 @@ const socials = [
                 aria-label={`Follow XPlus Nexus on ${s.name} (${s.handle})`}
                 rel="me noopener"
                 target="_blank"
-                class={`group relative h-9.5 rounded-xl border border-border bg-[#0d0f17] flex items-center justify-center text-ink-muted hover:text-white transition-all duration-200 ${s.hoverBg} hover:scale-110 hover:-translate-y-0.5 active:scale-95 shadow-sm`}
+                class={`group relative h-9.5 rounded-xl border border-border bg-[#0d0f17] flex items-center justify-center text-slate-200 hover:text-white transition-all duration-200 ${s.hoverBg} hover:scale-110 hover:-translate-y-0.5 active:scale-95 shadow-sm`}
                 title={`${s.name} - ${s.handle}`}
               >
                 <span class="transition-transform group-hover:scale-110" set:html={s.svg} />
@@ -163,9 +163,9 @@ const socials = [
             href="https://www.xplusnexus.com/"
             target="_blank"
             rel="noopener"
-            class="mt-3 group flex items-center justify-between px-3 py-2 rounded-xl border border-border/80 bg-surface/90 hover:border-cyan/50 hover:bg-surface-2 text-xs font-semibold text-ink transition-all"
+            class="mt-3 group flex items-center justify-between px-3 py-2 rounded-xl border border-border/80 bg-surface/90 hover:border-cyan/50 hover:bg-surface-2 text-xs font-semibold text-white transition-all"
           >
-            <span class="text-ink-muted group-hover:text-cyan transition-colors">Explore XPlusNexus.com Ecosystem</span>
+            <span class="text-slate-100 group-hover:text-cyan transition-colors font-medium">Explore XPlusNexus.com Ecosystem</span>
             <span class="text-cyan group-hover:translate-x-1 transition-transform">↗</span>
           </a>
         </div>
@@ -182,7 +182,7 @@ const socials = [
             <li>
               <a
                 href={t.href}
-                class="group flex items-center justify-between gap-2 text-ink-muted hover:text-ink hover:translate-x-1 transition-all duration-200 py-1"
+                class="group flex items-center justify-between gap-2 text-slate-200 hover:text-cyan hover:translate-x-1 transition-all duration-200 py-1 font-medium"
               >
                 <span class="group-hover:text-cyan transition-colors">{t.label}</span>
                 {t.badge && (
@@ -210,7 +210,7 @@ const socials = [
                 class={`group flex items-center justify-between gap-2 py-1 transition-all duration-200 hover:translate-x-1 ${
                   t.highlight
                     ? "font-bold text-cyan hover:brightness-125"
-                    : "text-ink-muted hover:text-ink"
+                    : "text-slate-200 hover:text-white font-medium"
                 }`}
               >
                 <span class={t.highlight ? "text-cyan" : "group-hover:text-purple transition-colors"}>
@@ -231,7 +231,7 @@ const socials = [
 
       <!-- 4. Company, Legal & Custom Tool Contact Column (Col 10-12) -->
       <div class="sm:col-span-2 lg:col-span-3 xl:col-span-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-ink-muted mb-3.5 font-sans flex items-center gap-2">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-cyan mb-3.5 font-sans flex items-center gap-2">
           <span>🏢</span>
           <span>Company &amp; Legal</span>
         </h4>
@@ -242,11 +242,11 @@ const socials = [
                 href={c.href}
                 target={c.external ? "_blank" : undefined}
                 rel={c.external ? "noopener" : undefined}
-                class="group flex items-center gap-1.5 text-ink-muted hover:text-cyan hover:translate-x-1 transition-all duration-200 py-1"
+                class="group flex items-center gap-1.5 text-slate-200 hover:text-cyan hover:translate-x-1 transition-all duration-200 py-1 font-medium"
               >
                 <span>{c.label}</span>
                 {c.external && (
-                  <span class="text-[10px] text-ink-muted group-hover:text-cyan" aria-hidden="true">↗</span>
+                  <span class="text-[10px] text-cyan" aria-hidden="true">↗</span>
                 )}
               </a>
             </li>
@@ -265,7 +265,7 @@ const socials = [
             </span>
           </div>
 
-          <p class="text-xs text-ink-muted mb-3.5 leading-relaxed">
+          <p class="text-xs sm:text-sm text-slate-100 mb-3.5 leading-relaxed font-normal">
             Need a custom image algorithm, batch processing, or API integration? Reach out to our engineering team:
           </p>
 
@@ -299,8 +299,8 @@ const socials = [
 
     <!-- 🌍 Worldwide Language & International Hub -->
     <div class="mt-12 pt-6 border-t border-border/60 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-2.5 flex-wrap justify-center sm:justify-start text-xs text-ink-muted">
-        <span class="inline-flex items-center gap-1.5 text-cyan font-semibold">
+      <div class="flex items-center gap-2.5 flex-wrap justify-center sm:justify-start text-xs sm:text-sm text-slate-100 font-medium">
+        <span class="inline-flex items-center gap-1.5 text-cyan font-bold">
           <span>🌍</span>
           <span>Worldwide Access:</span>
         </span>
@@ -313,9 +313,9 @@ const socials = [
     </div>
 
     <!-- Bottom Copyright & Trust Bar -->
-    <div class="mt-6 pt-5 border-t border-border/40 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-ink-muted">
+    <div class="mt-6 pt-5 border-t border-border/40 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs sm:text-sm text-slate-100 font-normal">
       <div class="flex items-center gap-2.5 flex-wrap justify-center sm:justify-start">
-        <span>© {year} <strong class="text-ink">XPlus Nexus</strong>. All rights reserved.</span>
+        <span>© {year} <strong class="text-white font-bold">XPlus Nexus</strong>. All rights reserved.</span>
         <span class="hidden sm:inline text-border">•</span>
         <span class="inline-flex items-center gap-1.5">
           <span class="text-cyan">⚡</span>
@@ -324,11 +324,11 @@ const socials = [
       </div>
 
       <div class="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
-        <span class="text-[11px] text-ink-muted/80">100% Client-Side WebAssembly &amp; HTML5 Canvas</span>
+        <span class="text-xs text-slate-200 font-medium">100% Client-Side WebAssembly &amp; HTML5 Canvas</span>
         <button
           type="button"
           id="footer-back-to-top"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-border bg-surface text-ink hover:border-cyan hover:text-cyan transition-all text-xs cursor-pointer shadow-sm active:scale-95"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan/40 bg-surface text-white hover:border-cyan hover:bg-cyan hover:text-black transition-all text-xs font-bold cursor-pointer shadow-sm active:scale-95"
           aria-label="Scroll back to top"
         >
           <span>Top</span>

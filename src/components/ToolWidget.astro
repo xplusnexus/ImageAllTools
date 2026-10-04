@@ -115,11 +115,11 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
             <button class={`mode-option ${slug.includes("kb") ? "active" : ""}`} id="tw-cmp-t-mode" type="button">Target file size</button>
           </div>
         </div>
-        <div class="field" id="tw-cmp-q-field" style={slug.includes("kb") ? "opacity:0.55" : ""}>
+        <div class="field" id="tw-cmp-q-field">
           <label for="tw-cmp-q">Quality (<span id="tw-cmp-q-val">80</span>%)</label>
           <input type="range" id="tw-cmp-q" min="10" max="100" value="80" disabled={slug.includes("kb")} />
         </div>
-        <div class="field" id="tw-cmp-t-field" style={slug.includes("kb") ? "" : "opacity:0.55"}>
+        <div class="field" id="tw-cmp-t-field">
           <label for="tw-cmp-t">Target size (KB)</label>
           <div class="target-inline">
             <input type="number" id="tw-cmp-t" min="1" value={defaultTargetKB} disabled={!slug.includes("kb")} />
@@ -211,7 +211,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         <div class="field">
           <label class="flex items-center gap-2 cursor-pointer pt-3">
             <input type="checkbox" id="tw-res-lock" checked={!slug.includes("instagram")} />
-            <span class="text-xs text-ink">Lock aspect ratio</span>
+            <span class="text-xs text-white font-medium">Lock aspect ratio</span>
           </label>
         </div>
         <div class="field">
@@ -258,8 +258,8 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         </div>
 
         <div class="field col-span-full">
-          <div class="text-xs text-ink-muted flex items-center justify-between pt-1">
-            <span>Selection: <strong id="tw-crop-dims" class="text-ink">Draw box or select preset</strong></span>
+          <div class="text-xs text-slate-100 flex items-center justify-between pt-1">
+            <span>Selection: <strong id="tw-crop-dims" class="text-white font-bold">Draw box or select preset</strong></span>
             <button class="btn btn-sm btn-ghost text-xs" id="tw-crop-center-btn" type="button">🎯 Center 80% Box</button>
           </div>
         </div>
@@ -309,7 +309,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     {mode === "rotate" && (
       <div class="controls">
         <div class="field col-span-full">
-          <label class="block mb-2 font-medium text-ink">{slug.includes("flip") ? "Mirror & Flip Options" : "Rotate & Orientation Controls"}</label>
+          <label class="block mb-2 font-bold text-white">{slug.includes("flip") ? "Mirror & Flip Options" : "Rotate & Orientation Controls"}</label>
           <div class="flex gap-2.5 flex-wrap">
             <button class={`btn ${slug.includes("flip") ? "btn-primary" : "btn-ghost"}`} id="tw-flip-h" type="button">⇋ Flip Horizontal (Mirror Left/Right)</button>
             <button class="btn btn-ghost" id="tw-flip-v" type="button">⇵ Flip Vertical (Upside Down)</button>
@@ -318,7 +318,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
             <button class="btn btn-ghost" id="tw-rot-reset" type="button">↺ Reset Orientation</button>
           </div>
           <div class="mt-3 flex items-center gap-3">
-            <span class="text-xs text-ink-muted" id="tw-flip-status">Orientation: Original | Angle: 0°</span>
+            <span class="text-xs text-slate-100 font-medium" id="tw-flip-status">Orientation: Original | Angle: 0°</span>
           </div>
         </div>
       </div>
@@ -384,7 +384,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         <div class="field">
           <label class="flex items-center gap-2 cursor-pointer pt-3">
             <input type="checkbox" id="tw-wm-shadow" checked />
-            <span class="text-xs text-ink">{slug.includes("meme") ? "Heavy black stroke (Classic Meme outline)" : "Dark text outline (always readable)"}</span>
+            <span class="text-xs text-white font-medium">{slug.includes("meme") ? "Heavy black stroke (Classic Meme outline)" : "Dark text outline (always readable)"}</span>
           </label>
         </div>
       </div>
@@ -416,8 +416,8 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
           <div class="field col-span-full">
             <div class="flex justify-between items-center mb-1">
-              <label for="tw-h2i-code" class="font-semibold text-xs text-ink">HTML & Inline CSS Code</label>
-              <span class="text-xs text-cyan">HTML5, Flexbox & Gradients supported</span>
+              <label for="tw-h2i-code" class="font-bold text-xs text-white">HTML & Inline CSS Code</label>
+              <span class="text-xs text-cyan font-semibold">HTML5, Flexbox & Gradients supported</span>
             </div>
             <textarea id="tw-h2i-code" class="code-editor-textarea w-full" rows="7" spellcheck="false"></textarea>
           </div>
@@ -471,8 +471,8 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         <div id="tw-h2i-pane-img2b64" class="col-span-full grid grid-cols-1 gap-3" style="display:none;">
           <div class="field">
             <div class="flex justify-between items-center mb-1">
-              <label for="tw-b64-output" class="font-semibold text-xs text-ink">Base64 Data URI (data:image/png;base64,...)</label>
-              <span id="tw-b64-size" class="text-xs text-cyan">Upload an image above to generate</span>
+              <label for="tw-b64-output" class="font-bold text-xs text-white">Base64 Data URI (data:image/png;base64,...)</label>
+              <span id="tw-b64-size" class="text-xs text-cyan font-semibold">Upload an image above to generate</span>
             </div>
             <textarea id="tw-b64-output" class="code-editor-textarea w-full" rows="4" readonly placeholder="Upload an image using the box above to generate Base64 Data URI..."></textarea>
             <div class="mt-2 flex gap-2">
@@ -481,7 +481,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           </div>
 
           <div class="field">
-            <label for="tw-b64-img-tag" class="font-semibold text-xs text-ink">HTML &lt;img&gt; Tag (Ready to embed)</label>
+            <label for="tw-b64-img-tag" class="font-bold text-xs text-white">HTML &lt;img&gt; Tag (Ready to embed)</label>
             <textarea id="tw-b64-img-tag" class="code-editor-textarea w-full" rows="2" readonly placeholder='&lt;img src="data:image/png;base64,..." alt="Embedded Image" /&gt;'></textarea>
             <div class="mt-2">
               <button class="btn btn-ghost" id="tw-b64-copy-imgtag" type="button">📋 Copy HTML &lt;img&gt; Code</button>
@@ -489,7 +489,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           </div>
 
           <div class="field">
-            <label for="tw-b64-css-tag" class="font-semibold text-xs text-ink">CSS Background Property</label>
+            <label for="tw-b64-css-tag" class="font-bold text-xs text-white">CSS Background Property</label>
             <textarea id="tw-b64-css-tag" class="code-editor-textarea w-full" rows="2" readonly placeholder='background-image: url("data:image/png;base64,...");'></textarea>
             <div class="mt-2">
               <button class="btn btn-ghost" id="tw-b64-copy-csstag" type="button">📋 Copy CSS Background</button>
@@ -500,7 +500,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         <!-- TAB 3: Base64 to Image -->
         <div id="tw-h2i-pane-b642img" class="col-span-full grid grid-cols-1 gap-3" style="display:none;">
           <div class="field">
-            <label for="tw-b64-input" class="font-semibold text-xs text-ink">Paste Base64 String or Data URI</label>
+            <label for="tw-b64-input" class="font-bold text-xs text-white">Paste Base64 String or Data URI</label>
             <textarea id="tw-b64-input" class="code-editor-textarea w-full" rows="5" placeholder="Paste data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."></textarea>
           </div>
           <div class="field">
@@ -575,9 +575,9 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         <div class="field col-span-full">
           <label class="flex items-center gap-2 cursor-pointer pt-2">
             <input type="checkbox" id="tw-dp-guide" checked />
-            <span class="text-xs text-ink font-semibold">Show WhatsApp Circular Safe-Zone (Green dashed ring preview)</span>
+            <span class="text-xs text-white font-bold">Show WhatsApp Circular Safe-Zone (Green dashed ring preview)</span>
           </label>
-          <span class="text-xs text-muted block mt-1">Shows the exact circular area WhatsApp displays in chat lists. The green guide is automatically removed from your download!</span>
+          <span class="text-xs text-slate-100 font-medium block mt-1">Shows the exact circular area WhatsApp displays in chat lists. The green guide is automatically removed from your download!</span>
         </div>
       </div>
     )}
@@ -635,8 +635,8 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
         <div class="field col-span-full">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-semibold text-ink">Extracted Swatches (Click swatch to copy, click 2 to check WCAG contrast)</span>
-            <span class="text-xs text-cyan" id="tw-pal-hint">Click image to sample custom color</span>
+            <span class="text-xs font-bold text-white">Extracted Swatches (Click swatch to copy, click 2 to check WCAG contrast)</span>
+            <span class="text-xs text-cyan font-semibold" id="tw-pal-hint">Click image to sample custom color</span>
           </div>
           <div class="swatches" id="tw-pal-swatches"></div>
         </div>
@@ -646,12 +646,12 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         </div>
 
         <div class="field col-span-full" id="tw-pal-analysis-box">
-          <div class="p-3 rounded-lg bg-surface-alt border border-border flex items-center justify-between gap-3 text-xs">
+          <div class="p-3 rounded-lg bg-surface-alt border border-[#334468] flex items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2">
               <span class="text-base" id="tw-pal-season-icon">🎨</span>
               <div>
-                <strong class="text-ink" id="tw-pal-season-title">Color Season Analysis: Warm Autumn</strong>
-                <p class="text-ink-muted mt-0.5" id="tw-pal-season-desc">Upload a photo to detect warm/cool undertones and seasonal palette classification.</p>
+                <strong class="text-white font-bold" id="tw-pal-season-title">Color Season Analysis: Warm Autumn</strong>
+                <p class="text-slate-100 font-normal mt-0.5" id="tw-pal-season-desc">Upload a photo to detect warm/cool undertones and seasonal palette classification.</p>
               </div>
             </div>
             <span class="badge text-[11px] px-2 py-0.5 bg-accent/15 text-accent font-semibold whitespace-nowrap" id="tw-pal-season-badge">Seasonal Match</span>
@@ -784,7 +784,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         </div>
         <div class="field col-span-full">
           <div class="flex items-center justify-between gap-2 mt-2">
-            <span class="text-xs text-ink-muted" id="tw-col-count">0 photos in collage</span>
+            <span class="text-xs text-slate-100 font-medium" id="tw-col-count">0 photos in collage</span>
             <div class="flex gap-2">
               <button class="btn btn-ghost text-xs py-1 px-3" id="tw-col-add-btn" type="button">+ Add More Photos</button>
               <button class="btn btn-ghost text-xs py-1 px-3" id="tw-col-clear-btn" type="button">↺ Clear</button>
@@ -1113,7 +1113,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         const qField = document.getElementById("tw-cmp-q-field");
         const tField = document.getElementById("tw-cmp-t-field");
         if (qField) qField.style.opacity = "1";
-        if (tField) tField.style.opacity = "0.55";
+        if (tField) tField.style.opacity = "1";
         refreshCompress();
       });
       tModeBtn.addEventListener("click", () => {
@@ -1124,7 +1124,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         if (tEl) tEl.disabled = false;
         const qField = document.getElementById("tw-cmp-q-field");
         const tField = document.getElementById("tw-cmp-t-field");
-        if (qField) qField.style.opacity = "0.55";
+        if (qField) qField.style.opacity = "1";
         if (tField) tField.style.opacity = "1";
         refreshCompress();
       });

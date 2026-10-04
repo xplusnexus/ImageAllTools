@@ -14,23 +14,23 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
   <main id="main" class="py-12 md:py-20">
     <div class="wrap max-w-4xl">
       <!-- Breadcrumb Nav -->
-      <nav class="flex items-center gap-2 text-xs text-ink-muted mb-8" aria-label="Breadcrumb">
-        <a href="/" class="hover:text-cyan transition-colors">Home</a>
-        <span>/</span>
-        <span class="text-ink">Contact Support</span>
+      <nav class="flex items-center gap-2 text-sm text-slate-200 font-semibold mb-8" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-cyan text-slate-200 transition-colors">Home</a>
+        <span class="text-cyan/60 font-bold">/</span>
+        <span class="text-white font-bold">Contact Support</span>
       </nav>
 
       <!-- Header Section -->
       <header class="mb-12 border-b border-border/60 pb-8 text-center sm:text-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs font-semibold mb-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan/40 bg-cyan/10 text-cyan text-xs font-bold uppercase tracking-wider mb-4">
           <span>✨</span>
           <span>We're Here to Help</span>
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-white mb-4">
           Get in Touch with Our Team
         </h1>
-        <p class="text-sm sm:text-base text-ink-muted leading-relaxed max-w-2xl">
-          Have an idea for a new image tool, need custom batch processing, or ran into a browser bug? Our engineering team at <strong class="text-ink">XPlus Nexus</strong> is ready to assist.
+        <p class="text-sm sm:text-base text-slate-100 leading-relaxed max-w-2xl font-normal">
+          Have an idea for a new image tool, need custom batch processing, or ran into a browser bug? Our engineering team at <strong class="text-white font-bold">XPlus Nexus</strong> is ready to assist.
         </p>
       </header>
 
@@ -39,30 +39,30 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
         <!-- Direct Email Card -->
         <div class="p-6 sm:p-8 rounded-2xl border border-cyan/40 bg-gradient-to-br from-[#10141f] via-surface to-surface-2 shadow-lg flex flex-col justify-between">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/30 flex items-center justify-center text-xl text-cyan mb-5 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-cyan/15 border border-cyan/40 flex items-center justify-center text-xl text-cyan mb-5 shadow-sm">
               ✉️
             </div>
             <h2 class="text-xl font-display font-bold text-white mb-2">Direct Engineering Email</h2>
-            <p class="text-xs sm:text-sm text-ink-muted mb-6 leading-relaxed">
-              Drop us an email anytime. Our core development team reviews incoming inquiries and responds within <strong class="text-cyan">24 hours</strong>.
+            <p class="text-sm text-slate-100 mb-6 leading-relaxed font-normal">
+              Drop us an email anytime. Our core development team reviews incoming inquiries and responds within <strong class="text-cyan font-bold">24 hours</strong>.
             </p>
           </div>
 
           <div class="p-3 rounded-xl bg-[#08090d] border border-cyan/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <span id="contact-email-text" class="text-white font-mono text-xs sm:text-sm font-semibold truncate pl-1">
+            <span id="contact-email-text" class="text-white font-mono text-xs sm:text-sm font-bold truncate pl-1">
               support@xplusnexus.com
             </span>
             <div class="flex items-center gap-2 flex-shrink-0">
               <button
                 type="button"
                 id="copy-contact-page-btn"
-                class="px-3 py-1.5 rounded-lg bg-cyan/15 hover:bg-cyan/25 text-cyan border border-cyan/40 text-xs font-semibold cursor-pointer active:scale-95 transition-all shadow-sm"
+                class="px-3 py-1.5 rounded-lg bg-cyan/15 hover:bg-cyan/25 text-cyan border border-cyan/40 text-xs font-bold cursor-pointer active:scale-95 transition-all shadow-sm"
               >
                 <span id="copy-contact-page-badge">Copy Email</span>
               </button>
               <a
                 href="mailto:support@xplusnexus.com?subject=ImageAll%20Inquiry"
-                class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan to-purple text-bg text-xs font-bold hover:opacity-90 transition-all shadow-sm text-center"
+                class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan to-purple text-bg text-xs font-extrabold hover:opacity-90 transition-all shadow-sm text-center"
               >
                 Send Email ↗
               </a>
@@ -73,18 +73,18 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
         <!-- Custom Tool & Enterprise Card -->
         <div class="p-6 sm:p-8 rounded-2xl border border-purple/40 bg-gradient-to-br from-[#181124] via-surface to-surface-2 shadow-lg flex flex-col justify-between">
           <div>
-            <div class="w-12 h-12 rounded-xl bg-purple/10 border border-purple/30 flex items-center justify-center text-xl text-purple mb-5 shadow-sm">
+            <div class="w-12 h-12 rounded-xl bg-purple/15 border border-purple/40 flex items-center justify-center text-xl text-purple mb-5 shadow-sm">
               🛠️
             </div>
             <h2 class="text-xl font-display font-bold text-white mb-2">Need a Custom Tool?</h2>
-            <p class="text-xs sm:text-sm text-ink-muted mb-6 leading-relaxed">
+            <p class="text-sm text-slate-100 mb-6 leading-relaxed font-normal">
               Require proprietary format conversion, private SDK integrations, or specific image processing algorithms built for your organization?
             </p>
           </div>
 
           <a
             href="mailto:support@xplusnexus.com?subject=Custom%20Tool%20Request%20-%20ImageAll"
-            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-purple/40 bg-purple/10 hover:bg-purple/20 text-purple font-semibold text-xs sm:text-sm transition-all"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-purple/40 bg-purple/15 hover:bg-purple/25 text-purple font-bold text-xs sm:text-sm transition-all"
           >
             <span>Request Custom Feature</span>
             <span>→</span>
@@ -93,29 +93,29 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
       </div>
 
       <!-- Common Inquiry Types -->
-      <section class="p-6 sm:p-8 rounded-2xl border border-border bg-surface mb-12 shadow-sm">
+      <section class="p-6 sm:p-8 rounded-2xl border border-[#334468] bg-[#151d31] mb-12 shadow-sm">
         <h2 class="text-xl sm:text-2xl font-display font-bold text-white mb-6 flex items-center gap-2.5">
           <span>💡</span>
           <span>What We Can Help You With</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div class="p-4 rounded-xl border border-border/80 bg-surface-2/60">
+          <div class="p-4 rounded-xl border border-[#334468] bg-[#192238]">
             <h3 class="text-sm font-bold text-white mb-2">🐛 Bug Reports</h3>
-            <p class="text-xs text-ink-muted leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal">
               If an image file fails to convert or resize on a specific device, send us your browser version and OS for immediate patching.
             </p>
           </div>
 
-          <div class="p-4 rounded-xl border border-border/80 bg-surface-2/60">
+          <div class="p-4 rounded-xl border border-[#334468] bg-[#192238]">
             <h3 class="text-sm font-bold text-white mb-2">🚀 Feature Requests</h3>
-            <p class="text-xs text-ink-muted leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal">
               Looking for a particular aspect ratio, batch compression threshold, or new filter? We prioritize community requested utilities.
             </p>
           </div>
 
-          <div class="p-4 rounded-xl border border-border/80 bg-surface-2/60">
+          <div class="p-4 rounded-xl border border-[#334468] bg-[#192238]">
             <h3 class="text-sm font-bold text-white mb-2">🤝 Partnerships</h3>
-            <p class="text-xs text-ink-muted leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal">
               Interested in white-labeling our client-side WebAssembly image algorithms or integrating them into your SaaS app?
             </p>
           </div>
@@ -123,11 +123,11 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
       </section>
 
       <!-- Connect With Us Hub -->
-      <section class="p-6 sm:p-8 rounded-2xl border border-border bg-gradient-to-r from-surface via-surface-2 to-surface text-center">
+      <section class="p-6 sm:p-8 rounded-2xl border border-[#334468] bg-gradient-to-r from-[#151d31] via-[#1c263e] to-[#151d31] text-center">
         <h2 class="text-lg sm:text-xl font-display font-bold text-white mb-2">
           Connect With XPlus Nexus
         </h2>
-        <p class="text-xs sm:text-sm text-ink-muted mb-6 max-w-lg mx-auto leading-relaxed">
+        <p class="text-sm text-slate-100 mb-6 max-w-lg mx-auto leading-relaxed font-normal">
           Follow our official channels for engineering devlogs, new tool announcements, and product updates.
         </p>
 
@@ -136,7 +136,7 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
             href="https://x.com/xplusnexus"
             target="_blank"
             rel="noopener"
-            class="px-4 py-2 rounded-xl border border-border bg-surface-2 hover:border-white hover:text-white text-ink-muted text-xs font-semibold transition"
+            class="px-4 py-2 rounded-xl border border-[#334468] bg-[#192238] hover:border-cyan hover:text-cyan text-white text-xs sm:text-sm font-bold transition"
           >
             X (Twitter) ↗
           </a>
@@ -144,7 +144,7 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
             href="https://www.linkedin.com/company/xplusnexus"
             target="_blank"
             rel="noopener"
-            class="px-4 py-2 rounded-xl border border-border bg-surface-2 hover:border-[#0077B5] hover:text-[#0077B5] text-ink-muted text-xs font-semibold transition"
+            class="px-4 py-2 rounded-xl border border-[#334468] bg-[#192238] hover:border-[#0077B5] hover:text-[#0077B5] text-white text-xs sm:text-sm font-bold transition"
           >
             LinkedIn ↗
           </a>
@@ -152,7 +152,7 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
             href="https://github.com/xplusnexus"
             target="_blank"
             rel="noopener"
-            class="px-4 py-2 rounded-xl border border-border bg-surface-2 hover:border-purple hover:text-purple text-ink-muted text-xs font-semibold transition"
+            class="px-4 py-2 rounded-xl border border-[#334468] bg-[#192238] hover:border-purple hover:text-purple text-white text-xs sm:text-sm font-bold transition"
           >
             GitHub ↗
           </a>
@@ -160,7 +160,7 @@ const description = "Contact the ImageAll engineering and support team at XPlus 
             href="https://www.xplusnexus.com/"
             target="_blank"
             rel="noopener"
-            class="px-4 py-2 rounded-xl border border-cyan/40 bg-cyan/10 hover:bg-cyan/20 text-cyan text-xs font-semibold transition"
+            class="px-4 py-2 rounded-xl border border-cyan/40 bg-cyan/15 hover:bg-cyan/25 text-cyan text-xs sm:text-sm font-bold transition"
           >
             Official Site ↗
           </a>

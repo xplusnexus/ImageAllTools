@@ -16,11 +16,11 @@ const schema = {
   ],
 };
 ---
-<nav class="text-xs text-ink-muted mb-3 flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
-  <a href="/" class="hover:text-cyan transition-colors">Home</a>
-  <span>/</span>
-  <a href={`/#${category}`} class="hover:text-cyan transition-colors">{categoryLabel}</a>
-  <span>/</span>
-  <span class="text-ink font-medium" aria-current="page">{toolTitle}</span>
+<nav class="text-xs sm:text-sm text-slate-200 mb-3.5 flex items-center gap-2 flex-wrap font-medium" aria-label="Breadcrumb">
+  <a href="/" class="hover:text-cyan text-slate-200 transition-colors">Home</a>
+  <span class="text-cyan/60 font-bold">/</span>
+  <a href={`/#${category}`} class="hover:text-cyan text-slate-200 transition-colors">{categoryLabel}</a>
+  <span class="text-cyan/60 font-bold">/</span>
+  <span class="text-white font-bold" aria-current="page">{toolTitle}</span>
 </nav>
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
