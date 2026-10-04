@@ -2,6 +2,7 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import AccessibilityAssistant from "../components/AccessibilityAssistant.astro";
+import RealtimeActivityTracker from "../components/RealtimeActivityTracker.astro";
 import "../styles/global.css";
 
 export interface Props {
@@ -135,6 +136,7 @@ const metaKeywords = keyword ? `${keyword}, ${defaultKeywords}` : defaultKeyword
     </main>
     <Footer />
     <AccessibilityAssistant />
+    <RealtimeActivityTracker />
     <!-- Global Google Translate Mount Point -->
     <div id="google_translate_element" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;"></div>
   </body>

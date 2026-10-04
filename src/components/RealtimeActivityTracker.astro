@@ -1,0 +1,173 @@
+---
+// RealtimeActivityTracker.astro - Lightweight, zero-bloat client-side presence & processed counter tracker
+---
+<script>
+  (function () {
+    // Unique session ID stored in sessionStorage (cleared when browser tab/window closes)
+    let sessionId = '';
+    try {
+      sessionId = sessionStorage.getItem('imageall_sid') || '';
+      if (!sessionId) {
+        sessionId = Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(4);
+        sessionStorage.setItem('imageall_sid', sessionId);
+      }
+    } catch (e) {
+      sessionId = 'anon_' + Math.random().toString(36).substring(2, 8);
+    }
+
+    // Check if new visitor
+    let isNewVisit = false;
+    try {
+      if (!localStorage.getItem('imageall_visited')) {
+        isNewVisit = true;
+        localStorage.setItem('imageall_visited', '1');
+      }
+    } catch (e) {}
+
+    // In-memory counter state
+    let onlineUsers = 14;
+    let imagesProcessed = 148520;
+    let totalVisitors = 36140;
+    let heartbeatTimer: any = null;
+    let isRequestPending = false;
+
+    // Helper: Format number with commas (e.g. 148,520)
+    function formatNumber(num: number): string {
+      return num.toLocaleString();
+    }
+
+    // Update all matching DOM elements across the page
+    function updateDOM(animate: boolean = false) {
+      const onlineElements = document.querySelectorAll('.live-online-count');
+      const processedElements = document.querySelectorAll('.live-processed-count');
+      const visitorElements = document.querySelectorAll('.live-visitors-count');
+
+      onlineElements.forEach((el) => {
+        el.textContent = formatNumber(onlineUsers);
+      });
+
+      processedElements.forEach((el) => {
+        el.textContent = formatNumber(imagesProcessed);
+        if (animate) {
+          el.classList.add('text-white', 'scale-110');
+          setTimeout(() => {
+            el.classList.remove('text-white', 'scale-110');
+          }, 400);
+        }
+      });
+
+      visitorElements.forEach((el) => {
+        el.textContent = formatNumber(totalVisitors);
+      });
+    }
+
+    // Ping API (heartbeat or increment)
+    async function sendPing(action: 'heartbeat' | 'increment_processed', amount: number = 1) {
+      if (isRequestPending && action === 'heartbeat') return;
+      isRequestPending = true;
+
+      try {
+        const payload = {
+          action,
+          session_id: sessionId,
+          is_new_visit: isNewVisit ? 1 : 0,
+          amount: Math.min(20, Math.max(1, amount))
+        };
+        isNewVisit = false; // only report once per browser session
+
+        const res = await fetch('/api/stats.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          cache: 'no-store'
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.status === 'success') {
+            if (data.online_users !== undefined) onlineUsers = Number(data.online_users);
+            if (data.images_processed !== undefined) imagesProcessed = Number(data.images_processed);
+            if (data.total_visitors !== undefined) totalVisitors = Number(data.total_visitors);
+            updateDOM(action === 'increment_processed');
+          }
+        }
+      } catch (err) {
+        // Silently keep current baseline on network hiccup
+      } finally {
+        isRequestPending = false;
+      }
+    }
+
+    // Global hook for incrementing processed count
+    (window as any).trackImageProcessed = function (amount: number = 1) {
+      const add = Math.min(20, Math.max(1, Number(amount) || 1));
+      // Optimistic instant UI update
+      imagesProcessed += add;
+      updateDOM(true);
+
+      // Inform server
+      sendPing('increment_processed', add);
+    };
+
+    // Auto-detect ANY image file selection anywhere on the page
+    document.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target && target.type === 'file' && target.files && target.files.length > 0) {
+        (window as any).trackImageProcessed(target.files.length);
+      }
+    }, true);
+
+    // Auto-detect ANY drag and drop onto a dropzone
+    document.addEventListener('drop', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.closest('.dropzone') && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        (window as any).trackImageProcessed(e.dataTransfer.files.length);
+      }
+    }, true);
+
+    // Listen to custom event dispatched by existing widgets
+    window.addEventListener('imageall:processed', () => {
+      (window as any).trackImageProcessed(1);
+    });
+
+    // Start heartbeat interval (only when tab is visible)
+    function startHeartbeat() {
+      stopHeartbeat();
+      // Send initial heartbeat
+      sendPing('heartbeat');
+      // Every 25 seconds while active
+      heartbeatTimer = setInterval(() => {
+        if (!document.hidden) {
+          sendPing('heartbeat');
+        }
+      }, 25000);
+    }
+
+    function stopHeartbeat() {
+      if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
+    }
+
+    // Page Visibility API: Stop pinging when tab is minimized/hidden to prevent useless loops
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopHeartbeat();
+      } else {
+        startHeartbeat();
+      }
+    });
+
+    // Initialize on page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        updateDOM();
+        startHeartbeat();
+      });
+    } else {
+      updateDOM();
+      startHeartbeat();
+    }
+  })();
+</script>

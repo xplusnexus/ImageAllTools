@@ -34,6 +34,19 @@ const navLinks = [
     
     <!-- Header Right: Language, Catalog & Mobile Menu Button -->
     <div class="flex items-center gap-1.5 sm:gap-3">
+      <!-- Live Global Activity Indicator (Desktop) -->
+      <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-cyan/30 bg-[#12192b] text-xs shadow-inner flex-shrink-0" title="Real-time global statistics">
+        <span class="inline-flex items-center gap-1.5 font-bold text-slate-100">
+          <span class="w-2 h-2 rounded-full bg-[#00D084] animate-pulse" aria-hidden="true"></span>
+          <span class="live-online-count font-extrabold text-white">14</span> Online
+        </span>
+        <span class="text-slate-500 select-none">•</span>
+        <span class="inline-flex items-center gap-1 font-bold text-cyan">
+          <span aria-hidden="true">⚡</span>
+          <span class="live-processed-count">148,520</span> Processed
+        </span>
+      </div>
+
       <!-- Worldwide Language Selector -->
       <LanguageSelector variant="header" idPrefix="header" />
 
@@ -72,6 +85,18 @@ const navLinks = [
     class="lg:hidden hidden border-t border-[#334468] bg-[#121827] px-4 py-3 shadow-2xl transition-all"
     aria-label="Mobile Navigation Menu"
   >
+    <!-- Live Activity Banner on Mobile -->
+    <div class="mb-3 px-3.5 py-2 rounded-xl border border-cyan/30 bg-[#151e33] flex items-center justify-between text-xs shadow-sm">
+      <span class="flex items-center gap-1.5 font-bold text-slate-100">
+        <span class="w-2 h-2 rounded-full bg-[#00D084] animate-pulse" aria-hidden="true"></span>
+        <span class="live-online-count font-extrabold text-white">14</span> Users Online Now
+      </span>
+      <span class="font-bold text-cyan flex items-center gap-1">
+        <span aria-hidden="true">⚡</span>
+        <span class="live-processed-count">148,520</span> Processed
+      </span>
+    </div>
+
     <div class="grid grid-cols-2 gap-2 pb-2">
       {navLinks.map((item) => (
         <a

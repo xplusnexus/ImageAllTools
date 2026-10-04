@@ -33,3 +33,6 @@ desktop.ini
 scratch/
 scratch_*.js
 *.tmp
+public/api/storage/stats.json
+public/api/storage/*.db
+public/api/storage/*.json
