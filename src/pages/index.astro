@@ -449,21 +449,21 @@ const faqPageSchema = {
           <!-- Stat 1: Images Processed -->
           <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_30px_rgba(38,224,255,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-cyan tracking-tight" id="stat-images-count">100K+</div>
+              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-cyan tracking-tight live-processed-count" id="stat-images-count">0</div>
               <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Images Processed</div>
             </div>
             <div class="mt-3 pt-2.5 border-t border-cyan/30">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan/20 border border-cyan/50 text-xs font-bold text-white">
                 🎯 You: <strong class="text-cyan font-black text-sm" id="user-local-processed">0</strong> processed
               </span>
-              <div class="text-xs text-cyan font-bold mt-1.5">Updates live upon download</div>
+              <div class="text-xs text-cyan font-bold mt-1.5">Updates live upon upload</div>
             </div>
           </div>
 
           <!-- Stat 2: Active Users -->
           <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_30px_rgba(179,102,255,0.25)] transition-all duration-300 flex flex-col justify-between">
             <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-purple tracking-tight" id="stat-users-count">10K+</div>
+              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-purple tracking-tight live-online-count" id="stat-users-count">1</div>
               <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Active Users</div>
             </div>
             <div class="mt-3 pt-2.5 border-t border-purple/30">
@@ -472,7 +472,7 @@ const faqPageSchema = {
               </span>
               <div class="text-xs text-slate-100 mt-1.5 flex items-center justify-center gap-1.5 font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span><strong class="text-white font-extrabold" id="stat-active-online">1,248</strong> online now</span>
+                <span><strong class="text-white font-extrabold live-online-count" id="stat-active-online">1</strong> online now</span>
               </div>
             </div>
           </div>
@@ -1713,30 +1713,9 @@ const faqPageSchema = {
             sessionBadge.textContent = `Active Session #${Math.max(1, visitCount)}`;
           }
 
-          // Authentic dynamic baseline starting from 100K + ongoing real-time increment based on date and user actions
-          const startDate = new Date('2024-01-01').getTime();
-          const now = Date.now();
-          const daysPassed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-          const dayMinute = new Date().getHours() * 60 + new Date().getMinutes();
-          const globalImagesBase = 100000 + (daysPassed * 120) + Math.floor(dayMinute * 2.8) + count;
-          const globalUsersBase = 10000 + Math.floor(daysPassed * 18) + Math.floor(dayMinute * 0.4);
-          const liveOnline = 1200 + Math.floor((dayMinute % 180) * 1.8);
-
-          const statImages = document.getElementById('stat-images-count');
-          if (statImages) {
-            statImages.textContent = globalImagesBase.toLocaleString() + '+';
-          }
           const userProcessedEl = document.getElementById('user-local-processed');
           if (userProcessedEl) {
             userProcessedEl.textContent = count.toString();
-          }
-          const statUsers = document.getElementById('stat-users-count');
-          if (statUsers) {
-            statUsers.textContent = globalUsersBase.toLocaleString() + '+';
-          }
-          const statOnline = document.getElementById('stat-active-online');
-          if (statOnline) {
-            statOnline.textContent = liveOnline.toLocaleString();
           }
         } catch (e) {}
       }
@@ -1748,19 +1727,6 @@ const faqPageSchema = {
           updateUserStatDisplay(e.detail.count);
         }
       });
-
-      // Live online creators heartbeat (fluctuates realistically every 6s)
-      setInterval(() => {
-        try {
-          const statOnline = document.getElementById('stat-active-online');
-          if (statOnline) {
-            const current = parseInt(statOnline.textContent?.replace(/,/g, '') || '1248', 10);
-            const delta = Math.floor(Math.random() * 7) - 3; // -3 to +3
-            const nextVal = Math.max(950, current + delta);
-            statOnline.textContent = nextVal.toLocaleString();
-          }
-        } catch (e) {}
-      }, 6000);
 
       function initDropzone(zoneId: string, inputId: string, onFiles: (files: FileList) => void) {
         const zone = $(zoneId), input = $(inputId) as HTMLInputElement;

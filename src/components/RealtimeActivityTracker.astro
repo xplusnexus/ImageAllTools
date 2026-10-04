@@ -118,6 +118,18 @@
       }
       lastUploadTriggerTime = now;
       (window as any).trackImageProcessed(amount);
+
+      // Also update local user counter
+      try {
+        const count = parseInt(localStorage.getItem('imageall_user_processed') || '0', 10) + amount;
+        localStorage.setItem('imageall_user_processed', count.toString());
+        const userProcessedEl = document.getElementById('user-local-processed');
+        if (userProcessedEl) {
+          userProcessedEl.textContent = count.toString();
+          userProcessedEl.classList.add('text-white', 'bg-cyan', 'scale-125');
+          setTimeout(() => userProcessedEl.classList.remove('text-white', 'bg-cyan', 'scale-125'), 600);
+        }
+      } catch (e) {}
     }
 
     // 1. Trigger when user clicks the "Click to Upload Image" button or dropzone
