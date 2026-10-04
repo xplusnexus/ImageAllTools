@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0a0b0f;
-  --surface: #12141c;
-  --surface-2: #171a24;
-  --border: #232634;
+  --bg: #0f1422;
+  --surface: #171f33;
+  --surface-2: #1f2942;
+  --border: #2c3b59;
   --cyan: #26e0ff;
   --purple: #a76bff;
-  --text: #e7eaf3;
-  --text-muted: #8b93a8;
+  --text: #ffffff;
+  --text-muted: #cbd5e1;
   --radius: 14px;
 }
 
@@ -81,8 +81,9 @@ img {
   margin-top: 22px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: var(--bg);
+  background: var(--surface);
   padding: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .dropzone {
@@ -631,14 +632,14 @@ font {
 
 /* Article & Long-form Markdown Content Styling */
 .article-content {
-  color: var(--text-muted);
+  color: #e2e8f0;
   font-size: 0.95rem;
   line-height: 1.7;
 }
 
 .article-content h2 {
   font-size: 1.45rem;
-  color: var(--text);
+  color: #ffffff;
   margin-top: 2.25rem;
   margin-bottom: 0.75rem;
   font-family: 'Space Grotesk', sans-serif;

@@ -5,14 +5,14 @@ export interface Props {
 const { engine } = Astro.props;
 ---
 {engine === "client" ? (
-  <div class="rounded-xl bg-surface border border-border p-4 text-xs sm:text-sm text-ink-muted my-6">
-    <strong class="text-cyan font-semibold">Your data is safe.</strong> We do not save, upload, or store your
+  <div class="rounded-xl bg-surface-2 border border-cyan/40 p-4 text-xs sm:text-sm text-slate-200 my-6 shadow-sm">
+    <strong class="text-cyan font-bold">Your data is safe.</strong> We do not save, upload, or store your
     images anywhere. All processing happens 100% locally in your browser using client-side APIs —
     your files never leave your device.
   </div>
 ) : (
-  <div class="rounded-xl bg-surface border border-purple/40 p-4 text-xs sm:text-sm text-ink-muted my-6">
-    <strong class="text-purple font-semibold">Your data is safe.</strong> This operation executes in an isolated transient
+  <div class="rounded-xl bg-surface-2 border border-purple/50 p-4 text-xs sm:text-sm text-slate-200 my-6 shadow-sm">
+    <strong class="text-purple font-bold">Your data is safe.</strong> This operation executes in an isolated transient
     sandbox and automatically purges your image immediately upon completion — we never store, log, or share your files.
   </div>
 )}

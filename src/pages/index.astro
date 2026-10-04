@@ -391,21 +391,21 @@ const faqPageSchema = {
     <div class="absolute top-10 -right-20 w-96 h-96 bg-purple/15 rounded-full blur-3xl pointer-events-none"></div>
     
     <div class="wrap relative z-10 max-w-4xl">
-      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-cyan/30 bg-surface/90 shadow-[0_0_20px_rgba(38,224,255,0.15)] mb-4">
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-cyan/40 bg-surface shadow-[0_0_20px_rgba(38,224,255,0.18)] mb-4">
         <img src="/logo.png" alt="XPlus Nexus Logo" class="w-6 h-6 rounded-md object-cover" />
-        <span class="text-xs sm:text-sm font-medium text-ink-muted">An <strong class="text-cyan font-semibold">XPlus Nexus</strong> product</span>
+        <span class="text-xs sm:text-sm font-semibold text-slate-200">An <strong class="text-cyan font-bold">XPlus Nexus</strong> product</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-ink leading-tight">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight text-white leading-tight">
         Every image tool you need, <span class="accent">in one place.</span>
       </h1>
-      <p class="mt-4 text-base sm:text-lg text-ink-muted leading-relaxed">
+      <p class="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed font-normal">
         Upload an image and every tool below actually processes it — compress, resize, convert, crop, remove backgrounds, watermark, extract colors, or export to PDF, all on your own device.
       </p>
       
-      <div class="mt-6 rounded-xl border border-border bg-surface p-4 text-xs sm:text-sm text-ink-muted flex items-start gap-3 shadow-inner">
+      <div class="mt-6 rounded-xl border border-cyan/40 bg-surface-2 p-4 text-xs sm:text-sm text-slate-200 flex items-start gap-3 shadow-md">
         <span class="text-cyan font-bold text-base leading-none mt-0.5">⚡</span>
         <div>
-          <strong class="text-ink">100% Client-Side Private Engine:</strong> No images are uploaded to any server. Everything runs on your computer or phone using HTML5 Canvas & WebAssembly APIs.
+          <strong class="text-white font-semibold">100% Client-Side Private Engine:</strong> No images are uploaded to any server. Everything runs on your computer or phone using HTML5 Canvas &amp; WebAssembly APIs.
         </div>
       </div>
 
@@ -414,7 +414,7 @@ const faqPageSchema = {
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
           <div>
             <!-- Prominent Badge -->
-            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-purple/50 bg-purple/15 text-purple text-xs sm:text-sm font-black uppercase tracking-wider mb-3.5 shadow-[0_0_20px_rgba(179,102,255,0.25)]">
+            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-purple/60 bg-purple/20 text-purple text-xs sm:text-sm font-black uppercase tracking-wider mb-3.5 shadow-[0_0_20px_rgba(179,102,255,0.35)]">
               <span class="w-2.5 h-2.5 rounded-full bg-purple animate-pulse shadow-[0_0_8px_rgba(179,102,255,0.8)]"></span>
               <span>Proven Performance</span>
               <span class="text-purple/60">•</span>
@@ -424,7 +424,7 @@ const faqPageSchema = {
             <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tight leading-tight">
               Proven Performance <span class="text-purple mx-1 sm:mx-2">•</span> Trusted by Creators <span class="accent">Worldwide</span>
             </h2>
-            <p class="text-sm sm:text-base text-ink-muted mt-2.5 max-w-2xl leading-relaxed">
+            <p class="text-sm sm:text-base text-slate-200 mt-2.5 max-w-2xl leading-relaxed">
               Authentic processing telemetry computed directly on your device. Zero cloud uploads, zero wait times, and verified by creators worldwide.
             </p>
           </div>
@@ -594,7 +594,7 @@ const faqPageSchema = {
   </section>
 
   <!-- 🔥 HOT PLACE: Direct-Access Popular Tools -->
-  <section class="py-12 border-b border-border bg-gradient-to-b from-[#0a0b0f] via-surface/60 to-[#0d0f17] relative overflow-hidden" id="hot-tools">
+  <section class="py-12 border-b border-border bg-gradient-to-b from-[#0f1422] via-surface/60 to-[#121828] relative overflow-hidden" id="hot-tools">
     <div class="wrap relative z-10">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
@@ -715,10 +715,10 @@ const faqPageSchema = {
 
 
   <!-- How It Works (Three simple steps - on every page) -->
-  <HowItWorks className="py-12 border-b border-border bg-[#08090c]" />
+  <HowItWorks className="py-12 border-b border-border bg-[#121828]" />
 
   <!-- Sticky Interactive Quick Tools Navigation -->
-  <nav class="sticky top-[58px] z-30 border-b border-border bg-[#0a0b0f]/95 backdrop-blur-xl py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]" aria-label="Jump to a tool" id="quick-jump-nav">
+  <nav class="sticky top-[58px] z-30 border-b border-border bg-[#0f1422]/95 backdrop-blur-xl py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)]" aria-label="Jump to a tool" id="quick-jump-nav">
     <div class="wrap relative">
       <div class="flex items-center gap-3 overflow-x-auto py-1.5 no-scrollbar scroll-smooth" id="jump-scroll-container">
         <a
@@ -1231,10 +1231,10 @@ const faqPageSchema = {
   </section>
 
   <!-- 100% Private, Lightning Fast, Batch Processing (Every page) -->
-  <CoreValueProps className="py-14 border-t border-border bg-[#08090c]" />
+  <CoreValueProps className="py-14 border-t border-border bg-[#121828]" />
 
   <!-- ================= UNIQUE EDITORIAL SECTION ================= -->
-  <section class="py-16 border-t border-border bg-gradient-to-b from-surface to-[#0a0b0f]">
+  <section class="py-16 border-t border-border bg-gradient-to-b from-surface to-[#0f1422]">
     <div class="wrap max-w-5xl">
       <div class="max-w-3xl mb-12">
         <span class="text-xs font-semibold uppercase tracking-wider text-cyan">Next-Generation Image Suite</span>
@@ -1299,7 +1299,7 @@ const faqPageSchema = {
   </section>
 
   <!-- ================= 45 TOOLS CATALOG (SEO & DIRECTORY) ================= -->
-  <section id="catalog" class="py-16 border-t border-border bg-[#08090c]">
+  <section id="catalog" class="py-16 border-t border-border bg-[#0f1422]">
     <div class="wrap">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
@@ -1331,7 +1331,7 @@ const faqPageSchema = {
   </section>
 
   <!-- ================= CATEGORIZED FAQ & SCHEMA ================= -->
-  <section class="py-16 border-t border-border bg-gradient-to-b from-[#0a0b0f] via-surface to-[#0a0b0f]" id="faq">
+  <section class="py-16 border-t border-border bg-gradient-to-b from-[#0f1422] via-surface to-[#0f1422]" id="faq">
     <div class="wrap max-w-5xl">
       <div class="section-head mb-12 text-center max-w-2xl mx-auto">
         <span class="text-xs font-semibold uppercase tracking-wider text-purple px-3 py-1 rounded-full border border-purple/30 bg-purple/10">Help &amp; Knowledge Base</span>

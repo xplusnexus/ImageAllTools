@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#0a0b0f",
+        bg: "#0f1422",
         surface: {
-          DEFAULT: "#12141c",
-          2: "#171a24",
+          DEFAULT: "#171f33",
+          2: "#1f2942",
         },
-        border: "#232634",
+        border: "#2c3b59",
         cyan: {
           DEFAULT: "#26e0ff",
           500: "#26e0ff",
@@ -19,20 +19,20 @@ export default {
           500: "#a76bff",
         },
         text: {
-          DEFAULT: "#e7eaf3",
-          muted: "#8b93a8",
+          DEFAULT: "#ffffff",
+          muted: "#cbd5e1",
         },
         ink: {
-          DEFAULT: "#e7eaf3",
-          muted: "#8b93a8",
+          DEFAULT: "#ffffff",
+          muted: "#cbd5e1",
         },
         brand: {
-          50: "rgba(38, 224, 255, 0.08)",
-          100: "#232634",
+          50: "rgba(38, 224, 255, 0.12)",
+          100: "#2c3b59",
           500: "#26e0ff",
           600: "#26e0ff",
           700: "#a76bff",
-          900: "#12141c",
+          900: "#171f33",
         },
       },
       borderRadius: {
