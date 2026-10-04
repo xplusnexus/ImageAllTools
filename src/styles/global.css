@@ -68,6 +68,25 @@ img {
 }
 
 /* Tool cards & containers */
+.tool-card {
+  position: relative;
+  will-change: transform, box-shadow, border-color;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--cyan) !important;
+  box-shadow: 0 14px 38px rgba(38, 224, 255, 0.24),
+              0 0 0 1px rgba(38, 224, 255, 0.4) !important;
+}
+
+.tool-card:active {
+  transform: translateY(-2px);
+}
+
 .tool-card-box {
   border: 1px solid var(--border);
   border-radius: var(--radius);
