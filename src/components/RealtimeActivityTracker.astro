@@ -15,16 +15,18 @@
       sessionId = 'anon_' + Math.random().toString(36).substring(2, 8);
     }
 
-    // Check if new visitor
+    // Check if new visitor session
     let isNewVisit = false;
     try {
-      if (!localStorage.getItem('imageall_visited')) {
+      if (!sessionStorage.getItem('imageall_counted_visit')) {
         isNewVisit = true;
-        localStorage.setItem('imageall_visited', '1');
+        sessionStorage.setItem('imageall_counted_visit', '1');
       }
-    } catch (e) {}
+    } catch (e) {
+      isNewVisit = true;
+    }
 
-    // In-memory counter state (starts from zero for clean launch)
+    // In-memory counter state (starts from zero/one for clean launch)
     let onlineUsers = 1;
     let imagesProcessed = 0;
     let totalVisitors = 1;
@@ -43,8 +45,9 @@
       const processedElements = document.querySelectorAll('.live-processed-count');
       const visitorElements = document.querySelectorAll('.live-visitors-count');
 
+      const displayUsers = Math.max(1, totalVisitors || onlineUsers);
       onlineElements.forEach((el) => {
-        el.textContent = formatNumber(onlineUsers);
+        el.textContent = formatNumber(displayUsers);
       });
 
       processedElements.forEach((el) => {
@@ -58,7 +61,7 @@
       });
 
       visitorElements.forEach((el) => {
-        el.textContent = formatNumber(totalVisitors);
+        el.textContent = formatNumber(displayUsers);
       });
     }
 
@@ -86,9 +89,10 @@
         if (res.ok) {
           const data = await res.json();
           if (data && data.status === 'success') {
-            if (data.online_users !== undefined) onlineUsers = Number(data.online_users);
+            const userCount = Number(data.total_users || data.total_visitors || data.online_users || 1);
+            onlineUsers = userCount;
+            totalVisitors = userCount;
             if (data.images_processed !== undefined) imagesProcessed = Number(data.images_processed);
-            if (data.total_visitors !== undefined) totalVisitors = Number(data.total_visitors);
             updateDOM(action === 'increment_processed');
           }
         }

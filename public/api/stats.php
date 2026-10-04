@@ -124,24 +124,15 @@ $now = time();
 // If it's a bot or standard GET request without updates, read and return
 if ($isBot || ($action === 'get' && $_SERVER['REQUEST_METHOD'] === 'GET')) {
     $stats = loadStats($dataFile, $defaultStats);
-    
-    // Calculate live active users count (seen in last 45s)
-    $activeCount = 0;
-    if (isset($stats['sessions']) && is_array($stats['sessions'])) {
-        foreach ($stats['sessions'] as $t) {
-            if ($now - $t <= 45) {
-                $activeCount++;
-            }
-        }
-    }
-    // Genuine live active users count (seen in last 45s, min 1 for current visitor)
-    $displayOnline = max(1, $activeCount);
+    $totalUsers = max(1, (int)($stats['total_visitors'] ?? 1));
 
     echo json_encode([
         'status'           => 'success',
-        'online_users'     => $displayOnline,
+        'total_users'      => $totalUsers,
+        'total_visitors'   => $totalUsers,
+        'online_users'     => $totalUsers, // Changed: now reflects total users as requested
+        'active_users'     => $totalUsers,
         'images_processed' => (int)($stats['images_processed'] ?? 0),
-        'total_visitors'   => (int)($stats['total_visitors'] ?? 0),
         'timestamp'        => $now
     ]);
     exit;
@@ -178,44 +169,51 @@ if (flock($fp, LOCK_EX)) {
         $stats['images_processed'] = ($stats['images_processed'] ?? $defaultStats['images_processed']) + $amount;
     }
 
-    // ACTION B: Heartbeat / Active Session Ping
+    // ACTION B: Register User / Heartbeat
     if (!empty($sessionId)) {
+        if (!isset($stats['visited_tokens']) || !is_array($stats['visited_tokens'])) {
+            $stats['visited_tokens'] = [];
+        }
+
+        // Whenever ANY new user / session visits this page, increment total users by 1!
+        $isNewVisit = !empty($input['is_new_visit']) || !empty($_POST['is_new_visit']) || !empty($_GET['is_new_visit']);
+        if ($isNewVisit || !isset($stats['visited_tokens'][$sessionId])) {
+            if (!isset($stats['visited_tokens'][$sessionId])) {
+                $stats['total_visitors'] = ($stats['total_visitors'] ?? 0) + 1;
+                $stats['visited_tokens'][$sessionId] = $now;
+            }
+        }
+
+        // Keep visited tokens capped at 300 to prevent any file bloat
+        if (count($stats['visited_tokens']) > 300) {
+            asort($stats['visited_tokens']);
+            $stats['visited_tokens'] = array_slice($stats['visited_tokens'], -200, 200, true);
+        }
+
+        // Record heartbeat timestamp
         if (!isset($stats['sessions']) || !is_array($stats['sessions'])) {
             $stats['sessions'] = [];
         }
-
-        // If newly opened session, increment total visitors
-        $isNewVisit = !empty($input['is_new_visit']) || !empty($_POST['is_new_visit']) || !empty($_GET['is_new_visit']);
-        if ($isNewVisit && !isset($stats['sessions'][$sessionId])) {
-            $stats['total_visitors'] = ($stats['total_visitors'] ?? $defaultStats['total_visitors']) + 1;
-        }
-
-        // Record heartbeat timestamp for this session
         $stats['sessions'][$sessionId] = $now;
     }
 
-    // CRITICAL: STRICT AUTO-PRUNING OF STALE SESSIONS
-    // Remove any session older than 45 seconds so memory/file NEVER bloats
+    // Auto-prune stale active sessions older than 45s
     if (isset($stats['sessions']) && is_array($stats['sessions'])) {
         foreach ($stats['sessions'] as $tok => $timestamp) {
             if ($now - $timestamp > 45) {
                 unset($stats['sessions'][$tok]);
             }
         }
-
-        // HARD CAP: Max 100 concurrent active sessions in memory
-        // Keeps file size strictly under ~3 KB forever, preventing database full issues
         if (count($stats['sessions']) > 100) {
-            asort($stats['sessions']); // sort oldest first
+            asort($stats['sessions']);
             $stats['sessions'] = array_slice($stats['sessions'], -100, 100, true);
         }
     }
 
     $stats['updated_at'] = $now;
 
-    // Calculate active user count (genuine live users, min 1 for current user)
-    $activeCount = count($stats['sessions'] ?? []);
-    $displayOnline = max(1, $activeCount);
+    // Total users count: starts from 1 on first visit, increments on each new visitor
+    $totalUsers = max(1, (int)($stats['total_visitors'] ?? 1));
 
     // Commit atomic write back to disk
     $json = json_encode($stats, JSON_UNESCAPED_SLASHES);
@@ -228,9 +226,11 @@ if (flock($fp, LOCK_EX)) {
 
     echo json_encode([
         'status'           => 'success',
-        'online_users'     => $displayOnline,
+        'total_users'      => $totalUsers,
+        'total_visitors'   => $totalUsers,
+        'online_users'     => $totalUsers, // Changed: now reflects total users as requested
+        'active_users'     => $totalUsers,
         'images_processed' => (int)$stats['images_processed'],
-        'total_visitors'   => (int)$stats['total_visitors'],
         'timestamp'        => $now
     ]);
     exit;
