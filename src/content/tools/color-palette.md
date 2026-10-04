@@ -1,5 +1,5 @@
 ---
-title: "Color Palette Generator — Extract Hex Codes & Seasonal Color Analysis from Image"
+title: "Color Palette Generator — Hex Codes & Seasonal Analysis"
 description: "Free online color palette generator from image. Extract hex codes, seasonal color analysis (Autumn, Winter, Spring, Summer), Coolors-style palettes, and WCAG contrast."
 h1: "Color Palette Generator & Image Color Extractor"
 keyword: "color palette generator"
