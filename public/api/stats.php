@@ -16,9 +16,34 @@
 error_reporting(0);
 ini_set('display_errors', '0');
 
-// CORS and Cache-Control Headers
+// CORS, Anti-CSRF, and Cache-Control Headers
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = [
+    'https://www.imagealltools.com',
+    'https://imagealltools.com',
+    'http://localhost:4321',
+    'http://localhost:3000'
+];
+
+if (!empty($origin)) {
+    if (in_array($origin, $allowedOrigins, true)) {
+        header("Access-Control-Allow-Origin: $origin");
+    } else {
+        // Disallow cross-origin state changes from unauthorized third-party domains
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(403);
+            echo json_encode(['status' => 'forbidden']);
+            exit;
+        }
+        header("Access-Control-Allow-Origin: https://www.imagealltools.com");
+    }
+} else {
+    // Direct same-origin requests or non-CORS requests
+    header('Access-Control-Allow-Origin: *');
+}
+
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');

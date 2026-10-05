@@ -1,5 +1,8 @@
 # Hostinger Apache / LiteSpeed Configuration for ImageAllTools Static Site
 
+# Disable Directory Browsing (Prevents directory index leaks)
+Options -Indexes
+
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -8,6 +11,9 @@
   # Force HTTPS
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Block direct web access to internal stats storage
+  RewriteRule ^api/storage/ - [F,L]
 
   # If requested resource exists as a file or directory, serve it directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -18,6 +24,26 @@
   RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
   RewriteRule ^(.*)/?$ /$1/index.html [L]
 </IfModule>
+
+# Block access to hidden files and directories (e.g. .git, .env, .htaccess)
+<FilesMatch "^\.">
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</FilesMatch>
+
+# Block direct access to sensitive file extensions (backups, configs, logs, sql, db)
+<FilesMatch "\.(bak|config|sql|ini|log|sh|inc|swp|dist|env|db)$">
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</FilesMatch>
 
 # Custom 404 Error Document
 ErrorDocument 404 /404.html
@@ -44,9 +70,11 @@ ErrorDocument 404 /404.html
   ExpiresByType text/html "access plus 600 seconds"
 </IfModule>
 
-# Security Headers
+# Comprehensive HTTP Security Headers
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 </IfModule>

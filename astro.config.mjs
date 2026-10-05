@@ -12,6 +12,11 @@ export default defineConfig({
   build: {
     format: "directory", // /image-resizer/ instead of /image-resizer.html
   },
+  vite: {
+    build: {
+      sourcemap: false, // Prevents exposing source maps in production
+    },
+  },
   redirects: {
     "/whatsapp-full-dp": "/whatsapp-dp-maker",
     "/full-dp-whatsapp": "/whatsapp-dp-maker",

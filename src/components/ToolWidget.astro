@@ -54,6 +54,7 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
   class="workspace"
   id="active-tool-workspace"
   data-tool-slug={slug}
+  data-tool-name={toolName}
   data-tool-mode={mode}
   data-target-kb={defaultTargetKB}
   data-default-w={defaultWidth}
@@ -942,6 +943,49 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       return (n / (1024 * 1024)).toFixed(2) + " MB";
     }
 
+    function getSmartDownloadName(file: File | null | undefined, toolSuffix: string, ext: string = "png"): string {
+      let baseName = "";
+      if (file && file.name) {
+        const lastDot = file.name.lastIndexOf(".");
+        baseName = lastDot > 0 ? file.name.substring(0, lastDot) : file.name;
+        baseName = baseName
+          .replace(/[\x00-\x1f\x7f\\/:\*\?"<>\|\s]+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^[-_.]+|[-_.]+$/g, "");
+      }
+
+      let cleanSuffix = (toolSuffix || "")
+        .replace(/[\x00-\x1f\x7f\\/:\*\?"<>\|\s]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^[-_.]+|[-_.]+$/g, "");
+
+      const cleanExt = (ext || "png").replace(/^\./, "").toLowerCase();
+
+      // If no original file was provided or baseName is empty, fall back to cleanSuffix or default
+      if (!baseName) {
+        return cleanSuffix ? `${cleanSuffix}.${cleanExt}` : `image.${cleanExt}`;
+      }
+
+      // If no suffix was provided, return baseName
+      if (!cleanSuffix) {
+        return `${baseName}.${cleanExt}`;
+      }
+
+      // Avoid duplicate suffix if baseName already ends with cleanSuffix
+      const lowerBase = baseName.toLowerCase();
+      const lowerSuffix = cleanSuffix.toLowerCase();
+      if (lowerBase.endsWith("-" + lowerSuffix) || lowerBase === lowerSuffix) {
+        return `${baseName}.${cleanExt}`;
+      }
+
+      return `${baseName}-${cleanSuffix}.${cleanExt}`;
+    }
+
+    function getToolDownloadName(file: File | null | undefined, defaultSuffix: string, ext: string = "png"): string {
+      const toolSlug = ws?.getAttribute("data-tool-slug") || slug || defaultSuffix;
+      return getSmartDownloadName(file, toolSlug, ext);
+    }
+
     function downloadBlob(blob: Blob, filename: string) {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
@@ -985,6 +1029,10 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     }
 
     function handleFiles(files: FileList) {
+      if (files && files.length > 0) {
+        currentFile = files[0];
+      }
+
       if (mode === "pdf") {
         Array.from(files).forEach((f) => {
           loadImage(f).then((r) => {
@@ -2051,6 +2099,16 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       });
     }
 
+    // Helper to safely escape HTML special characters
+    function escapeHtml(str: string): string {
+      return (str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     // 7. PDF
     function renderPdfList() {
       const listEl = document.getElementById("tw-pdf-list");
@@ -2059,9 +2117,10 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
       pdfItems.forEach((it, i) => {
         const item = document.createElement("div");
         item.className = "pdf-item";
+        const cleanName = escapeHtml(it.file.name);
         item.innerHTML = `
-          <img src="${it.url}" alt="${it.file.name}" />
-          <span>${i + 1}. ${it.file.name}</span>
+          <img src="${it.url}" alt="${cleanName}" />
+          <span>${i + 1}. ${cleanName}</span>
           <button type="button" data-move="-1" ${i === 0 ? "disabled" : ""}>↑</button>
           <button type="button" data-move="1" ${i === pdfItems.length - 1 ? "disabled" : ""}>↓</button>
           <button type="button" data-remove="${i}">Remove</button>
@@ -2769,6 +2828,8 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
     function cleanXHtml(html: string): string {
       return html
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+        .replace(/on\w+\s*=\s*(["'][^"']*["']|[^\s>]+)/gi, "")
         .replace(/<img\b([^>]*[^\/])>/gi, '<img $1 />')
         .replace(/<br\b([^>]*[^\/])>/gi, '<br $1 />')
         .replace(/<hr\b([^>]*[^\/])>/gi, '<hr $1 />')
@@ -2777,9 +2838,10 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
     }
 
     function measureHtmlHeight(html: string, width: number): number {
+      const sanitized = cleanXHtml(html);
       const m = document.createElement("div");
       m.style.cssText = `position: absolute; left: -9999px; top: 0; width: ${width}px; visibility: hidden; pointer-events: none; box-sizing: border-box;`;
-      m.innerHTML = html;
+      m.innerHTML = sanitized;
       document.body.appendChild(m);
       const h = Math.max(80, m.offsetHeight + 24);
       document.body.removeChild(m);
@@ -3586,8 +3648,10 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
             });
 
             const blob = doc.output("blob");
-            downloadBlob(blob, "document.pdf");
-            setStatus(`PDF generated (${fmtBytes(blob.size)}) with ${pdfItems.length} page(s). Ready to download.`, "ok");
+            const primaryFile = pdfItems[0]?.file || currentFile;
+            const filename = getToolDownloadName(primaryFile, "image-to-pdf", "pdf");
+            downloadBlob(blob, filename);
+            setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}) with ${pdfItems.length} page(s).`, "ok");
           } catch (e: any) {
             setStatus("Could not generate PDF: " + e?.message, "err");
           }
@@ -3611,8 +3675,9 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
               });
               doc.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, canvas.width, canvas.height, undefined, "FAST");
               const blob = doc.output("blob");
-              downloadBlob(blob, "html-render.pdf");
-              setStatus(`Downloaded PDF document (${fmtBytes(blob.size)}).`, "ok");
+              const filename = getToolDownloadName(currentFile, "html-render", "pdf");
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
             } catch (err: any) {
               setStatus("Could not generate PDF: " + err?.message, "err");
             }
@@ -3622,8 +3687,9 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = fmtSelect === "image/jpeg" ? "jpg" : fmtSelect === "image/webp" ? "webp" : "png";
-              downloadBlob(blob, `html-render.${ext}`);
-              setStatus(`Downloaded ${ext.toUpperCase()} image (${fmtBytes(blob.size)}).`, "ok");
+              const filename = getToolDownloadName(currentFile, "html-render", ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
             }
           }, fmtSelect, 0.95);
           return;
@@ -3640,9 +3706,15 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = cvtFmt === "image/png" ? "png" : "jpg";
-              const prefix = bgType === "black" && !srcImg ? "full-black-whatsapp-dp" : "whatsapp-full-dp";
-              downloadBlob(blob, `${prefix}.${ext}`);
-              setStatus(`Downloaded WhatsApp Full DP (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}). No crop!`, "ok");
+              const toolSlug = ws?.getAttribute("data-tool-slug") || slug || "whatsapp-dp-maker";
+              let filename: string;
+              if (bgType === "black" && !srcImg && !currentFile) {
+                filename = `full-black-${toolSlug}.${ext}`;
+              } else {
+                filename = getToolDownloadName(currentFile, "whatsapp-dp-maker", ext);
+              }
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}). No crop!`, "ok");
               renderWhatsAppDp(true); // Restore guide after capture
             }
           }, cvtFmt, 0.95);
@@ -3761,8 +3833,9 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
           out.toBlob((blob) => {
             if (blob) {
-              downloadBlob(blob, "color-palette-swatch-card.png");
-              setStatus(`Downloaded Color Palette Presentation Card (${outW}×${outH}px, ${fmtBytes(blob.size)}).`, "ok");
+              const filename = getToolDownloadName(currentFile, "color-palette", "png");
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${outW}×${outH}px, ${fmtBytes(blob.size)}).`, "ok");
             }
           }, "image/png", 0.95);
           return;
@@ -3811,9 +3884,10 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
           out.toBlob((blob) => {
             if (blob) {
-              const filename = isCircle ? `circle-avatar.${ext}` : `cropped-image.${ext}`;
+              const defaultSuffix = isCircle ? "circle-avatar" : "crop-image";
+              const filename = getToolDownloadName(currentFile, defaultSuffix, ext);
               downloadBlob(blob, filename);
-              setStatus(`Downloaded ${isCircle ? "circle avatar" : "cropped image"} (${bw}×${bh}px, ${fmtBytes(blob.size)}).`, "ok");
+              setStatus(`Downloaded ${filename} (${bw}×${bh}px, ${fmtBytes(blob.size)}).`, "ok");
             }
           }, mime, 0.95);
           return;
@@ -3823,12 +3897,12 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           const bgType = (document.getElementById("tw-bg-type") as HTMLSelectElement)?.value || "transparent";
           const fmtSelect = (document.getElementById("tw-bg-fmt") as HTMLSelectElement)?.value || (bgType === "transparent" ? "image/png" : "image/jpeg");
           const ext = fmtSelect === "image/jpeg" ? "jpg" : fmtSelect === "image/webp" ? "webp" : "png";
-          const prefix = bgType === "transparent" ? "transparent-cutout" : bgType === "white" ? "white-background-product" : bgType === "passport-blue" ? "passport-photo" : "background-removed";
 
           canvas.toBlob((blob) => {
             if (blob) {
-              downloadBlob(blob, `${prefix}.${ext}`);
-              setStatus(`Downloaded ${prefix}.${ext} (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}).`, "ok");
+              const filename = getToolDownloadName(currentFile, "background-remover", ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}).`, "ok");
             }
           }, fmtSelect, 0.95);
           return;
@@ -3878,8 +3952,9 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
             out.toBlob((blob) => {
               if (blob) {
-                downloadBlob(blob, "circle-cropped.png");
-                setStatus(`Downloaded circular image (${fmtBytes(blob.size)}).`, "ok");
+                const filename = getToolDownloadName(currentFile, "circle-crop-image", "png");
+                downloadBlob(blob, filename);
+                setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
               }
             }, "image/png");
           }
@@ -3888,12 +3963,13 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
 
         if (mode === "blur" && canvas && srcImg) {
           renderBlur(false); // Render clean image without dashed guide box
-          const cvtFmt = defaultFmt || "image/png";
+          const cvtFmt = defaultFmt || (currentFile?.type === "image/jpeg" ? "image/jpeg" : "image/png");
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
-              downloadBlob(blob, `blurred-photo.${ext}`);
-              setStatus(`Downloaded ${fmtBytes(blob.size)}.`, "ok");
+              const filename = getToolDownloadName(currentFile, "blur-image", ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
               renderBlur(true); // Restore guide after capture
             }
           }, cvtFmt, 0.95);
@@ -3903,28 +3979,60 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
         if (mode === "collage" && canvas) {
           canvas.toBlob((blob) => {
             if (blob) {
-              downloadBlob(blob, "photo-collage.png");
-              setStatus(`Downloaded photo collage (${fmtBytes(blob.size)}).`, "ok");
+              const primaryFile = collageItems[0]?.file || currentFile;
+              const filename = getToolDownloadName(primaryFile, "collage-maker", "png");
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
             }
           }, "image/png", 0.95);
           return;
         }
 
         if (mode === "rotate" && canvas && srcImg) {
-          const cvtFmt = defaultFmt || "image/png";
+          const cvtFmt = defaultFmt || (currentFile?.type === "image/jpeg" ? "image/jpeg" : "image/png");
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
-              const prefix = ws?.getAttribute("data-tool-slug")?.includes("flip") ? "flipped-image" : "rotated-image";
-              downloadBlob(blob, `${prefix}.${ext}`);
-              setStatus(`Downloaded ${prefix} (${fmtBytes(blob.size)}).`, "ok");
+              const defaultSuffix = ws?.getAttribute("data-tool-slug")?.includes("flip") ? "flip-image" : "rotate-image";
+              const filename = getToolDownloadName(currentFile, defaultSuffix, ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
             }
           }, cvtFmt, 0.95);
           return;
         }
 
+        if (mode === "compress") {
+          if (!lastBlob) await refreshCompress();
+          if (lastBlob) {
+            let ext = "jpg";
+            if (lastBlob.type) {
+              if (lastBlob.type.includes("jpeg")) ext = "jpg";
+              else if (lastBlob.type.includes("png")) ext = "png";
+              else if (lastBlob.type.includes("webp")) ext = "webp";
+              else if (lastBlob.type.includes("pdf")) ext = "pdf";
+            } else {
+              const cmpFmt = (document.getElementById("tw-cmp-fmt") as HTMLSelectElement)?.value || defaultFmt;
+              ext = cmpFmt === "image/png" ? "png" : cmpFmt === "image/webp" ? "webp" : "jpg";
+            }
+            const filename = getToolDownloadName(currentFile, "compress-image", ext);
+            downloadBlob(lastBlob, filename);
+            setStatus(`Downloaded ${filename} (${fmtBytes(lastBlob.size)}).`, "ok");
+            return;
+          }
+        }
+
         if (lastBlob) {
-          downloadBlob(lastBlob, "processed-image");
+          let ext = "jpg";
+          if (lastBlob.type) {
+            if (lastBlob.type.includes("jpeg")) ext = "jpg";
+            else if (lastBlob.type.includes("png")) ext = "png";
+            else if (lastBlob.type.includes("webp")) ext = "webp";
+            else if (lastBlob.type.includes("pdf")) ext = "pdf";
+          }
+          const filename = getToolDownloadName(currentFile, "processed-image", ext);
+          downloadBlob(lastBlob, filename);
+          setStatus(`Downloaded ${filename} (${fmtBytes(lastBlob.size)}).`, "ok");
           return;
         }
 
@@ -3933,25 +4041,24 @@ else if (slug.includes("to-jpg")) defaultFormat = "image/jpeg";
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = cvtFmt === "image/png" ? "png" : "jpg";
-              const isIG = ws?.getAttribute("data-tool-slug")?.includes("instagram");
-              const isFB = ws?.getAttribute("data-tool-slug")?.includes("facebook");
-              const prefix = isIG ? `instagram-post-${canvas.width}x${canvas.height}` : isFB ? `facebook-${canvas.width}x${canvas.height}` : `resized-${canvas.width}x${canvas.height}`;
-              downloadBlob(blob, `${prefix}.${ext}`);
-              setStatus(`Downloaded ${prefix}.${ext} (${fmtBytes(blob.size)}). Ready to publish!`, "ok");
+              const filename = getToolDownloadName(currentFile, "resize-image", ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${canvas.width}×${canvas.height}px, ${fmtBytes(blob.size)}). Ready to publish!`, "ok");
             }
           }, cvtFmt, 0.92);
           return;
         }
 
         if (canvas) {
-          const cvtFmt = (document.getElementById("tw-cvt-fmt") as HTMLSelectElement)?.value || defaultFmt || "image/png";
+          const cvtFmt = (document.getElementById("tw-cvt-fmt") as HTMLSelectElement)?.value || defaultFmt || (currentFile?.type === "image/jpeg" ? "image/jpeg" : "image/png");
           canvas.toBlob((blob) => {
             if (blob) {
               const ext = cvtFmt === "image/jpeg" ? "jpg" : cvtFmt === "image/webp" ? "webp" : "png";
-              downloadBlob(blob, `processed.${ext}`);
-              setStatus(`Downloaded ${fmtBytes(blob.size)}.`, "ok");
+              const filename = getToolDownloadName(currentFile, "processed", ext);
+              downloadBlob(blob, filename);
+              setStatus(`Downloaded ${filename} (${fmtBytes(blob.size)}).`, "ok");
             }
-          }, cvtFmt, 0.9);
+          }, cvtFmt, 0.92);
         }
       });
     }

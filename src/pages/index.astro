@@ -402,208 +402,48 @@ const faqPageSchema = {
         Upload an image and every tool below actually processes it — compress, resize, convert, crop, remove backgrounds, watermark, extract colors, or export to PDF, all on your own device.
       </p>
       
-      <div class="mt-6 rounded-xl border border-cyan/40 bg-surface-2 p-4 text-xs sm:text-sm text-slate-200 flex items-start gap-3 shadow-md">
-        <span class="text-cyan font-bold text-base leading-none mt-0.5">⚡</span>
-        <div>
-          <strong class="text-white font-semibold">100% Client-Side Private Engine:</strong> No images are uploaded to any server. Everything runs on your computer or phone using HTML5 Canvas &amp; WebAssembly APIs.
-        </div>
-      </div>
-
       <!-- Proven Performance / Trusted by Creators Worldwide (Hero Placement - Dynamic & Real) -->
-      <div class="mt-12 pt-10 border-t border-border/80" id="proven-performance-section">
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
-          <div>
-            <!-- Prominent Badge -->
-            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-purple/60 bg-purple/20 text-purple text-xs sm:text-sm font-black uppercase tracking-wider mb-3.5 shadow-[0_0_20px_rgba(179,102,255,0.35)]">
-              <span class="w-2.5 h-2.5 rounded-full bg-purple animate-pulse shadow-[0_0_8px_rgba(179,102,255,0.8)]"></span>
-              <span>Proven Performance</span>
-              <span class="text-purple/60">•</span>
-              <span class="text-white">Global Real-Time Telemetry</span>
-            </div>
-            <!-- Big Bold Headline -->
-            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tight leading-tight">
-              Proven Performance <span class="text-purple mx-1 sm:mx-2">•</span> Trusted by Creators <span class="accent">Worldwide</span>
-            </h2>
-            <p class="text-sm sm:text-base text-slate-200 mt-2.5 max-w-2xl leading-relaxed">
-              Authentic processing telemetry computed directly on your device. Zero cloud uploads, zero wait times, and verified by creators worldwide.
-            </p>
+      <div class="mt-10 pt-8 border-t border-border/80" id="proven-performance-section">
+        <div class="mb-6 sm:mb-8">
+          <!-- Prominent Badge -->
+          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-purple/60 bg-purple/20 text-purple text-xs sm:text-sm font-black uppercase tracking-wider mb-3.5 shadow-[0_0_20px_rgba(179,102,255,0.35)]">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple animate-pulse shadow-[0_0_8px_rgba(179,102,255,0.8)]"></span>
+            <span>Proven Performance</span>
+            <span class="text-purple/60">•</span>
+            <span class="text-white">Global Real-Time Telemetry</span>
           </div>
-          <!-- Live User Telemetry Indicator -->
-          <div class="flex items-center gap-3 px-4 py-3 rounded-2xl border border-emerald-500/40 bg-emerald-950/30 shadow-[0_0_20px_rgba(16,185,129,0.15)] w-fit self-start lg:self-end">
-            <span class="relative flex h-3.5 w-3.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
-            </span>
-            <div class="text-left">
-              <div class="text-emerald-400 font-extrabold tracking-wider uppercase text-[11px] flex items-center gap-1.5">
-                <span>Real-Time User Sync</span>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span class="text-emerald-300">Live</span>
-              </div>
-              <div class="text-slate-200 font-medium text-xs mt-0.5">Tracking your browser processing</div>
-            </div>
-          </div>
+          <!-- Big Bold Headline -->
+          <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tight leading-tight">
+            Proven Performance <span class="text-purple mx-1 sm:mx-2">•</span> Trusted by Creators <span class="accent">Worldwide</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-200 mt-2.5 max-w-2xl leading-relaxed">
+            Authentic processing telemetry computed directly on your device. Zero cloud uploads, zero wait times, and verified by creators worldwide.
+          </p>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-5 text-center">
+        <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
           <!-- Stat 1: Images Processed -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_30px_rgba(38,224,255,0.25)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-cyan tracking-tight live-processed-count" id="stat-images-count">0</div>
-              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Images Processed</div>
-            </div>
-            <div class="mt-3 pt-2.5 border-t border-cyan/30">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan/20 border border-cyan/50 text-xs font-bold text-white">
-                🎯 You: <strong class="text-cyan font-black text-sm" id="user-local-processed">0</strong> processed
-              </span>
-              <div class="text-xs text-cyan font-bold mt-1.5">Updates live upon upload</div>
-            </div>
+          <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_20px_rgba(38,224,255,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-cyan tracking-tight live-processed-count leading-none" id="stat-images-count">0</div>
+            <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Images Processed</div>
           </div>
 
           <!-- Stat 2: Total Users -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_30px_rgba(179,102,255,0.25)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-purple tracking-tight live-online-count" id="stat-users-count">1</div>
-              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Total Users</div>
-            </div>
-            <div class="mt-3 pt-2.5 border-t border-purple/30">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple/20 border border-purple/50 text-xs font-bold text-white">
-                👤 <span id="user-session-badge">Active Session #1</span>
-              </span>
-              <div class="text-xs text-slate-100 mt-1.5 flex items-center justify-center gap-1.5 font-bold">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span><strong class="text-white font-extrabold live-online-count" id="stat-active-online">1</strong> total users visited</span>
-              </div>
-            </div>
+          <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_20px_rgba(179,102,255,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-purple tracking-tight live-online-count leading-none" id="stat-users-count">1</div>
+            <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Total Users</div>
           </div>
 
           <!-- Stat 3: Free & In-Browser -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-emerald-400 hover:bg-[#0a1e16] hover:shadow-[0_0_30px_rgba(52,211,153,0.25)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-emerald-400 tracking-tight">100%</div>
-              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Free & In-Browser</div>
-            </div>
-            <div class="mt-3 pt-2.5 border-t border-emerald-500/30">
-              <div class="text-xs text-emerald-300 font-extrabold">Zero Subscriptions</div>
-              <div class="text-xs text-slate-100 mt-1 font-semibold">Unlimited edits &amp; downloads</div>
-            </div>
+          <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-emerald-400 hover:bg-[#0a1e16] hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-emerald-400 tracking-tight leading-none">100%</div>
+            <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Free &amp; In-Browser</div>
           </div>
 
           <!-- Stat 4: Server Upload Delay -->
-          <div class="group p-5 sm:p-6 rounded-2xl border-2 border-border bg-surface hover:border-[#FFB800] hover:bg-[#1f190a] hover:shadow-[0_0_30px_rgba(255,184,0,0.25)] transition-all duration-300 flex flex-col justify-between">
-            <div>
-              <div class="text-3xl sm:text-4xl md:text-5xl font-display font-black text-[#FFB800] tracking-tight">0 ms</div>
-              <div class="text-xs sm:text-sm text-white mt-1 uppercase tracking-wider font-black">Server Upload Delay</div>
-            </div>
-            <div class="mt-3 pt-2.5 border-t border-[#FFB800]/30">
-              <div class="text-xs text-[#FFB800] font-extrabold">Pure Client WASM</div>
-              <div class="text-xs text-slate-100 mt-1 font-semibold">100% private on your device</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 🌍 WORLDWIDE ACCESS — Premium Attraction Banner (Hot Spot) -->
-  <section class="relative overflow-hidden border-b border-border">
-    <!-- Animated gradient background -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0a1628] via-[#0d0f17] to-[#1a0e2e] pointer-events-none"></div>
-    <div class="absolute top-0 left-1/3 w-[30rem] h-[12rem] bg-cyan/8 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
-    <div class="absolute bottom-0 right-1/4 w-[25rem] h-[10rem] bg-purple/8 rounded-full blur-[80px] pointer-events-none"></div>
-
-    <div class="wrap relative z-10 py-10 sm:py-14">
-      <div class="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-        <!-- Left: Message & Big Attractive Trust Metrics -->
-        <div class="flex-1 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan/40 bg-gradient-to-r from-cyan/15 via-purple/15 to-cyan/10 text-cyan text-xs font-bold uppercase tracking-wider mb-4 shadow-[0_0_25px_rgba(38,224,255,0.2)]">
-            <span class="text-base">🌍</span>
-            <span>Worldwide Access • 190+ Countries</span>
-            <span class="w-2 h-2 rounded-full bg-cyan animate-ping"></span>
-          </div>
-
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight leading-tight mb-3">
-            Available in <span class="accent">190+ Countries</span> with Instant Real-Time Translation
-          </h2>
-          <p class="text-sm sm:text-base text-slate-100 font-normal leading-relaxed max-w-2xl mb-8">
-            Whether you are in <strong class="text-white font-bold">Tokyo, London, São Paulo, Mumbai, or New York</strong> — ImageAll speaks your native tongue.
-            Enjoy 45+ free, high-speed image processing tools with zero sign-up, 100% on-device privacy, and instant translation across <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
-          </p>
-
-          <!-- 🟢 LIVE REAL-TIME GLOBAL ACTIVITY BAR -->
-          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-2xl border border-cyan/40 bg-surface/90 shadow-[0_4px_24px_rgba(38,224,255,0.18)] mb-6 flex-wrap">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#00D084] animate-pulse" aria-hidden="true"></span>
-              <span class="text-xs sm:text-sm font-bold text-white"><span class="live-online-count text-cyan font-extrabold">1</span> Total Users</span>
-            </div>
-            <span class="text-[#334468] select-none" aria-hidden="true">•</span>
-            <div class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-100">
-              <span class="text-cyan" aria-hidden="true">⚡</span>
-              <span><span class="live-processed-count text-white font-extrabold">0</span> Images Processed Globally</span>
-            </div>
-            <span class="text-[#334468] select-none hidden sm:inline" aria-hidden="true">•</span>
-            <div class="hidden sm:flex items-center gap-1 text-xs text-slate-300 font-medium">
-              <span>🔒 100% Client-Side Privacy</span>
-            </div>
-          </div>
-
-          <!-- 💎 BIG & ATTRACTIVE TRUST METRIC FEATURE CARDS -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
-            <!-- Card 1: 190+ Countries -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-cyan/40 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_25px_rgba(38,224,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-cyan/15 border border-cyan/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
-                🌐
-              </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">190+</div>
-              <div class="text-xs sm:text-sm font-bold text-cyan mt-0.5">Countries</div>
-              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Universal worldwide access with zero borders</p>
-            </div>
-
-            <!-- Card 2: 133+ Languages -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-purple/40 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_25px_rgba(179,102,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-purple/15 border border-purple/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
-                🗣️
-              </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">133+</div>
-              <div class="text-xs sm:text-sm font-bold text-purple mt-0.5">Languages</div>
-              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Full native translations with instant live search</p>
-            </div>
-
-            <!-- Card 3: Instant Translation -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#00D084]/40 bg-surface/90 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_25px_rgba(0,208,132,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#00D084]/15 border border-[#00D084]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
-                ⚡
-              </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">&lt; 50ms</div>
-              <div class="text-xs sm:text-sm font-bold text-[#00D084] mt-0.5">Instant Translation</div>
-              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">Live client-side translation without page reload</p>
-            </div>
-
-            <!-- Card 4: Zero Data Collection -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#FF6B6B]/40 bg-surface/90 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_25px_rgba(255,107,107,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#FF6B6B]/15 border border-[#FF6B6B]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
-                🔒
-              </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">100%</div>
-              <div class="text-xs sm:text-sm font-bold text-[#FF6B6B] mt-0.5">Zero Data Collection</div>
-              <p class="text-xs text-slate-100 font-medium mt-1 leading-snug hidden sm:block">100% private in-browser on-device execution</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Language Selector Interactive Card -->
-        <div class="flex-shrink-0 w-full lg:w-auto flex flex-col items-center lg:items-end gap-3">
-          <div class="p-5 sm:p-6 rounded-3xl border border-cyan/40 bg-gradient-to-br from-[#0c1424] via-surface-2/95 to-[#130f24] shadow-[0_12px_45px_rgba(38,224,255,0.18)] w-full sm:w-[320px] md:w-[340px]">
-            <div class="flex items-center justify-between mb-3.5">
-              <p class="text-xs font-bold text-cyan uppercase tracking-wider flex items-center gap-1.5">
-                <span class="text-sm">🌐</span> Choose Your Language
-              </p>
-              <span class="text-xs font-bold text-white px-2 py-0.5 rounded-full bg-surface border border-[#334468]">133 Total</span>
-            </div>
-            <LanguageSelector variant="floating" idPrefix="hero" />
-            <p class="text-xs text-slate-100 font-normal mt-3 text-center sm:text-left leading-relaxed">
-              Select from <strong class="text-white font-bold">70+ quick-pick languages</strong> with instant search, or translate seamlessly into <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
-            </p>
+          <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-[#FFB800] hover:bg-[#1f190a] hover:shadow-[0_0_20px_rgba(255,184,0,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-[#FFB800] tracking-tight leading-none">0 ms</div>
+            <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Server Upload Delay</div>
           </div>
         </div>
       </div>
@@ -730,6 +570,106 @@ const faqPageSchema = {
     </div>
   </section>
 
+  <!-- 🌍 WORLDWIDE ACCESS — Premium Attraction Banner (Hot Spot - Positioned After Quick Launch) -->
+  <section class="relative overflow-hidden border-b border-border">
+    <!-- Animated gradient background -->
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0a1628] via-[#0d0f17] to-[#1a0e2e] pointer-events-none"></div>
+    <div class="absolute top-0 left-1/3 w-[30rem] h-[12rem] bg-cyan/8 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
+    <div class="absolute bottom-0 right-1/4 w-[25rem] h-[10rem] bg-purple/8 rounded-full blur-[80px] pointer-events-none"></div>
+
+    <div class="wrap relative z-10 py-10 sm:py-14">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+        <!-- Left: Message & Big Attractive Trust Metrics -->
+        <div class="flex-1 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan/40 bg-gradient-to-r from-cyan/15 via-purple/15 to-cyan/10 text-cyan text-xs font-bold uppercase tracking-wider mb-4 shadow-[0_0_25px_rgba(38,224,255,0.2)]">
+            <span class="text-base">🌍</span>
+            <span>Worldwide Access • 190+ Countries</span>
+            <span class="w-2 h-2 rounded-full bg-cyan animate-ping"></span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight leading-tight mb-3">
+            Available in <span class="accent">190+ Countries</span> with Instant Real-Time Translation
+          </h2>
+          <p class="text-sm sm:text-base text-slate-100 font-normal leading-relaxed max-w-2xl mb-8">
+            Whether you are in <strong class="text-white font-bold">Tokyo, London, São Paulo, Mumbai, or New York</strong> — ImageAll speaks your native tongue.
+            Enjoy 45+ free, high-speed image processing tools with zero sign-up, 100% on-device privacy, and instant translation across <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
+          </p>
+
+          <!-- 🟢 LIVE REAL-TIME GLOBAL ACTIVITY BAR -->
+          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-2xl border border-cyan/40 bg-surface/90 shadow-[0_4px_24px_rgba(38,224,255,0.18)] mb-6 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#00D084] animate-pulse" aria-hidden="true"></span>
+              <span class="text-xs sm:text-sm font-bold text-white"><span class="live-online-count text-cyan font-extrabold">1</span> Total Users</span>
+            </div>
+            <span class="text-[#334468] select-none" aria-hidden="true">•</span>
+            <div class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-100">
+              <span class="text-cyan" aria-hidden="true">⚡</span>
+              <span><span class="live-processed-count text-white font-extrabold">0</span> Images Processed Globally</span>
+            </div>
+            <span class="text-[#334468] select-none hidden sm:inline" aria-hidden="true">•</span>
+            <div class="hidden sm:flex items-center gap-1 text-xs text-slate-300 font-medium">
+              <span>🔒 100% Client-Side Privacy</span>
+            </div>
+          </div>
+
+          <!-- 💎 BIG & ATTRACTIVE TRUST METRIC FEATURE CARDS -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
+            <!-- Card 1: 190+ Countries -->
+            <div class="group p-4 sm:p-5 rounded-2xl border border-cyan/40 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_25px_rgba(38,224,255,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-cyan/15 border border-cyan/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                🌐
+              </div>
+              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">190+</div>
+              <div class="text-xs sm:text-sm font-bold text-cyan mt-0.5">Countries</div>
+            </div>
+
+            <!-- Card 2: 133+ Languages -->
+            <div class="group p-4 sm:p-5 rounded-2xl border border-purple/40 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_25px_rgba(179,102,255,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-purple/15 border border-purple/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                🗣️
+              </div>
+              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">133+</div>
+              <div class="text-xs sm:text-sm font-bold text-purple mt-0.5">Languages</div>
+            </div>
+
+            <!-- Card 3: Instant Translation -->
+            <div class="group p-4 sm:p-5 rounded-2xl border border-[#00D084]/40 bg-surface/90 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_25px_rgba(0,208,132,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-[#00D084]/15 border border-[#00D084]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                ⚡
+              </div>
+              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">&lt; 50ms</div>
+              <div class="text-xs sm:text-sm font-bold text-[#00D084] mt-0.5">Instant Translation</div>
+            </div>
+
+            <!-- Card 4: Zero Data Collection -->
+            <div class="group p-4 sm:p-5 rounded-2xl border border-[#FF6B6B]/40 bg-surface/90 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_25px_rgba(255,107,107,0.25)] transition-all duration-300 text-left">
+              <div class="w-10 h-10 rounded-xl bg-[#FF6B6B]/15 border border-[#FF6B6B]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                🔒
+              </div>
+              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">100%</div>
+              <div class="text-xs sm:text-sm font-bold text-[#FF6B6B] mt-0.5">Zero Data Collection</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Language Selector Interactive Card -->
+        <div class="flex-shrink-0 w-full lg:w-auto flex flex-col items-center lg:items-end gap-3">
+          <div class="p-5 sm:p-6 rounded-3xl border border-cyan/40 bg-gradient-to-br from-[#0c1424] via-surface-2/95 to-[#130f24] shadow-[0_12px_45px_rgba(38,224,255,0.18)] w-full sm:w-[320px] md:w-[340px]">
+            <div class="flex items-center justify-between mb-3.5">
+              <p class="text-xs font-bold text-cyan uppercase tracking-wider flex items-center gap-1.5">
+                <span class="text-sm">🌐</span> Choose Your Language
+              </p>
+              <span class="text-xs font-bold text-white px-2 py-0.5 rounded-full bg-surface border border-[#334468]">133 Total</span>
+            </div>
+            <LanguageSelector variant="floating" idPrefix="hero" />
+            <p class="text-xs text-slate-100 font-normal mt-3 text-center sm:text-left leading-relaxed">
+              Select from <strong class="text-white font-bold">70+ quick-pick languages</strong> with instant search, or translate seamlessly into <strong class="text-cyan font-bold">133+ languages</strong> worldwide.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- How It Works (Three simple steps - on every page) -->
   <HowItWorks className="py-12 border-b border-border bg-[#121828]" />
@@ -854,9 +794,17 @@ const faqPageSchema = {
   <!-- ================= LIVE TOOLKIT WORKSPACES ================= -->
   <section class="tools py-12">
     <div class="wrap">
-      <div class="section-head max-w-2xl mb-10">
+      <div class="section-head max-w-2xl mb-6">
         <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">The ImageAll Interactive Toolkit</h2>
         <p class="text-sm sm:text-base text-slate-100 font-normal mt-2">Every operation runs locally in your browser with zero latency. No sign-up, no queues, no watermarks.</p>
+      </div>
+
+      <!-- ⚡ 100% Client-Side Private Engine Banner (Middle Placement) -->
+      <div class="mb-10 rounded-xl border border-cyan/40 bg-surface-2 p-4 text-xs sm:text-sm text-slate-200 flex items-start gap-3 shadow-md max-w-3xl">
+        <span class="text-cyan font-bold text-base leading-none mt-0.5">⚡</span>
+        <div>
+          <strong class="text-white font-semibold">100% Client-Side Private Engine:</strong> No images are uploaded to any server. Everything runs on your computer or phone using HTML5 Canvas &amp; WebAssembly APIs.
+        </div>
       </div>
 
       <!-- 1. COMPRESS -->
@@ -1672,6 +1620,41 @@ const faqPageSchema = {
       function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob | null> {
         return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
       }
+      function getSmartDownloadName(file: File | null | undefined, toolSuffix: string, ext: string = "png"): string {
+        let baseName = "";
+        if (file && file.name) {
+          const lastDot = file.name.lastIndexOf(".");
+          baseName = lastDot > 0 ? file.name.substring(0, lastDot) : file.name;
+          baseName = baseName
+            .replace(/[\x00-\x1f\x7f\\/:\*\?"<>\|\s]+/g, "-")
+            .replace(/-+/g, "-")
+            .replace(/^[-_.]+|[-_.]+$/g, "");
+        }
+
+        let cleanSuffix = (toolSuffix || "")
+          .replace(/[\x00-\x1f\x7f\\/:\*\?"<>\|\s]+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^[-_.]+|[-_.]+$/g, "");
+
+        const cleanExt = (ext || "png").replace(/^\./, "").toLowerCase();
+
+        if (!baseName) {
+          return cleanSuffix ? `${cleanSuffix}.${cleanExt}` : `image.${cleanExt}`;
+        }
+
+        if (!cleanSuffix) {
+          return `${baseName}.${cleanExt}`;
+        }
+
+        const lowerBase = baseName.toLowerCase();
+        const lowerSuffix = cleanSuffix.toLowerCase();
+        if (lowerBase.endsWith("-" + lowerSuffix) || lowerBase === lowerSuffix) {
+          return `${baseName}.${cleanExt}`;
+        }
+
+        return `${baseName}-${cleanSuffix}.${cleanExt}`;
+      }
+
       function downloadBlob(blob: Blob, filename: string) {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
@@ -1852,7 +1835,11 @@ const faqPageSchema = {
         $("compress-download")?.addEventListener("click", async () => {
           if (!srcImg) { setStatus($("compress-status"), "Upload an image first.", "err"); return; }
           if (!lastBlob) await refresh();
-          if (lastBlob) downloadBlob(lastBlob, "compressed.jpg");
+          if (lastBlob) {
+            const ext = (formatEl?.value === "image/png") ? "png" : (formatEl?.value === "image/webp") ? "webp" : "jpg";
+            const filename = getSmartDownloadName(currentFile, "compress-image", ext);
+            downloadBlob(lastBlob, filename);
+          }
         });
         $("compress-reset")?.addEventListener("click", () => {
           currentFile = null; srcImg = null; lastBlob = null;
@@ -1866,7 +1853,7 @@ const faqPageSchema = {
       (function () {
         const canvas = $("resize-canvas") as HTMLCanvasElement;
         const ctx = canvas ? canvas.getContext("2d") : null;
-        let srcImg: HTMLImageElement | null = null, origW = 0, origH = 0;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null, origW = 0, origH = 0;
         const wEl = $("resize-w") as HTMLInputElement;
         const hEl = $("resize-h") as HTMLInputElement;
         const lockEl = $("resize-lock") as HTMLInputElement;
@@ -1874,7 +1861,8 @@ const faqPageSchema = {
         const pctVal = $("resize-pct-val");
 
         initDropzone("resize-drop", "resize-input", (files) => {
-          loadImage(files[0]).then((r) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
             srcImg = r.img; origW = r.img.naturalWidth; origH = r.img.naturalHeight;
             canvas.width = origW; canvas.height = origH;
             ctx?.drawImage(srcImg, 0, 0);
@@ -1910,10 +1898,14 @@ const faqPageSchema = {
         $("resize-download")?.addEventListener("click", () => {
           if (!srcImg) return;
           canvasToBlob(canvas, "image/png").then((blob) => {
-            if (blob) downloadBlob(blob, "resized.png");
+            if (blob) {
+              const filename = getSmartDownloadName(currentFile, "resize-image", "png");
+              downloadBlob(blob, filename);
+            }
           });
         });
         $("resize-reset")?.addEventListener("click", () => {
+          currentFile = null;
           srcImg = null;
           const prev = $("resize-preview");
           if (prev) prev.style.display = "none";
@@ -1925,9 +1917,10 @@ const faqPageSchema = {
       (function () {
         const canvas = $("convert-canvas") as HTMLCanvasElement;
         const ctx = canvas ? canvas.getContext("2d") : null;
-        let srcImg: HTMLImageElement | null = null;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null;
         initDropzone("convert-drop", "convert-input", (files) => {
-          loadImage(files[0]).then((r) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
             srcImg = r.img;
             canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
             ctx?.drawImage(srcImg, 0, 0);
@@ -1942,12 +1935,14 @@ const faqPageSchema = {
           canvasToBlob(canvas, fmt, 0.92).then((blob) => {
             if (blob) {
               const ext = fmt === "image/png" ? "png" : fmt === "image/webp" ? "webp" : "jpg";
-              downloadBlob(blob, "converted." + ext);
+              const filename = getSmartDownloadName(currentFile, "convert-image", ext);
+              downloadBlob(blob, filename);
               setStatus($("convert-status"), "Downloaded.", "ok");
             }
           });
         });
         $("convert-reset")?.addEventListener("click", () => {
+          currentFile = null;
           srcImg = null;
           const prev = $("convert-preview");
           if (prev) prev.style.display = "none";
@@ -1959,7 +1954,7 @@ const faqPageSchema = {
       (function () {
         const canvas = $("crop-canvas") as HTMLCanvasElement;
         const ctx = canvas ? canvas.getContext("2d") : null;
-        let srcImg: HTMLImageElement | null = null;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null;
         let cropBox: { x: number; y: number; w: number; h: number } | null = null;
         let dragging = false, startX = 0, startY = 0, ratio = "free";
 
@@ -1980,7 +1975,8 @@ const faqPageSchema = {
         }
 
         initDropzone("crop-drop", "crop-input", (files) => {
-          loadImage(files[0]).then((r) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
             srcImg = r.img;
             canvas.width = r.img.naturalWidth; canvas.height = r.img.naturalHeight;
             cropBox = null;
@@ -2040,7 +2036,10 @@ const faqPageSchema = {
           out.width = Math.round(cropBox.w); out.height = Math.round(cropBox.h);
           out.getContext("2d")?.drawImage(srcImg, cropBox.x, cropBox.y, cropBox.w, cropBox.h, 0, 0, out.width, out.height);
           canvasToBlob(out, "image/png").then((blob) => {
-            if (blob) downloadBlob(blob, "cropped.png");
+            if (blob) {
+              const filename = getSmartDownloadName(currentFile, "crop-image", "png");
+              downloadBlob(blob, filename);
+            }
           });
         });
       })();
@@ -2083,7 +2082,10 @@ const faqPageSchema = {
           }
         });
         $("bg-download")?.addEventListener("click", () => {
-          if (resultBlob) downloadBlob(resultBlob, "no-background.png");
+          if (resultBlob) {
+            const filename = getSmartDownloadName(currentFile, "background-remover", "png");
+            downloadBlob(resultBlob, filename);
+          }
         });
       })();
 
@@ -2091,7 +2093,7 @@ const faqPageSchema = {
       (function () {
         const canvas = $("rotate-canvas") as HTMLCanvasElement;
         const ctx = canvas ? canvas.getContext("2d") : null;
-        let srcImg: HTMLImageElement | null = null, rotation = 0, flipH = false, flipV = false;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null, rotation = 0, flipH = false, flipV = false;
         function render() {
           if (!srcImg || !ctx) return;
           const w = srcImg.naturalWidth, h = srcImg.naturalHeight;
@@ -2105,7 +2107,8 @@ const faqPageSchema = {
           ctx.restore();
         }
         initDropzone("rotate-drop", "rotate-input", (files) => {
-          loadImage(files[0]).then((r) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
             srcImg = r.img; rotation = 0; flipH = false; flipV = false;
             render();
             const prev = $("rotate-preview");
@@ -2119,7 +2122,11 @@ const faqPageSchema = {
         $("rotate-download")?.addEventListener("click", () => {
           if (!srcImg) return;
           canvasToBlob(canvas, "image/png").then((blob) => {
-            if (blob) downloadBlob(blob, "rotated.png");
+            if (blob) {
+              const suffix = (flipH || flipV) ? "flip-image" : "rotate-image";
+              const filename = getSmartDownloadName(currentFile, suffix, "png");
+              downloadBlob(blob, filename);
+            }
           });
         });
       })();
@@ -2128,7 +2135,7 @@ const faqPageSchema = {
       (function () {
         const canvas = $("wm-canvas") as HTMLCanvasElement;
         const ctx = canvas ? canvas.getContext("2d") : null;
-        let srcImg: HTMLImageElement | null = null;
+        let currentFile: File | null = null, srcImg: HTMLImageElement | null = null;
         function render() {
           if (!srcImg || !ctx) return;
           canvas.width = srcImg.naturalWidth; canvas.height = srcImg.naturalHeight;
@@ -2161,7 +2168,8 @@ const faqPageSchema = {
           ctx.globalAlpha = 1;
         }
         initDropzone("wm-drop", "wm-input", (files) => {
-          loadImage(files[0]).then((r) => {
+          currentFile = files[0];
+          loadImage(currentFile).then((r) => {
             srcImg = r.img; render();
             const prev = $("wm-preview");
             if (prev) prev.style.display = "grid";
@@ -2177,7 +2185,10 @@ const faqPageSchema = {
         $("wm-download")?.addEventListener("click", () => {
           if (!srcImg) return;
           canvasToBlob(canvas, "image/png").then((blob) => {
-            if (blob) downloadBlob(blob, "watermarked.png");
+            if (blob) {
+              const filename = getSmartDownloadName(currentFile, "watermark-image", "png");
+              downloadBlob(blob, filename);
+            }
           });
         });
       })();
@@ -2191,7 +2202,8 @@ const faqPageSchema = {
           listEl.innerHTML = "";
           items.forEach((it, i) => {
             const row = document.createElement("div"); row.className = "pdf-item";
-            row.innerHTML = `<img src="${it.url}" alt="${it.file.name}" /><span>${i + 1}. ${it.file.name}</span><button type="button" data-del="${i}">Remove</button>`;
+            const cleanName = (it.file.name || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            row.innerHTML = `<img src="${it.url}" alt="${cleanName}" /><span>${i + 1}. ${cleanName}</span><button type="button" data-del="${i}">Remove</button>`;
             row.querySelector("[data-del]")?.addEventListener("click", () => {
               items.splice(i, 1); renderList();
             });
@@ -2225,7 +2237,9 @@ const faqPageSchema = {
             doc.addImage(c.toDataURL("image/jpeg", 0.85), "JPEG", 0, 0, w, h);
           });
           const blob = doc.output("blob");
-          downloadBlob(blob, "converted.pdf");
+          const primaryFile = items[0]?.file;
+          const filename = getSmartDownloadName(primaryFile, "image-to-pdf", "pdf");
+          downloadBlob(blob, filename);
         });
       })();
 
