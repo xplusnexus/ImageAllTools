@@ -7,9 +7,14 @@ const navLinks = [
   { label: "Convert", href: "/#convert", icon: "🔄" },
   { label: "Crop", href: "/#crop", icon: "✂️" },
   { label: "Remove BG", href: "/#bg-remove", icon: "🪄" },
+  { label: "Rotate & Flip", href: "/#rotate", icon: "⟳" },
   { label: "Watermark", href: "/#watermark", icon: "🏷️" },
   { label: "To PDF", href: "/#to-pdf", icon: "📄" },
+  { label: "Color Palette", href: "/#palette", icon: "🎨" },
+  { label: "WhatsApp DP", href: "/whatsapp-dp-maker", icon: "💬" },
+  { label: "Instagram", href: "/resize-image-for-instagram", icon: "📸" },
   { label: "All 45 Tools", href: "/#catalog", icon: "⚡" },
+  { label: "FAQ", href: "/#faq", icon: "❓" },
 ];
 ---
 <header class="border-b border-border sticky top-0 z-50 bg-[#0f1422]/95 backdrop-blur-md shadow-lg" role="banner">
@@ -64,3 +69,22 @@ const navLinks = [
     </div>
   </nav>
 </header>
+
+<script>
+  // Smooth scroll for hash links when already on the homepage
+  document.querySelectorAll('header a[href^="/#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      const href = anchor.getAttribute('href');
+      if (!href) return;
+      const targetHash = href.substring(1); // e.g. "#compress"
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        const targetEl = document.querySelector(targetHash);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', targetHash);
+        }
+      }
+    });
+  });
+</script>
