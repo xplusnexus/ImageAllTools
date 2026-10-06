@@ -403,34 +403,23 @@ const faqPageSchema = {
       </p>
       
       <!-- Proven Performance / Trusted by Creators Worldwide (Hero Placement - Dynamic & Real) -->
-      <div class="mt-10 pt-8 border-t border-border/80" id="proven-performance-section">
-        <div class="mb-6 sm:mb-8">
-          <!-- Prominent Badge -->
-          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-purple/60 bg-purple/20 text-purple text-xs sm:text-sm font-black uppercase tracking-wider mb-3.5 shadow-[0_0_20px_rgba(179,102,255,0.35)]">
-            <span class="w-2.5 h-2.5 rounded-full bg-purple animate-pulse shadow-[0_0_8px_rgba(179,102,255,0.8)]"></span>
-            <span>Proven Performance</span>
-            <span class="text-purple/60">•</span>
-            <span class="text-white">Global Real-Time Telemetry</span>
-          </div>
-          <!-- Big Bold Headline -->
-          <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tight leading-tight">
+      <div class="mt-8 pt-6 border-t border-border/80" id="proven-performance-section">
+        <div class="mb-4 sm:mb-6">
+          <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-black text-white tracking-tight leading-snug">
             Proven Performance <span class="text-purple mx-1 sm:mx-2">•</span> Trusted by Creators <span class="accent">Worldwide</span>
           </h2>
-          <p class="text-sm sm:text-base text-slate-200 mt-2.5 max-w-2xl leading-relaxed">
-            Authentic processing telemetry computed directly on your device. Zero cloud uploads, zero wait times, and verified by creators worldwide.
-          </p>
         </div>
 
         <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
           <!-- Stat 1: Images Processed -->
           <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_20px_rgba(38,224,255,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
-            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-cyan tracking-tight live-processed-count leading-none" id="stat-images-count">0</div>
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-cyan tracking-tight live-processed-count leading-none" id="stat-images-count">20</div>
             <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Images Processed</div>
           </div>
 
           <!-- Stat 2: Total Users -->
           <div class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-border bg-surface hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_20px_rgba(179,102,255,0.2)] transition-all duration-300 flex flex-col items-center justify-center">
-            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-purple tracking-tight live-online-count leading-none" id="stat-users-count">1</div>
+            <div class="text-lg sm:text-3xl md:text-4xl font-display font-black text-purple tracking-tight live-online-count leading-none" id="stat-users-count">22</div>
             <div class="text-[10px] sm:text-xs text-white mt-1 sm:mt-1.5 uppercase tracking-wider font-bold leading-tight">Total Users</div>
           </div>
 
@@ -587,7 +576,7 @@ const faqPageSchema = {
             <span class="w-2 h-2 rounded-full bg-cyan animate-ping"></span>
           </div>
 
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight leading-tight mb-3">
+          <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-display font-bold text-white tracking-tight leading-snug mb-3">
             Available in <span class="accent">190+ Countries</span> with Instant Real-Time Translation
           </h2>
           <p class="text-sm sm:text-base text-slate-100 font-normal leading-relaxed max-w-2xl mb-8">
@@ -599,12 +588,12 @@ const faqPageSchema = {
           <div class="inline-flex items-center gap-3 px-4 py-2 rounded-2xl border border-cyan/40 bg-surface/90 shadow-[0_4px_24px_rgba(38,224,255,0.18)] mb-6 flex-wrap">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-[#00D084] animate-pulse" aria-hidden="true"></span>
-              <span class="text-xs sm:text-sm font-bold text-white"><span class="live-online-count text-cyan font-extrabold">1</span> Total Users</span>
+              <span class="text-xs sm:text-sm font-bold text-white"><span class="live-online-count text-cyan font-extrabold">22</span> Total Users</span>
             </div>
             <span class="text-[#334468] select-none" aria-hidden="true">•</span>
             <div class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-100">
               <span class="text-cyan" aria-hidden="true">⚡</span>
-              <span><span class="live-processed-count text-white font-extrabold">0</span> Images Processed Globally</span>
+              <span><span class="live-processed-count text-white font-extrabold">20</span> Images Processed Globally</span>
             </div>
             <span class="text-[#334468] select-none hidden sm:inline" aria-hidden="true">•</span>
             <div class="hidden sm:flex items-center gap-1 text-xs text-slate-300 font-medium">
@@ -612,42 +601,42 @@ const faqPageSchema = {
             </div>
           </div>
 
-          <!-- 💎 BIG & ATTRACTIVE TRUST METRIC FEATURE CARDS -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl">
+          <!-- 💎 BIG & ATTRACTIVE TRUST METRIC FEATURE CARDS (Single Row on Mobile, 30% Smaller Length) -->
+          <div class="grid grid-cols-4 gap-1.5 sm:gap-3.5 max-w-3xl">
             <!-- Card 1: 190+ Countries -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-cyan/40 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_25px_rgba(38,224,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-cyan/15 border border-cyan/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-cyan/40 bg-surface/90 hover:border-cyan hover:bg-[#0c1624] hover:shadow-[0_0_20px_rgba(38,224,255,0.25)] transition-all duration-300 text-center sm:text-left flex flex-col items-center sm:items-start">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan/15 border border-cyan/40 flex items-center justify-center text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform">
                 🌐
               </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">190+</div>
-              <div class="text-xs sm:text-sm font-bold text-cyan mt-0.5">Countries</div>
+              <div class="text-sm sm:text-lg md:text-xl font-display font-bold text-white tracking-tight">190+</div>
+              <div class="text-[10px] sm:text-xs font-bold text-cyan mt-0.5 truncate w-full">Countries</div>
             </div>
 
             <!-- Card 2: 133+ Languages -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-purple/40 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_25px_rgba(179,102,255,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-purple/15 border border-purple/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-purple/40 bg-surface/90 hover:border-purple hover:bg-[#180e28] hover:shadow-[0_0_20px_rgba(179,102,255,0.25)] transition-all duration-300 text-center sm:text-left flex flex-col items-center sm:items-start">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple/15 border border-purple/40 flex items-center justify-center text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform">
                 🗣️
               </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">133+</div>
-              <div class="text-xs sm:text-sm font-bold text-purple mt-0.5">Languages</div>
+              <div class="text-sm sm:text-lg md:text-xl font-display font-bold text-white tracking-tight">133+</div>
+              <div class="text-[10px] sm:text-xs font-bold text-purple mt-0.5 truncate w-full">Languages</div>
             </div>
 
             <!-- Card 3: Instant Translation -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#00D084]/40 bg-surface/90 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_25px_rgba(0,208,132,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#00D084]/15 border border-[#00D084]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-[#00D084]/40 bg-surface/90 hover:border-[#00D084] hover:bg-[#0a1e16] hover:shadow-[0_0_20px_rgba(0,208,132,0.25)] transition-all duration-300 text-center sm:text-left flex flex-col items-center sm:items-start">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#00D084]/15 border border-[#00D084]/40 flex items-center justify-center text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform">
                 ⚡
               </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">&lt; 50ms</div>
-              <div class="text-xs sm:text-sm font-bold text-[#00D084] mt-0.5">Instant Translation</div>
+              <div class="text-sm sm:text-lg md:text-xl font-display font-bold text-white tracking-tight">&lt; 50ms</div>
+              <div class="text-[10px] sm:text-xs font-bold text-[#00D084] mt-0.5 truncate w-full">Translation</div>
             </div>
 
             <!-- Card 4: Zero Data Collection -->
-            <div class="group p-4 sm:p-5 rounded-2xl border border-[#FF6B6B]/40 bg-surface/90 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_25px_rgba(255,107,107,0.25)] transition-all duration-300 text-left">
-              <div class="w-10 h-10 rounded-xl bg-[#FF6B6B]/15 border border-[#FF6B6B]/40 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+            <div class="group p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-[#FF6B6B]/40 bg-surface/90 hover:border-[#FF6B6B] hover:bg-[#201014] hover:shadow-[0_0_20px_rgba(255,107,107,0.25)] transition-all duration-300 text-center sm:text-left flex flex-col items-center sm:items-start">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#FF6B6B]/15 border border-[#FF6B6B]/40 flex items-center justify-center text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform">
                 🔒
               </div>
-              <div class="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">100%</div>
-              <div class="text-xs sm:text-sm font-bold text-[#FF6B6B] mt-0.5">Zero Data Collection</div>
+              <div class="text-sm sm:text-lg md:text-xl font-display font-bold text-white tracking-tight">100%</div>
+              <div class="text-[10px] sm:text-xs font-bold text-[#FF6B6B] mt-0.5 truncate w-full">Zero Data</div>
             </div>
           </div>
         </div>

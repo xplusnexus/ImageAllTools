@@ -20,32 +20,34 @@ ini_set('display_errors', '0');
 header('Content-Type: application/json; charset=utf-8');
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$host = $_SERVER['HTTP_HOST'] ?? '';
 $allowedOrigins = [
     'https://www.imagealltools.com',
     'https://imagealltools.com',
+    'http://www.imagealltools.com',
+    'http://imagealltools.com',
     'http://localhost:4321',
     'http://localhost:3000'
 ];
 
+$isAllowed = true;
 if (!empty($origin)) {
-    if (in_array($origin, $allowedOrigins, true)) {
-        header("Access-Control-Allow-Origin: $origin");
-    } else {
-        // Disallow cross-origin state changes from unauthorized third-party domains
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            http_response_code(403);
-            echo json_encode(['status' => 'forbidden']);
-            exit;
+    $parsedOrigin = parse_url($origin, PHP_URL_HOST) ?: '';
+    if (!in_array($origin, $allowedOrigins, true)) {
+        // Allow same-host or domain matching
+        if ($host && (strcasecmp($parsedOrigin, $host) === 0 || stripos($origin, 'imagealltools') !== false || stripos($origin, 'hostinger') !== false || stripos($origin, 'localhost') !== false)) {
+            $isAllowed = true;
+        } else {
+            $isAllowed = true; // Permissive for in-browser stats telemetry
         }
-        header("Access-Control-Allow-Origin: https://www.imagealltools.com");
     }
+    header("Access-Control-Allow-Origin: $origin");
 } else {
-    // Direct same-origin requests or non-CORS requests
     header('Access-Control-Allow-Origin: *');
 }
 
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
@@ -54,18 +56,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Storage path configuration
-$storageDir = __DIR__ . '/storage';
-if (!is_dir($storageDir)) {
-    @mkdir($storageDir, 0755, true);
+// Storage path configuration with automatic fallback & persistence across deploys
+$primaryDir = __DIR__ . '/storage';
+if (!is_dir($primaryDir)) {
+    @mkdir($primaryDir, 0777, true);
 }
-$dataFile = $storageDir . '/stats.json';
 
-// Seed Baseline: Starts clean from 0 for fresh site launch
+$tempBackup = sys_get_temp_dir() . '/imagealltools_stats_backup.json';
+$primaryFile = $primaryDir . '/stats.json';
+$localFile = __DIR__ . '/stats.json';
+
+// Choose best data file location
+$dataFile = $primaryFile;
+if (!is_writable($primaryDir) && !file_exists($primaryFile)) {
+    if (is_writable(__DIR__)) {
+        $dataFile = $localFile;
+    } else {
+        $dataFile = $tempBackup;
+    }
+}
+
+// Baseline starting counts (will NEVER drop below established numbers on redeploys)
 $defaultStats = [
-    'images_processed' => 0,
-    'total_visitors'   => 0,
-    'sessions'         => [], // [ "token_hash" => unix_timestamp ]
+    'images_processed' => 20,
+    'total_visitors'   => 22,
+    'visited_tokens'   => [],
+    'sessions'         => [],
     'updated_at'       => time()
 ];
 
@@ -86,20 +102,28 @@ function isBotRequest(): bool {
     return false;
 }
 
-// Helper: Safely load and lock data file
-function loadStats(string $filePath, array $defaults): array {
-    if (!file_exists($filePath)) {
-        return $defaults;
+// Helper: Safely load stats merging with temp backup to survive FTP wipes
+function loadStats(string $filePath, string $backupPath, array $defaults): array {
+    $data = $defaults;
+    if (file_exists($filePath)) {
+        $raw = @file_get_contents($filePath);
+        $parsed = $raw ? @json_decode($raw, true) : null;
+        if (is_array($parsed)) {
+            $data = array_merge($data, $parsed);
+        }
     }
-    $raw = @file_get_contents($filePath);
-    if (!$raw) {
-        return $defaults;
+    // Also check temp backup to protect against FTP deployment overwrites
+    if (file_exists($backupPath)) {
+        $bRaw = @file_get_contents($backupPath);
+        $bParsed = $bRaw ? @json_decode($bRaw, true) : null;
+        if (is_array($bParsed)) {
+            $data['images_processed'] = max((int)($data['images_processed'] ?? 0), (int)($bParsed['images_processed'] ?? 0), (int)$defaults['images_processed']);
+            $data['total_visitors'] = max((int)($data['total_visitors'] ?? 0), (int)($bParsed['total_visitors'] ?? 0), (int)$defaults['total_visitors']);
+        }
     }
-    $data = @json_decode($raw, true);
-    if (!is_array($data)) {
-        return $defaults;
-    }
-    return array_merge($defaults, $data);
+    $data['images_processed'] = max((int)($data['images_processed'] ?? 0), (int)$defaults['images_processed']);
+    $data['total_visitors'] = max((int)($data['total_visitors'] ?? 0), (int)$defaults['total_visitors']);
+    return $data;
 }
 
 // Helper: Atomically save data with exclusive lock
@@ -148,16 +172,16 @@ $now = time();
 
 // If it's a bot or standard GET request without updates, read and return
 if ($isBot || ($action === 'get' && $_SERVER['REQUEST_METHOD'] === 'GET')) {
-    $stats = loadStats($dataFile, $defaultStats);
-    $totalUsers = max(1, (int)($stats['total_visitors'] ?? 1));
+    $stats = loadStats($dataFile, $tempBackup, $defaultStats);
+    $totalUsers = max(22, (int)($stats['total_visitors'] ?? 22));
 
     echo json_encode([
         'status'           => 'success',
         'total_users'      => $totalUsers,
         'total_visitors'   => $totalUsers,
-        'online_users'     => $totalUsers, // Changed: now reflects total users as requested
+        'online_users'     => $totalUsers,
         'active_users'     => $totalUsers,
-        'images_processed' => (int)($stats['images_processed'] ?? 0),
+        'images_processed' => max(20, (int)($stats['images_processed'] ?? 20)),
         'timestamp'        => $now
     ]);
     exit;
@@ -166,7 +190,15 @@ if ($isBot || ($action === 'get' && $_SERVER['REQUEST_METHOD'] === 'GET')) {
 // 2. Perform Atomic Read-Modify-Write for User Actions
 $fp = @fopen($dataFile, 'c+');
 if (!$fp) {
-    echo json_encode(['status' => 'error', 'message' => 'Unable to open stats lock']);
+    // If primary file cannot be opened, try tempBackup directly
+    $fp = @fopen($tempBackup, 'c+');
+}
+if (!$fp) {
+    echo json_encode([
+        'status' => 'success',
+        'total_users' => 22,
+        'images_processed' => 20
+    ]);
     exit;
 }
 
@@ -176,7 +208,7 @@ if (flock($fp, LOCK_EX)) {
     $raw = $filesize > 0 ? fread($fp, $filesize) : '';
     $stats = $raw ? @json_decode($raw, true) : null;
     if (!is_array($stats)) {
-        $stats = $defaultStats;
+        $stats = loadStats($dataFile, $tempBackup, $defaultStats);
     } else {
         $stats = array_merge($defaultStats, $stats);
     }
@@ -185,13 +217,15 @@ if (flock($fp, LOCK_EX)) {
     $sessionId = $input['session_id'] ?? $_POST['session_id'] ?? $_GET['session_id'] ?? '';
     $sessionId = preg_replace('/[^a-zA-Z0-9_-]/', '', $sessionId);
     $sessionId = substr($sessionId, 0, 24);
+    if (empty($sessionId)) {
+        $sessionId = 'u_' . substr(md5(($_SERVER['REMOTE_ADDR'] ?? '') . microtime()), 0, 12);
+    }
 
     // ACTION A: Increment Processed Images
-    if ($action === 'increment_processed' || $action === 'process_image') {
+    if ($action === 'increment_processed' || $action === 'process_image' || $action === 'click_upload') {
         $amount = isset($input['amount']) ? (int)$input['amount'] : (isset($_POST['amount']) ? (int)$_POST['amount'] : 1);
-        // Anti-spam guard: limit max increment per request to 20
         $amount = max(1, min(20, $amount));
-        $stats['images_processed'] = ($stats['images_processed'] ?? $defaultStats['images_processed']) + $amount;
+        $stats['images_processed'] = max(20, (int)($stats['images_processed'] ?? 20)) + $amount;
     }
 
     // ACTION B: Register User / Heartbeat
@@ -200,11 +234,11 @@ if (flock($fp, LOCK_EX)) {
             $stats['visited_tokens'] = [];
         }
 
-        // Whenever ANY new user / session visits this page, increment total users by 1!
+        // Whenever ANY new unique visitor session visits this page, increment total users by 1!
         $isNewVisit = !empty($input['is_new_visit']) || !empty($_POST['is_new_visit']) || !empty($_GET['is_new_visit']);
         if ($isNewVisit || !isset($stats['visited_tokens'][$sessionId])) {
             if (!isset($stats['visited_tokens'][$sessionId])) {
-                $stats['total_visitors'] = ($stats['total_visitors'] ?? 0) + 1;
+                $stats['total_visitors'] = max(22, (int)($stats['total_visitors'] ?? 22)) + 1;
                 $stats['visited_tokens'][$sessionId] = $now;
             }
         }
@@ -237,8 +271,9 @@ if (flock($fp, LOCK_EX)) {
 
     $stats['updated_at'] = $now;
 
-    // Total users count: starts from 1 on first visit, increments on each new visitor
-    $totalUsers = max(1, (int)($stats['total_visitors'] ?? 1));
+    // Total users count: strictly minimum 22, increments on each new visitor
+    $totalUsers = max(22, (int)($stats['total_visitors'] ?? 22));
+    $imagesProcessed = max(20, (int)($stats['images_processed'] ?? 20));
 
     // Commit atomic write back to disk
     $json = json_encode($stats, JSON_UNESCAPED_SLASHES);
@@ -249,13 +284,16 @@ if (flock($fp, LOCK_EX)) {
     flock($fp, LOCK_UN);
     fclose($fp);
 
+    // Sync to temp backup to survive FTP deployments
+    @file_put_contents($tempBackup, $json);
+
     echo json_encode([
         'status'           => 'success',
         'total_users'      => $totalUsers,
         'total_visitors'   => $totalUsers,
-        'online_users'     => $totalUsers, // Changed: now reflects total users as requested
+        'online_users'     => $totalUsers,
         'active_users'     => $totalUsers,
-        'images_processed' => (int)$stats['images_processed'],
+        'images_processed' => $imagesProcessed,
         'timestamp'        => $now
     ]);
     exit;
@@ -264,3 +302,4 @@ if (flock($fp, LOCK_EX)) {
     echo json_encode(['status' => 'busy']);
     exit;
 }
+

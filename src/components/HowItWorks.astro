@@ -5,43 +5,43 @@ export interface Props {
 }
 const { className = "" } = Astro.props;
 ---
-<section class={`py-8 ${className}`}>
-  <div class="text-center max-w-xl mx-auto mb-8">
-    <span class="text-xs font-bold uppercase tracking-wider text-cyan">Effortless Workflow</span>
-    <h2 class="text-2xl sm:text-3xl font-display font-bold text-white mt-1.5">How It Works</h2>
-    <p class="text-sm sm:text-base text-slate-100 mt-2 font-medium">Three simple steps to perfect images</p>
+<section class={`py-4 sm:py-5 ${className}`}>
+  <div class="text-center max-w-xl mx-auto mb-4 sm:mb-5">
+    <span class="text-[11px] font-bold uppercase tracking-wider text-cyan">Effortless Workflow</span>
+    <h2 class="text-xl sm:text-2xl font-display font-bold text-white mt-1">How It Works</h2>
+    <p class="text-xs sm:text-sm text-slate-200 mt-1 font-medium">Three simple steps to perfect images</p>
   </div>
 
-  <ol class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto list-none p-0 m-0">
+  <ol class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto list-none p-0 m-0">
     <!-- Step 1 -->
-    <li class="relative p-6 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan/70 transition-all duration-200 group shadow-sm">
-      <div class="w-12 h-12 rounded-xl bg-cyan/15 border border-cyan/40 text-cyan flex items-center justify-center font-display font-bold text-lg mb-4 group-hover:scale-105 transition-transform" aria-hidden="true">
+    <li class="relative p-3.5 sm:p-4 rounded-xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan/70 transition-all duration-200 group shadow-sm">
+      <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan/15 border border-cyan/40 text-cyan flex items-center justify-center font-display font-bold text-xs sm:text-sm mb-2 group-hover:scale-105 transition-transform" aria-hidden="true">
         01
       </div>
-      <h3 class="text-lg font-display font-bold text-white group-hover:text-cyan transition-colors">1. Upload</h3>
-      <p class="text-sm text-slate-100 mt-2 leading-relaxed font-normal">
+      <h3 class="text-sm sm:text-base font-display font-bold text-white group-hover:text-cyan transition-colors">1. Upload</h3>
+      <p class="text-xs text-slate-200 mt-1 sm:mt-1.5 leading-snug font-normal">
         Drag &amp; drop or select your images directly from your device. Supports all major formats.
       </p>
     </li>
 
     <!-- Step 2 -->
-    <li class="relative p-6 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-purple/70 transition-all duration-200 group shadow-sm">
-      <div class="w-12 h-12 rounded-xl bg-purple/15 border border-purple/40 text-purple flex items-center justify-center font-display font-bold text-lg mb-4 group-hover:scale-105 transition-transform" aria-hidden="true">
+    <li class="relative p-3.5 sm:p-4 rounded-xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-purple/70 transition-all duration-200 group shadow-sm">
+      <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple/15 border border-purple/40 text-purple flex items-center justify-center font-display font-bold text-xs sm:text-sm mb-2 group-hover:scale-105 transition-transform" aria-hidden="true">
         02
       </div>
-      <h3 class="text-lg font-display font-bold text-white group-hover:text-purple transition-colors">2. Adjust</h3>
-      <p class="text-sm text-slate-100 mt-2 leading-relaxed font-normal">
+      <h3 class="text-sm sm:text-base font-display font-bold text-white group-hover:text-purple transition-colors">2. Adjust</h3>
+      <p class="text-xs text-slate-200 mt-1 sm:mt-1.5 leading-snug font-normal">
         Configure size, quality, target KB, aspect ratios, or visual effects with real-time visual feedback.
       </p>
     </li>
 
     <!-- Step 3 -->
-    <li class="relative p-6 rounded-2xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan/70 transition-all duration-200 group shadow-sm">
-      <div class="w-12 h-12 rounded-xl bg-cyan/15 border border-cyan/40 text-cyan flex items-center justify-center font-display font-bold text-lg mb-4 group-hover:scale-105 transition-transform" aria-hidden="true">
+    <li class="relative p-3.5 sm:p-4 rounded-xl border border-[#334468] bg-gradient-to-b from-[#151d31] to-[#1c263e] hover:border-cyan/70 transition-all duration-200 group shadow-sm">
+      <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan/15 border border-cyan/40 text-cyan flex items-center justify-center font-display font-bold text-xs sm:text-sm mb-2 group-hover:scale-105 transition-transform" aria-hidden="true">
         03
       </div>
-      <h3 class="text-lg font-display font-bold text-white group-hover:text-cyan transition-colors">3. Download</h3>
-      <p class="text-sm text-slate-100 mt-2 leading-relaxed font-normal">
+      <h3 class="text-sm sm:text-base font-display font-bold text-white group-hover:text-cyan transition-colors">3. Download</h3>
+      <p class="text-xs text-slate-200 mt-1 sm:mt-1.5 leading-snug font-normal">
         Save your processed images instantly to your device without quality loss, wait times, or watermarks.
       </p>
     </li>

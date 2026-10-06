@@ -3,33 +3,32 @@
 ---
 <script>
   (function () {
-    // Unique session ID stored in sessionStorage (cleared when browser tab/window closes)
-    let sessionId = '';
-    try {
-      sessionId = sessionStorage.getItem('imageall_sid') || '';
-      if (!sessionId) {
-        sessionId = Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(4);
-        sessionStorage.setItem('imageall_sid', sessionId);
-      }
-    } catch (e) {
-      sessionId = 'anon_' + Math.random().toString(36).substring(2, 8);
-    }
-
-    // Check if new visitor session
+    // Unique visitor ID stored permanently in localStorage (unique per user/browser)
+    let visitorId = '';
     let isNewVisit = false;
     try {
-      if (!sessionStorage.getItem('imageall_counted_visit')) {
+      visitorId = localStorage.getItem('imageall_visitor_id') || '';
+      if (!visitorId) {
+        visitorId = 'u_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36).substring(4);
+        localStorage.setItem('imageall_visitor_id', visitorId);
         isNewVisit = true;
-        sessionStorage.setItem('imageall_counted_visit', '1');
       }
     } catch (e) {
+      visitorId = 'anon_' + Math.random().toString(36).substring(2, 8);
       isNewVisit = true;
     }
 
-    // In-memory counter state (starts from zero/one for clean launch)
-    let onlineUsers = 1;
-    let imagesProcessed = 0;
-    let totalVisitors = 1;
+    // In-memory counter state, initialized from localStorage cache (strictly minimum 22 users, 20 images)
+    let cachedUsers = 22;
+    let cachedProcessed = 20;
+    try {
+      cachedUsers = Math.max(22, parseInt(localStorage.getItem('imageall_cached_users') || '22', 10));
+      cachedProcessed = Math.max(20, parseInt(localStorage.getItem('imageall_cached_processed') || '20', 10));
+    } catch(e) {}
+
+    let onlineUsers = cachedUsers;
+    let imagesProcessed = cachedProcessed;
+    let totalVisitors = cachedUsers;
     let heartbeatTimer: any = null;
     let isRequestPending = false;
     let lastUploadTriggerTime = 0;
@@ -45,13 +44,13 @@
       const processedElements = document.querySelectorAll('.live-processed-count');
       const visitorElements = document.querySelectorAll('.live-visitors-count');
 
-      const displayUsers = Math.max(1, totalVisitors || onlineUsers);
+      const displayUsers = Math.max(22, totalVisitors || onlineUsers);
       onlineElements.forEach((el) => {
         el.textContent = formatNumber(displayUsers);
       });
 
       processedElements.forEach((el) => {
-        el.textContent = formatNumber(imagesProcessed);
+        el.textContent = formatNumber(Math.max(20, imagesProcessed));
         if (animate) {
           el.classList.add('text-cyan', 'scale-110');
           setTimeout(() => {
@@ -73,11 +72,11 @@
       try {
         const payload = {
           action,
-          session_id: sessionId,
+          session_id: visitorId,
           is_new_visit: isNewVisit ? 1 : 0,
           amount: Math.min(20, Math.max(1, amount))
         };
-        isNewVisit = false; // only report once per browser session
+        isNewVisit = false; // only report new visit once per user
 
         const res = await fetch('/api/stats.php', {
           method: 'POST',
@@ -89,10 +88,16 @@
         if (res.ok) {
           const data = await res.json();
           if (data && data.status === 'success') {
-            const userCount = Number(data.total_users || data.total_visitors || data.online_users || 1);
+            const userCount = Math.max(22, Number(data.total_users || data.total_visitors || data.online_users || 22));
             onlineUsers = userCount;
             totalVisitors = userCount;
-            if (data.images_processed !== undefined) imagesProcessed = Number(data.images_processed);
+            if (data.images_processed !== undefined) {
+              imagesProcessed = Math.max(20, Number(data.images_processed));
+            }
+            try {
+              localStorage.setItem('imageall_cached_users', String(onlineUsers));
+              localStorage.setItem('imageall_cached_processed', String(imagesProcessed));
+            } catch(e) {}
             updateDOM(action === 'increment_processed');
           }
         }
@@ -108,6 +113,9 @@
       const add = Math.min(20, Math.max(1, Number(amount) || 1));
       // Optimistic instant UI update
       imagesProcessed += add;
+      try {
+        localStorage.setItem('imageall_cached_processed', String(imagesProcessed));
+      } catch(e) {}
       updateDOM(true);
 
       // Inform server
@@ -116,8 +124,8 @@
 
     function triggerUploadIncrement(amount: number = 1) {
       const now = Date.now();
-      // Debounce to prevent double-counting when clicking button then picking file
-      if (now - lastUploadTriggerTime < 800) {
+      // Debounce to prevent duplicate triggers
+      if (now - lastUploadTriggerTime < 500) {
         return;
       }
       lastUploadTriggerTime = now;
@@ -140,7 +148,9 @@
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       if (target) {
-        const isUploadTrigger = target.closest('.dropzone-cta-btn, .dropzone, #tw-drop, [data-upload-trigger]');
+        const uploadBtn = target.closest('button, a, label');
+        const textHasUpload = uploadBtn && /upload/i.test(uploadBtn.textContent || '');
+        const isUploadTrigger = target.closest('.dropzone-cta-btn, .dropzone, #tw-drop, [data-upload-trigger], input[type="file"]') || textHasUpload;
         if (isUploadTrigger) {
           triggerUploadIncrement(1);
         }
